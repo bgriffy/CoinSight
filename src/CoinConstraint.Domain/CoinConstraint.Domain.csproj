@@ -41,7 +41,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AggregateModels\BudgetAggregate\Bill.cs" />
+    <Compile Include="AggregateModels\BudgetAggregate\Budget.cs" />
+    <Compile Include="AggregateModels\BudgetAggregate\Expense.cs" />
+    <Compile Include="AggregateModels\BudgetAggregate\Reminder.cs" />
+    <Compile Include="AggregateModels\BudgetAggregate\Total.cs" />
+    <Compile Include="AggregateModels\UserAggregate\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
