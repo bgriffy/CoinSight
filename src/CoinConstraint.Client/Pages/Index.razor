@@ -1,7 +1,24 @@
 ﻿@page "/"
+@using CoinConstraint.Domain.AggregateModels.BudgetAggregate;
 
-<h1>Hello, world!</h1>
+<h1>Budgets</h1>
 
-Welcome to your new app.
+<DataGrid TItem="Expense"
+          Data="@_expenses"
+          Filterable="true"
+          FilterMethod="DataGridFilterMethod.StartsWith"></DataGrid>
 
-<SurveyPrompt Title="How is Blazor working for you?" />
+    <Icon Name="IconName.Save" /> Save
+
+
+    @code {
+        private List<Expense> _expenses = new List<Expense>();
+        private Expense t1 = new Expense { ID = 1, Title="Test1", Amount = 800, Description = "This is a test expense.", Note="testNote"};
+
+        protected override void OnInitialized()
+        {
+            _expenses.Add(t1);
+            StateHasChanged();
+            var rando = true;
+        }
+}
