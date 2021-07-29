@@ -1,4 +1,5 @@
 ﻿@page "/"
+@using Blazorise.DataGrid
 @using CoinConstraint.Domain.AggregateModels.BudgetAggregate;
 
 <h1>Budgets</h1>
@@ -6,19 +7,30 @@
 <DataGrid TItem="Expense"
           Data="@_expenses"
           Filterable="true"
-          FilterMethod="DataGridFilterMethod.StartsWith"></DataGrid>
+          FilterMethod="DataGridFilterMethod.StartsWith">
+    <DataGridColumn TItem="Expense" Field="@nameof(Expense.ID)" Caption="ID" Sortable="false" />
+    <DataGridColumn TItem="Expense" Field="@nameof(Expense.Title)" Caption="Title" Sortable="false" />
+    <DataGridColumn TItem="Expense" Field="@nameof(Expense.Description)" Caption="Description" Sortable="false" />
+    <DataGridColumn TItem="Expense" Field="@nameof(Expense.DueDate)" Caption="Due Date" Sortable="false" />
+</DataGrid>
 
-    <Icon Name="IconName.Save" /> Save
+
+<Icon Name="IconName.Save" /> Save
 
 
-    @code {
-        private List<Expense> _expenses = new List<Expense>();
-        private Expense t1 = new Expense { ID = 1, Title="Test1", Amount = 800, Description = "This is a test expense.", Note="testNote"};
+@code {
+    private List<Expense> _expenses = new List<Expense>();
+    private Expense t1 = new Expense { ID = 1, Title = "Test1", Amount = 800, Description = "This is a test expense.", Note = "testNote" };
+    private Expense t2 = new Expense { ID = 2, Title = "Test2", Amount = 800, Description = "This is a test expense 2.", Note = "testNote2" };
+    private Expense t3 = new Expense { ID = 3, Title = "Test3", Amount = 800, Description = "This is a test expense 3.", Note = "testNote3" };
+    private Expense t4 = new Expense { ID = 4, Title = "Test4", Amount = 800, Description = "This is a test expense 4.", Note = "testNote4" };
+    private Expense t5 = new Expense { ID = 5, Title = "Test5", Amount = 800, Description = "This is a test expense 5.", Note = "testNote5" };
+    private Expense t6 = new Expense { ID = 6, Title = "Test6", Amount = 800, Description = "This is a test expense 6.", Note = "testNote6" };
 
-        protected override void OnInitialized()
-        {
-            _expenses.Add(t1);
-            StateHasChanged();
-            var rando = true;
-        }
+    protected override void OnInitialized()
+    {
+        var expenses = new List<Expense>{ t1, t2, t3, t4, t5, t6 };
+        _expenses.AddRange(expenses);
+        StateHasChanged();
+    }
 }

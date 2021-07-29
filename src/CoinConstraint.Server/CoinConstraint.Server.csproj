@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
@@ -13,5 +13,8 @@
     <ProjectReference Include="..\CoinConstraint.Server.Infrastructure\CoinConstraint.Server.Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Watch Include="..\Client\**\*.razor" />
+  </ItemGroup>
 
 </Project>
