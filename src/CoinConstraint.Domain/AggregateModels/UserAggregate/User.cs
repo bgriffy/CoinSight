@@ -1,11 +1,14 @@
 ﻿using CoinConstraint.Domain.AggregateModels.BudgetAggregate;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace CoinConstraint.Domain.AggregateModels.UserAggregate
 {
     public class User
     {
+        [Key]
+
         public Guid UUID { get; set; }
 
         public string FirstName { get; set; }

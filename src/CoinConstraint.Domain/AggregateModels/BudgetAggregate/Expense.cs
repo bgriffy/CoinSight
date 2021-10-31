@@ -1,9 +1,12 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace CoinConstraint.Domain.AggregateModels.BudgetAggregate
 {
     public class Expense
     {
+
+        [Key]
         public int ID { get; set; }
 
         public int BudgetID { get; set; }
