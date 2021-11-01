@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 
 namespace CoinConstraint.Server.Infrastructure.DataAccess
 {
@@ -31,9 +32,19 @@ namespace CoinConstraint.Server.Infrastructure.DataAccess
             return _dbset.Where(predicate);
         }
 
+        public async Task<IEnumerable<T>> FindAsync(Expression<Func<T, bool>> predicate)
+        {
+            return (IEnumerable<T>)await _dbset.FindAsync(predicate);
+        }
+
         public IEnumerable<T> GetAll()
         {
             return _dbset.ToList();
+        }
+
+        public async Task<IEnumerable<T>> GetAllAsync()
+        {
+            return await _dbset.ToListAsync();
         }
 
         public void Remove(T entity)

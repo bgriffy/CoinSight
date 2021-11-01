@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 
 namespace CoinConstraint.Domain.Interfaces
 {
@@ -10,7 +11,9 @@ namespace CoinConstraint.Domain.Interfaces
         void AddRange(IEnumerable<T> entities);
         void Update(T entity);
         IEnumerable<T> GetAll();
+        Task<IEnumerable<T>> GetAllAsync();
         IEnumerable<T> Find(Expression<Func<T, bool>> predicate);
+        Task<IEnumerable<T>> FindAsync(Expression<Func<T, bool>> predicate);
         void Remove(T entity);
         void RemoveRange(IEnumerable<T> entities);
         void RemoveAll();
