@@ -13,6 +13,11 @@ namespace CoinConstraint.Server.Controllers
     {
         private readonly IExpenseRepository _expenseRepository;
 
+        public ExpensesController(IExpenseRepository expenseRepository)
+        {
+            _expenseRepository = expenseRepository;
+        }
+
         [HttpGet]
         public async Task<ActionResult<List<Expense>>> GetExpensesAsync()
         {
