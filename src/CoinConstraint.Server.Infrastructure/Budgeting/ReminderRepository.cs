@@ -4,7 +4,7 @@ using CoinConstraint.Server.Infrastructure.DataAccess;
 
 namespace CoinConstraint.Server.Infrastructure.Budgets
 {
-    public class ReminderRepository : Repository<Reminder>, IReminderRepository
+    public class ReminderRepository : ServersideRepository<Reminder>, IReminderRepository
     {
         private readonly CoinConstraintContext _context;
 

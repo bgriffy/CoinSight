@@ -4,7 +4,7 @@ using CoinConstraint.Server.Infrastructure.DataAccess;
 
 namespace CoinConstraint.Server.Infrastructure.Budgets
 {
-    public class BudgetRepository : Repository<Budget>, IBudgetRepository
+    public class BudgetRepository : ServersideRepository<Budget>, IBudgetRepository
     {
         private readonly CoinConstraintContext _context;
 

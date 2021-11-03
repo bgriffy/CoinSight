@@ -8,11 +8,11 @@ using System.Threading.Tasks;
 
 namespace CoinConstraint.Server.Infrastructure.DataAccess
 {
-    public class Repository<T> : IRepository<T> where T : class
+    public class ServersideRepository<T> : IServersideRepository<T> where T : class
     {
         private readonly DbSet<T> _dbset;
 
-        public Repository(DbContext dbContext)
+        public ServersideRepository(DbContext dbContext)
         {
             _dbset = dbContext.Set<T>();
         }
@@ -22,9 +22,19 @@ namespace CoinConstraint.Server.Infrastructure.DataAccess
             _dbset.Add(entity);
         }
 
+        public async Task AddAsync(T entity)
+        {
+            await _dbset.AddAsync(entity);
+        }
+
         public void AddRange(IEnumerable<T> entities)
         {
             _dbset.AddRange(entities);
+        }
+
+        public async Task AddRangeAsync(IEnumerable<T> entities)
+        {
+            await _dbset.AddRangeAsync(entities);
         }
 
         public IEnumerable<T> Find(Expression<Func<T, bool>> predicate)
@@ -57,14 +67,35 @@ namespace CoinConstraint.Server.Infrastructure.DataAccess
             _dbset.RemoveRange();
         }
 
+        public async Task RemoveAllAsync()
+        {
+            throw new NotImplementedException();
+
+        }
+
+        public Task RemoveAsync(T entity)
+        {
+            throw new NotImplementedException();
+        }
+
         public void RemoveRange(IEnumerable<T> entities)
         {
             _dbset.RemoveRange(entities);
         }
 
+        public Task RemoveRangeAsync(IEnumerable<T> entities)
+        {
+            throw new NotImplementedException();
+        }
+
         public void Update(T entity)
         {
             _dbset.Update(entity);
+        }
+
+        public Task UpdateAsync(T entity)
+        {
+            throw new NotImplementedException();
         }
     }
 }
