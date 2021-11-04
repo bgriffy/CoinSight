@@ -1,9 +1,12 @@
 ﻿using CoinConstraint.Domain.Interfaces;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Net.Http;
 using System.Net.Http.Json;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace CoinConstraint.Client.Infrastructure.DataAccess
@@ -31,32 +34,45 @@ namespace CoinConstraint.Client.Infrastructure.DataAccess
 
         public async Task<IEnumerable<T>> FindAsync(Expression<Func<T, bool>> predicate)
         {
-            throw new NotImplementedException();
+            var results = (IQueryable<T>) await _httpClient.GetFromJsonAsync<List<T>>(_apiEndpoint);
+            return results.Where(predicate);
         }
 
         public async Task<IEnumerable<T>> GetAllAsync()
         {
-            throw new NotImplementedException();
+            return await _httpClient.GetFromJsonAsync<List<T>>(_apiEndpoint);
         }
 
         public async Task RemoveAllAsync()
         {
-            throw new NotImplementedException();
+            await _httpClient.DeleteAsync(_apiEndpoint);
         }
 
         public async Task RemoveAsync(T entity)
         {
-            throw new NotImplementedException();
+            var request = new HttpRequestMessage
+            {
+                Method = HttpMethod.Delete,
+                RequestUri = new Uri("http://mydomain/api/something"),
+                Content = new StringContent(JsonConvert.SerializeObject(entity), Encoding.UTF8, "application/json")
+            };
+            await _httpClient.SendAsync(request);
         }
 
         public async Task RemoveRangeAsync(IEnumerable<T> entities)
         {
-            throw new NotImplementedException();
+            var request = new HttpRequestMessage
+            {
+                Method = HttpMethod.Delete,
+                RequestUri = new Uri("http://mydomain/api/something"),
+                Content = new StringContent(JsonConvert.SerializeObject(entities), Encoding.UTF8, "application/json")
+            };
+            await _httpClient.SendAsync(request);
         }
 
         public async Task UpdateAsync(T entity)
         {
-            throw new NotImplementedException();
+            await _httpClient.PutAsJsonAsync(_apiEndpoint, entity);
         }
     }
 }
