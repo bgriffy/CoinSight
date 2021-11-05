@@ -1,6 +1,8 @@
-﻿using CoinConstraint.Application.DataAccess;
+﻿using CoinConstraint.Application.Budgeting;
+using CoinConstraint.Application.DataAccess;
 using CoinConstraint.Client.Infrastructure.Budgeting;
 using CoinConstraint.Client.Infrastructure.DataAccess;
+using CoinConstraint.Client.Infrastructure.Services;
 using CoinConstraint.Domain.AggregateModels.BudgetAggregate.Repositories;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -21,6 +23,11 @@ namespace CoinConstraint.Client.Util
             serviceCollection.AddScoped<ITotalRepository, ClientTotalRepository>();
             serviceCollection.AddScoped<ITotalRepository, ClientTotalRepository>();
             serviceCollection.AddScoped<IUserRepository, ClientUserRepository>();
+        }
+
+        public static void AddApplicationServices(this IServiceCollection serviceCollection)
+        {
+            serviceCollection.AddScoped<IBudgetingService, BudgetingService>();
         }
     }
 }

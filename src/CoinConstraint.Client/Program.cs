@@ -29,6 +29,7 @@ namespace CoinConstraint.Client
 
             builder.Services.AddDataAccessServices();
             builder.Services.AddRepositores();
+            builder.Services.AddApplicationServices();
 
             await builder.Build().RunAsync();
         }

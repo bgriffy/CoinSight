@@ -12,8 +12,4 @@
     <ProjectReference Include="..\CoinConstraint.Application\CoinConstraint.Application.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Services\" />
-  </ItemGroup>
-
 </Project>
