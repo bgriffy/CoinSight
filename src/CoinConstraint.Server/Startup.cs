@@ -26,6 +26,7 @@ namespace CoinConstraint.Server
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddControllersWithViews();
             services.AddRazorPages();
+            services.AddDataAccessServices();
             services.AddRepositores();
         }
 
