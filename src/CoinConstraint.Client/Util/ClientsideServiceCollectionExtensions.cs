@@ -1,4 +1,6 @@
-﻿using CoinConstraint.Client.Infrastructure.Budgeting;
+﻿using CoinConstraint.Application.DataAccess;
+using CoinConstraint.Client.Infrastructure.Budgeting;
+using CoinConstraint.Client.Infrastructure.DataAccess;
 using CoinConstraint.Domain.AggregateModels.BudgetAggregate.Repositories;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -6,6 +8,11 @@ namespace CoinConstraint.Client.Util
 {
     public static class ClientsideServiceCollectionExtensions
     {
+        public static void AddDataAccessServices(this IServiceCollection serviceCollection)
+        {
+            serviceCollection.AddScoped<IClientsideCCUnitOfWork, ClientsideCCUnitOfWork>();
+        }
+
         public static void AddRepositores(this IServiceCollection serviceCollection)
         {
             serviceCollection.AddScoped<IBillRepository, ClientBillRepository>();
