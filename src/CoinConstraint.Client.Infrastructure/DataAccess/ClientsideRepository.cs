@@ -24,7 +24,7 @@ namespace CoinConstraint.Client.Infrastructure.DataAccess
 
         public async Task AddAsync(T entity)
         {
-            await _httpClient.PostAsJsonAsync(_apiEndpoint, entity);
+            await _httpClient.PostAsJsonAsync<T>(_apiEndpoint, entity);
         }
 
         public async Task AddRangeAsync(IEnumerable<T> entities)

@@ -5,32 +5,31 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace CoinConstraint.Server.Controllers.Budgeting
+namespace CoinConstraint.Server.Controllers.Budgeting;
+
+[Route("api/[controller]")]
+[ApiController]
+public class TotalsController : ControllerBase
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class TotalsController : ControllerBase
+    private readonly ITotalRepository _totalsRepository;
+
+    public TotalsController(ITotalRepository totalsRepository)
     {
-        private readonly ITotalRepository _totalsRepository;
+        _totalsRepository = totalsRepository;
+    }
 
-        public TotalsController(ITotalRepository totalsRepository)
+    [HttpGet]
+    public async Task<ActionResult<List<Total>>> GetTotalsAsync()
+    {
+        try
         {
-            _totalsRepository = totalsRepository;
+            var totals = await _totalsRepository.GetAllAsync();
+            return Ok(totals);
         }
-
-        [HttpGet]
-        public async Task<ActionResult<List<Total>>> GetTotalsAsync()
+        catch (System.Exception e)
         {
-            try
-            {
-                var totals = await _totalsRepository.GetAllAsync();
-                return Ok(totals);
-            }
-            catch (System.Exception e)
-            {
-                Console.WriteLine($"There was an error retrieving totals: {e.Message}");
-                throw;
-            }
+            Console.WriteLine($"There was an error retrieving totals: {e.Message}");
+            throw;
         }
     }
 }

@@ -18,6 +18,7 @@ namespace CoinConstraint.Client.Util
         public static void AddRepositores(this IServiceCollection serviceCollection)
         {
             serviceCollection.AddScoped<IBillRepository, ClientBillRepository>();
+            serviceCollection.AddScoped<IExpenseRepository, ClientExpenseRepository>();
             serviceCollection.AddScoped<IBudgetRepository, ClientBudgetRepository>();
             serviceCollection.AddScoped<IReminderRepository, ClientReminderRepository>();
             serviceCollection.AddScoped<ITotalRepository, ClientTotalRepository>();

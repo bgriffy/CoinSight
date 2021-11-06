@@ -11,10 +11,12 @@ namespace CoinConstraint.Server.Infrastructure.DataAccess
     public class ServersideRepository<T> : IServersideRepository<T> where T : class
     {
         private readonly DbSet<T> _dbset;
+        private DbContext _dbContext;
 
         public ServersideRepository(DbContext dbContext)
         {
             _dbset = dbContext.Set<T>();
+            _dbContext = dbContext;
         }
 
         public void Add(T entity)
@@ -96,6 +98,11 @@ namespace CoinConstraint.Server.Infrastructure.DataAccess
         public Task UpdateAsync(T entity)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task SaveChangesAsync()
+        {
+            await _dbContext.SaveChangesAsync();
         }
     }
 }

@@ -5,32 +5,31 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace CoinConstraint.Server.Controllers.Budgeting
+namespace CoinConstraint.Server.Controllers.Budgeting;
+
+[Route("api/[controller]")]
+[ApiController]
+public class BudgetController : ControllerBase
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class BudgetController : ControllerBase
+    private readonly IBudgetRepository _budgetRepository;
+
+    public BudgetController(IBudgetRepository budgetRepository)
     {
-        private readonly IBudgetRepository _budgetRepository;
+        _budgetRepository = budgetRepository;
+    }
 
-        public BudgetController(IBudgetRepository budgetRepository)
+    [HttpGet]
+    public async Task<ActionResult<List<Budget>>> GetBudgetsAsync()
+    {
+        try
         {
-            _budgetRepository = budgetRepository;
+            var budgets = await _budgetRepository.GetAllAsync();
+            return Ok(budgets);
         }
-
-        [HttpGet]
-        public async Task<ActionResult<List<Budget>>> GetBudgetsAsync()
+        catch (System.Exception e)
         {
-            try
-            {
-                var budgets = await _budgetRepository.GetAllAsync();
-                return Ok(budgets);
-            }
-            catch (System.Exception e)
-            {
-                Console.WriteLine($"There was an error retrieving bills: {e.Message}");
-                throw;
-            }
+            Console.WriteLine($"There was an error retrieving bills: {e.Message}");
+            throw;
         }
     }
 }

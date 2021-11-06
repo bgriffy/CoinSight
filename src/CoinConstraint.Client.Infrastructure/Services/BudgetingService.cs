@@ -36,5 +36,26 @@ namespace CoinConstraint.Client.Infrastructure.Services
         {
             return _expenses;
         }
+
+        public List<Expense> GetExpensesByBudget(int budgetID)
+        {
+            return _expenses.Where(e => e.BudgetID == budgetID).ToList();
+        }
+
+        public async Task SaveChanges()
+        {
+            foreach (var expense in _expenses)
+            {
+                if (expense.IsNew)
+                {
+                    expense.Note = "";
+                    expense.Paid = false;
+                    expense.Pay = false;
+                    expense.Automatic = false; 
+                    expense.BudgetID = 2;
+                    await _unitOfWork.Expenses.AddAsync(expense);
+                }
+            }
+        }
     }
 }

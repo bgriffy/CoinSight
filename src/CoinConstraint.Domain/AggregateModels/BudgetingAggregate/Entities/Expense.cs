@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CoinConstraint.Domain.AggregateModels.BudgetAggregate
 {
@@ -7,7 +8,7 @@ namespace CoinConstraint.Domain.AggregateModels.BudgetAggregate
     {
 
         [Key]
-        public int ID { get; set; }
+        public int? ID { get; set; }
 
         public int BudgetID { get; set; }
 
@@ -26,5 +27,8 @@ namespace CoinConstraint.Domain.AggregateModels.BudgetAggregate
         public decimal Amount { get; set; }
 
         public string Note { get; set; }
+
+        [NotMapped]
+        public bool IsNew { get; set; }
     }
 }

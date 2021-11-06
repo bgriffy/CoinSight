@@ -14,6 +14,7 @@ namespace CoinConstraint.Client
     {
         public static async Task Main(string[] args)
         {
+
             var builder = WebAssemblyHostBuilder.CreateDefault(args);
             builder.RootComponents.Add<App>("#app");
 
@@ -27,8 +28,8 @@ namespace CoinConstraint.Client
               .AddBootstrapProviders()
               .AddFontAwesomeIcons();
 
-            builder.Services.AddDataAccessServices();
             builder.Services.AddRepositores();
+            builder.Services.AddDataAccessServices();
             builder.Services.AddApplicationServices();
 
             await builder.Build().RunAsync();

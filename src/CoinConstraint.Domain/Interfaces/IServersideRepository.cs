@@ -17,5 +17,6 @@ namespace CoinConstraint.Domain.Interfaces
         void Remove(T entity);
         void RemoveRange(IEnumerable<T> entities);
         void RemoveAll();
+        Task SaveChangesAsync();
     }
 }
