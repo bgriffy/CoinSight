@@ -9,6 +9,7 @@ namespace CoinConstraint.Application.Budgeting
         List<Expense> GetAllExpenses();
         List<Expense> GetExpensesByBudget(int budgetID);
         Task Init();
+        void MarkExpenseForDeletion(Expense expense);
         Task SaveChanges();
     }
 }

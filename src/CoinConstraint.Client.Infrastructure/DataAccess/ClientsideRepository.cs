@@ -50,23 +50,15 @@ namespace CoinConstraint.Client.Infrastructure.DataAccess
 
         public async Task RemoveAsync(T entity)
         {
-            var request = new HttpRequestMessage
-            {
-                Method = HttpMethod.Delete,
-                RequestUri = new Uri("http://mydomain/api/something"),
-                Content = new StringContent(JsonConvert.SerializeObject(entity), Encoding.UTF8, "application/json")
-            };
+            var request = new HttpRequestMessage(HttpMethod.Delete, _apiEndpoint);
+            request.Content = new StringContent(JsonConvert.SerializeObject(entity), Encoding.UTF8, "application/json");
             await _httpClient.SendAsync(request);
         }
 
         public async Task RemoveRangeAsync(IEnumerable<T> entities)
         {
-            var request = new HttpRequestMessage
-            {
-                Method = HttpMethod.Delete,
-                RequestUri = new Uri("http://mydomain/api/something"),
-                Content = new StringContent(JsonConvert.SerializeObject(entities), Encoding.UTF8, "application/json")
-            };
+            var request = new HttpRequestMessage(HttpMethod.Delete, _apiEndpoint);
+            request.Content = new StringContent(JsonConvert.SerializeObject(entities), Encoding.UTF8, "application/json");
             await _httpClient.SendAsync(request);
         }
 

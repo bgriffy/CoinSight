@@ -62,7 +62,24 @@ public class ExpensesController : ControllerBase
         }
         catch (Exception e)
         {
-            Console.WriteLine($"Error saving new expense: {e.Message}");
+            Console.WriteLine($"Error updating existing expense: {e.Message}");
+            throw;
+        }
+    }
+
+    [HttpDelete]
+    public async Task DeleteExpense(Expense expense)
+    {
+        try
+        {
+            //TODO: Need to revisit and refactor IRepository/ICLientside repository logic.
+            //Should be able to call Remove instead of RemoveAsync here. 
+            await _expenseRepository.RemoveAsync(expense);
+            await _expenseRepository.SaveChangesAsync();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine($"Error deleting expense: {e.Message}");
             throw;
         }
     }

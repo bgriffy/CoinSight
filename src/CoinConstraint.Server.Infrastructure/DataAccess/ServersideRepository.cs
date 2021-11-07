@@ -77,7 +77,9 @@ namespace CoinConstraint.Server.Infrastructure.DataAccess
 
         public Task RemoveAsync(T entity)
         {
-            throw new NotImplementedException();
+            //TODO: Need to revisit this. Should serverside repository need a RemoveAsync function?
+            _dbset.Remove(entity);
+            return Task.CompletedTask;
         }
 
         public void RemoveRange(IEnumerable<T> entities)
@@ -87,7 +89,9 @@ namespace CoinConstraint.Server.Infrastructure.DataAccess
 
         public Task RemoveRangeAsync(IEnumerable<T> entities)
         {
-            throw new NotImplementedException();
+            //TODO: Need to revisit this. Should serverside repository need a RemoveRangeAsync function?
+            _dbset.RemoveRange(entities);
+            return Task.CompletedTask;
         }
 
         public void Update(T entity)

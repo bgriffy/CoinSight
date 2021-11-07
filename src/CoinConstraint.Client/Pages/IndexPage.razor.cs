@@ -38,6 +38,11 @@ namespace CoinConstraint.Client.Pages
             e.Item.IsUpdated = true;
         }
 
+        private void HandleDeletedExpense(Expense expense)
+        {
+            BudgetingService.MarkExpenseForDeletion(expense);
+        }
+
         private async Task SaveChanges()
         {
             await BudgetingService.SaveChanges();

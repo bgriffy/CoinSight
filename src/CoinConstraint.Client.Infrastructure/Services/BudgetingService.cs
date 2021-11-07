@@ -12,6 +12,7 @@ namespace CoinConstraint.Client.Infrastructure.Services
     {
         private readonly IClientsideCCUnitOfWork _unitOfWork;
         private List<Expense> _expenses;
+        private List<Expense> _expensesForDeletion;
 
         public BudgetingService(IClientsideCCUnitOfWork unitOfWork)
         {
@@ -24,6 +25,7 @@ namespace CoinConstraint.Client.Infrastructure.Services
             {
                 var expenses = await _unitOfWork.Expenses.GetAllAsync();
                 _expenses = expenses.OrderBy(e => e.DueDate).ToList();
+                _expensesForDeletion = new List<Expense>();
             }
             catch (Exception e)
             {
@@ -42,19 +44,41 @@ namespace CoinConstraint.Client.Infrastructure.Services
             return _expenses.Where(e => e.BudgetID == budgetID).ToList();
         }
 
+        public void MarkExpenseForDeletion(Expense expense)
+        {
+            _expensesForDeletion.Add(expense);
+        }
+
         public async Task SaveChanges()
         {
-            foreach (var expense in _expenses)
+            try
             {
-                if (expense.IsNew)
+                foreach (var expense in _expenses)
                 {
-                    await _unitOfWork.Expenses.AddAsync(expense);
+                    if (expense.IsNew)
+                    {
+                        await _unitOfWork.Expenses.AddAsync(expense);
+                    }
+                    else if (expense.IsUpdated)
+                    {
+                        await _unitOfWork.Expenses.UpdateAsync(expense);
+                    }
                 }
-                else if (expense.IsUpdated)
+
+                //await _unitOfWork.Expenses.RemoveRangeAsync(_expensesForDeletion);
+
+                foreach (var expense in _expensesForDeletion)
                 {
-                    await _unitOfWork.Expenses.UpdateAsync(expense);
+                    await _unitOfWork.Expenses.RemoveAsync(expense);
                 }
             }
+            catch (Exception e)
+            {
+                Console.WriteLine($"There was an error saving changes from the budgeting service: {e.Message}");
+                throw;
+            }
+
+            _expensesForDeletion.Clear();
         }
     }
 }
