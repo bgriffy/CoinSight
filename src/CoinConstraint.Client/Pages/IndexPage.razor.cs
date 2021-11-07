@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace CoinConstraint.Client.Pages
 {
-    public partial class Index
+    public partial class IndexPage
     {
         private List<Expense> _expenses;
         private Expense _selectedExpense; 
