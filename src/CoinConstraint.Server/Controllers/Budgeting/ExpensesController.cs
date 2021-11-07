@@ -38,9 +38,26 @@ public class ExpensesController : ControllerBase
     {
         try
         {
-            Console.WriteLine("HIT EXPENSE CONTROLLER!!!");
-            expense.ID = null;
+            //TODO: Need to revisit and refactor IRepository/ICLientside repository logic.
+            //Should be able to call Update instead of UpdateAsync here. 
             await _expenseRepository.AddAsync(expense);
+            await _expenseRepository.SaveChangesAsync();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine($"Error saving new expense: {e.Message}");
+            throw;
+        }
+    }
+
+    [HttpPut]
+    public async Task UpdateExistingExpense(Expense expense)
+    {
+        try
+        {
+            //TODO: Need to revisit and refactor IRepository/ICLientside repository logic.
+            //Should be able to call Update instead of UpdateAsync here. 
+            await _expenseRepository.UpdateAsync(expense);
             await _expenseRepository.SaveChangesAsync();
         }
         catch (Exception e)

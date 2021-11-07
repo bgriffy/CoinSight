@@ -8,7 +8,7 @@ namespace CoinConstraint.Domain.AggregateModels.BudgetAggregate
     {
 
         [Key]
-        public int? ID { get; set; }
+        public int? ID { get; set; } = null;
 
         public int BudgetID { get; set; }
 
@@ -26,9 +26,12 @@ namespace CoinConstraint.Domain.AggregateModels.BudgetAggregate
 
         public decimal Amount { get; set; }
 
-        public string Note { get; set; }
+        public string Note { get; set; } = "";
 
         [NotMapped]
         public bool IsNew { get; set; }
+
+        [NotMapped]
+        public bool IsUpdated { get; set; }
     }
 }

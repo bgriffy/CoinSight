@@ -28,7 +28,14 @@ namespace CoinConstraint.Client.Pages
 
         private void HandleNewExpense(SavedRowItem<Expense, Dictionary<string, object>> e)
         {
-            e.Item.IsNew = true; 
+            e.Item.IsNew = true;
+            //TODO: Remove this eventually. For testing purposes temporarily. 
+            e.Item.BudgetID = 2;
+        }
+
+        private void HandleUpdatedExpense(SavedRowItem<Expense, Dictionary<string, object>> e)
+        {
+            e.Item.IsUpdated = true;
         }
 
         private async Task SaveChanges()

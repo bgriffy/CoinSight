@@ -48,12 +48,11 @@ namespace CoinConstraint.Client.Infrastructure.Services
             {
                 if (expense.IsNew)
                 {
-                    expense.Note = "";
-                    expense.Paid = false;
-                    expense.Pay = false;
-                    expense.Automatic = false; 
-                    expense.BudgetID = 2;
                     await _unitOfWork.Expenses.AddAsync(expense);
+                }
+                else if (expense.IsUpdated)
+                {
+                    await _unitOfWork.Expenses.UpdateAsync(expense);
                 }
             }
         }

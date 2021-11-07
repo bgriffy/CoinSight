@@ -97,7 +97,9 @@ namespace CoinConstraint.Server.Infrastructure.DataAccess
 
         public Task UpdateAsync(T entity)
         {
-            throw new NotImplementedException();
+            //TODO: Need to revisit this. Should serverside repository need an UpdateAsync function?
+            _dbset.Update(entity);
+            return Task.CompletedTask;
         }
 
         public async Task SaveChangesAsync()
