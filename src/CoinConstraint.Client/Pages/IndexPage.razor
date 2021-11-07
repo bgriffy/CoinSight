@@ -27,10 +27,14 @@
                 <Button Color="Color.Secondary" Clicked="@context.Clicked">@context.LocalizationString</Button>
             </CancelCommandTemplate>
         </DataGridCommandColumn>
-        <DataGridColumn TItem="Expense" Editable="true" Field="@nameof(Expense.ID)" Caption="ID" Sortable="false" />
         <DataGridColumn TItem="Expense" Editable="true" Field="@nameof(Expense.Title)" Caption="Title" Sortable="false" />
         <DataGridColumn TItem="Expense" Editable="true" Field="@nameof(Expense.Description)" Caption="Description" Sortable="false" />
+        <DataGridColumn TItem="Expense" Editable="true" Field="@nameof(Expense.Amount)" Caption="Amount" Sortable="false" />
         <DataGridColumn TItem="Expense" Editable="true" Field="@nameof(Expense.DueDate)" Caption="Due Date" Sortable="false" />
+        <DataGridColumn TItem="Expense" Editable="true" Field="@nameof(Expense.Pay)" Caption="Pay Now" Sortable="false" />
+        <DataGridColumn TItem="Expense" Editable="true" Field="@nameof(Expense.Paid)" Caption="Paid" Sortable="false" />
+        <DataGridColumn TItem="Expense" Editable="true" Field="@nameof(Expense.Automatic)" Caption="Auto-Pay" Sortable="false" />
+        <DataGridColumn TItem="Expense" Editable="true" Field="@nameof(Expense.Note)" Caption="Note" Sortable="false" />
     </DataGridColumns>
     <ButtonRowTemplate>
         <Button Size="Size.Small" Padding="Padding.Is2.OnX.Is1.OnY" Margin="Margin.Is1.FromRight" Color="Color.Success" Clicked="@context.NewCommand.Clicked">Add</Button>
