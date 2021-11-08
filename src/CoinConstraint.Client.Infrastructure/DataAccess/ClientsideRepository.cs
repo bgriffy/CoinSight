@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace CoinConstraint.Client.Infrastructure.DataAccess
 {
-    public class ClientsideRepository<T> : IRepository<T> where T : class
+    public class ClientsideRepository<T> : IClientsideRepository<T> where T : class
     {
         private readonly HttpClient _httpClient;
         private readonly string _apiEndpoint;
@@ -60,6 +60,12 @@ namespace CoinConstraint.Client.Infrastructure.DataAccess
             var request = new HttpRequestMessage(HttpMethod.Delete, _apiEndpoint);
             request.Content = new StringContent(JsonConvert.SerializeObject(entities), Encoding.UTF8, "application/json");
             await _httpClient.SendAsync(request);
+        }
+
+        public Task SaveChangesAsync()
+        {
+            //TODO: Think I will need to implement this once the offline storage is setup. 
+            throw new NotImplementedException();
         }
 
         public async Task UpdateAsync(T entity)

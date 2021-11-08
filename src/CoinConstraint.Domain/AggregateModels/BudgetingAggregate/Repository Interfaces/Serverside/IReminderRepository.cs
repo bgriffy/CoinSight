@@ -2,7 +2,7 @@
 
 namespace CoinConstraint.Domain.AggregateModels.BudgetAggregate.Repositories
 {
-    public interface IBudgetRepository : IRepository<Budget>
+    public interface IReminderRepository : IServersideRepository<Reminder>
     {
     }
 }

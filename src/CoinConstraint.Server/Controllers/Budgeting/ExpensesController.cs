@@ -38,8 +38,6 @@ public class ExpensesController : ControllerBase
     {
         try
         {
-            //TODO: Need to revisit and refactor IRepository/ICLientside repository logic.
-            //Should be able to call Update instead of UpdateAsync here. 
             await _expenseRepository.AddAsync(expense);
             await _expenseRepository.SaveChangesAsync();
         }
@@ -55,9 +53,7 @@ public class ExpensesController : ControllerBase
     {
         try
         {
-            //TODO: Need to revisit and refactor IRepository/ICLientside repository logic.
-            //Should be able to call Update instead of UpdateAsync here. 
-            await _expenseRepository.UpdateAsync(expense);
+            _expenseRepository.Update(expense);
             await _expenseRepository.SaveChangesAsync();
         }
         catch (Exception e)
@@ -72,9 +68,7 @@ public class ExpensesController : ControllerBase
     {
         try
         {
-            //TODO: Need to revisit and refactor IRepository/ICLientside repository logic.
-            //Should be able to call Remove instead of RemoveAsync here. 
-            await _expenseRepository.RemoveAsync(expense);
+            _expenseRepository.Remove(expense);
             await _expenseRepository.SaveChangesAsync();
         }
         catch (Exception e)

@@ -23,7 +23,7 @@ namespace CoinConstraint.Server.Controllers.Users
         {
             try
             {
-                var users = await _userRepository.GetAllAsync();
+                var users =  _userRepository.GetAll();
                 return Ok(users);
             }
             catch (System.Exception e)

@@ -2,7 +2,7 @@
 
 namespace CoinConstraint.Domain.AggregateModels.BudgetAggregate.Repositories
 {
-    public interface IBillRepository : IRepository<Bill>
+    public interface ITotalRepository : IServersideRepository<Total>
     {
     }
 }

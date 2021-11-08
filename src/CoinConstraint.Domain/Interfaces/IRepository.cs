@@ -7,13 +7,14 @@ namespace CoinConstraint.Domain.Interfaces
 {
     public interface IRepository<T> where T : class
     {
-        Task AddAsync(T entity);
-        Task AddRangeAsync(IEnumerable<T> entities);
-        Task UpdateAsync(T entity);
-        Task<IEnumerable<T>> GetAllAsync();
-        Task<IEnumerable<T>> FindAsync(Expression<Func<T, bool>> predicate);
-        Task RemoveAsync(T entity);
-        Task RemoveRangeAsync(IEnumerable<T> entities);
-        Task RemoveAllAsync();
+        void Add(T entity);
+        void Update(T entity);
+        void AddRange(IEnumerable<T> entities);
+        IEnumerable<T> GetAll();
+        IEnumerable<T> Find(Expression<Func<T, bool>> predicate);
+        void Remove(T entity);
+        void RemoveRange(IEnumerable<T> entities);
+        void RemoveAll();
+        void SaveChanges();
     }
 }

@@ -1,16 +1,18 @@
 ﻿using CoinConstraint.Application.DataAccess;
 using CoinConstraint.Domain.AggregateModels.BudgetAggregate.Repositories;
+using CoinConstraint.Domain.AggregateModels.BudgetAggregate.Repositories.Client;
+using CoinConstraint.Domain.AggregateModels.BudgetAggregate.Repositories.Clientside;
 
 namespace CoinConstraint.Client.Infrastructure.DataAccess
 {
     public class ClientsideCCUnitOfWork : IClientsideCCUnitOfWork
     {
-        public ClientsideCCUnitOfWork(IBillRepository billRepository,
-                                      IBudgetRepository budgetRepository,
-                                      IExpenseRepository expenseRepository,
-                                      IReminderRepository reminderRepository,
-                                      ITotalRepository totalRepository,
-                                      IUserRepository userRepository)
+        public ClientsideCCUnitOfWork(IClientsideBillRepository billRepository,
+                                      IClientsideBudgetRepository budgetRepository,
+                                      IClientsideExpenseRepository expenseRepository,
+                                      IClientsideReminderRepository reminderRepository,
+                                      IClientsideTotalRepository totalRepository,
+                                      IClientsideUserRepository userRepository)
         {
             Bills = billRepository;
             Budgets = budgetRepository;
@@ -20,16 +22,16 @@ namespace CoinConstraint.Client.Infrastructure.DataAccess
             Users = userRepository;
         }
 
-        public IBillRepository Bills { get; set; }
+        public IClientsideBillRepository Bills { get; set; }
 
-        public IBudgetRepository Budgets { get; set; }
+        public IClientsideBudgetRepository Budgets { get; set; }
 
-        public IExpenseRepository Expenses { get; set; }
+        public IClientsideExpenseRepository Expenses { get; set; }
 
-        public IReminderRepository Reminders { get; set; }
+        public IClientsideReminderRepository Reminders { get; set; }
 
-        public ITotalRepository Totals { get; set; }
+        public IClientsideTotalRepository Totals { get; set; }
 
-        public IUserRepository Users { get; }
+        public IClientsideUserRepository Users { get; }
     }
 }

@@ -69,46 +69,26 @@ namespace CoinConstraint.Server.Infrastructure.DataAccess
             _dbset.RemoveRange();
         }
 
-        public async Task RemoveAllAsync()
-        {
-            throw new NotImplementedException();
-
-        }
-
-        public Task RemoveAsync(T entity)
-        {
-            //TODO: Need to revisit this. Should serverside repository need a RemoveAsync function?
-            _dbset.Remove(entity);
-            return Task.CompletedTask;
-        }
 
         public void RemoveRange(IEnumerable<T> entities)
         {
             _dbset.RemoveRange(entities);
         }
 
-        public Task RemoveRangeAsync(IEnumerable<T> entities)
-        {
-            //TODO: Need to revisit this. Should serverside repository need a RemoveRangeAsync function?
-            _dbset.RemoveRange(entities);
-            return Task.CompletedTask;
-        }
 
         public void Update(T entity)
         {
             _dbset.Update(entity);
         }
 
-        public Task UpdateAsync(T entity)
-        {
-            //TODO: Need to revisit this. Should serverside repository need an UpdateAsync function?
-            _dbset.Update(entity);
-            return Task.CompletedTask;
-        }
-
         public async Task SaveChangesAsync()
         {
             await _dbContext.SaveChangesAsync();
+        }
+
+        public void SaveChanges()
+        {
+            _dbContext.SaveChanges();
         }
     }
 }
