@@ -3,46 +3,53 @@
 @using CoinConstraint.Domain.AggregateModels.BudgetAggregate;
 @inject IBudgetingService BudgetingService 
 
-<h1>Budgets</h1>
 
-<DataGrid TItem="Expense"
-          @bind-SelectedRow="@_selectedExpense"
-          Data="@_expenses"
-          CommandMode="DataGridCommandMode.ButtonRow"
-          Filterable="false"
-          Editable="true"
-          EditMode="DataGridEditMode.Popup"
-          FilterMethod="DataGridFilterMethod.StartsWith"
-          PageSize="10"
-          RowInserted="@HandleNewExpense"
-          RowUpdated="@HandleUpdatedExpense"
-          RowRemoved="@HandleDeletedExpense"
-          ShowPageSizes="false"
-          ShowPager="true">
-    
-    <DataGridColumns>
-        <DataGridCommandColumn TItem="Expense" Width="170px">
-            <SaveCommandTemplate>
-                <Button Type="ButtonType.Submit" PreventDefaultOnSubmit Color="Color.Primary" Clicked="@context.Clicked">@context.LocalizationString</Button>
-            </SaveCommandTemplate>
-            <CancelCommandTemplate>
-                <Button Color="Color.Secondary" Clicked="@context.Clicked">@context.LocalizationString</Button>
-            </CancelCommandTemplate>
-        </DataGridCommandColumn>
-        <DataGridColumn TItem="Expense" Editable="true" Field="@nameof(Expense.Title)" Caption="Title" Sortable="false" />
-        <DataGridColumn TItem="Expense" Editable="true" Field="@nameof(Expense.Description)" Caption="Description" Sortable="false" />
-        <DataGridColumn TItem="Expense" Editable="true" Field="@nameof(Expense.Amount)" Caption="Amount" Sortable="false" />
-        <DataGridColumn TItem="Expense" Editable="true" Field="@nameof(Expense.DueDate)" Caption="Due Date" Sortable="false" />
-        <DataGridColumn TItem="Expense" Editable="true" Field="@nameof(Expense.Pay)" Caption="Pay Now" Sortable="false" />
-        <DataGridColumn TItem="Expense" Editable="true" Field="@nameof(Expense.Paid)" Caption="Paid" Sortable="false" />
-        <DataGridColumn TItem="Expense" Editable="true" Field="@nameof(Expense.Automatic)" Caption="Auto-Pay" Sortable="false" />
-        <DataGridColumn TItem="Expense" Editable="true" Field="@nameof(Expense.Note)" Caption="Note" Sortable="false" />
-    </DataGridColumns>
-    <ButtonRowTemplate>
-        <Button Size="Size.Small" Padding="Padding.Is2.OnX.Is1.OnY" Margin="Margin.Is1.FromRight" Color="Color.Success" Clicked="@context.NewCommand.Clicked">Add</Button>
-        <Button Size="Size.Small" Disabled="@(_selectedExpense == null)" Padding="Padding.Is2.OnX.Is1.OnY" Margin="Margin.Is1.FromRight" Color="Color.Secondary" Clicked="context.EditCommand.Clicked">Edit</Button>
-        <Button Size="Size.Small" Disabled="@(_selectedExpense == null)" Padding="Padding.Is2.OnX.Is1.OnY" Margin="Margin.Is1.FromRight" Color="Color.Danger" Clicked="context.DeleteCommand.Clicked">Delete</Button>
-    </ButtonRowTemplate>
-</DataGrid>
+<LoadSpinnerComponent @ref="_loadSpinner" @bind-LoadSpinnerIsHidden="_expensesAreLoaded"></LoadSpinnerComponent>
 
-<Button Size="Size.Small" Clicked="@(async() => await SaveChanges())" Margin="Margin.Is2.FromTop" Padding="Padding.Is2.OnX.Is1.OnY" Color="Color.Primary"><Icon Name="IconName.Save" /> Save</Button>
+@if(_expensesAreLoaded)
+{
+    <h3>Expenses</h3>
+
+    <DataGrid TItem="Expense"
+              @bind-SelectedRow="@_selectedExpense"
+              Data="@_expenses"
+              CommandMode="DataGridCommandMode.ButtonRow"
+              Filterable="false"
+              Editable="true"
+              EditMode="DataGridEditMode.Popup"
+              FilterMethod="DataGridFilterMethod.StartsWith"
+              PageSize="10"
+              RowInserted="@HandleNewExpense"
+              RowUpdated="@HandleUpdatedExpense"
+              RowRemoved="@HandleDeletedExpense"
+              ShowPageSizes="false"
+              ShowPager="true">
+
+        <DataGridColumns>
+            <DataGridCommandColumn TItem="Expense" Width="170px">
+                <SaveCommandTemplate>
+                    <Button Type="ButtonType.Submit" PreventDefaultOnSubmit Color="Color.Primary" Clicked="@context.Clicked">@context.LocalizationString</Button>
+                </SaveCommandTemplate>
+                <CancelCommandTemplate>
+                    <Button Color="Color.Secondary" Clicked="@context.Clicked">@context.LocalizationString</Button>
+                </CancelCommandTemplate>
+            </DataGridCommandColumn>
+            <DataGridColumn TItem="Expense" Editable="true" Field="@nameof(Expense.Title)" Caption="Title" Sortable="false" />
+            <DataGridColumn TItem="Expense" Editable="true" Field="@nameof(Expense.Description)" Caption="Description" Sortable="false" />
+            <DataGridColumn TItem="Expense" Editable="true" Field="@nameof(Expense.Amount)" Caption="Amount" Sortable="false" />
+            <DataGridColumn TItem="Expense" Editable="true" Field="@nameof(Expense.DueDate)" Caption="Due Date" Sortable="false" />
+            <DataGridColumn TItem="Expense" Editable="true" Field="@nameof(Expense.Pay)" Caption="Pay Now" Sortable="false" />
+            <DataGridColumn TItem="Expense" Editable="true" Field="@nameof(Expense.Paid)" Caption="Paid" Sortable="false" />
+            <DataGridColumn TItem="Expense" Editable="true" Field="@nameof(Expense.Automatic)" Caption="Auto-Pay" Sortable="false" />
+            <DataGridColumn TItem="Expense" Editable="true" Field="@nameof(Expense.Note)" Caption="Note" Sortable="false" />
+        </DataGridColumns>
+        <ButtonRowTemplate>
+            <Button Size="Size.Small" Padding="Padding.Is2.OnX.Is1.OnY" Margin="Margin.Is1.FromRight" Color="Color.Success" Clicked="@context.NewCommand.Clicked">Add</Button>
+            <Button Size="Size.Small" Disabled="@(_selectedExpense == null)" Padding="Padding.Is2.OnX.Is1.OnY" Margin="Margin.Is1.FromRight" Color="Color.Secondary" Clicked="context.EditCommand.Clicked">Edit</Button>
+            <Button Size="Size.Small" Disabled="@(_selectedExpense == null)" Padding="Padding.Is2.OnX.Is1.OnY" Margin="Margin.Is1.FromRight" Color="Color.Danger" Clicked="context.DeleteCommand.Clicked">Delete</Button>
+        </ButtonRowTemplate>
+    </DataGrid>
+
+    <Button Size="Size.Small" Clicked="@(async() => await SaveChanges())" Margin="Margin.Is2.FromTop" Padding="Padding.Is2.OnX.Is1.OnY" Color="Color.Primary"><Icon Name="IconName.Save" /> Save</Button>
+}
+
