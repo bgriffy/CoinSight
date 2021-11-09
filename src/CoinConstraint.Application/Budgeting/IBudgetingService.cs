@@ -7,9 +7,9 @@ namespace CoinConstraint.Application.Budgeting
     public interface IBudgetingService
     {
         List<Expense> GetAllExpenses();
-        List<Expense> GetExpensesByBudget(int budgetID);
+        Task<List<Expense>> GetExpensesByBudget(int budgetID);
         Task Init();
         void MarkExpenseForDeletion(Expense expense);
-        Task SaveChanges();
+        Task SaveExpenses();
     }
 }

@@ -11,6 +11,8 @@ namespace CoinConstraint.Client.Infrastructure.Services
     public class BudgetingService : IBudgetingService
     {
         private readonly IClientsideCCUnitOfWork _unitOfWork;
+        private Budget _selectedBudget;
+        private List<Budget> _budgets; 
         private List<Expense> _expenses;
         private List<Expense> _expensesForDeletion;
 
@@ -23,9 +25,14 @@ namespace CoinConstraint.Client.Infrastructure.Services
         {
             try
             {
-                var expenses = await _unitOfWork.Expenses.GetAllAsync();
-                _expenses = expenses.OrderBy(e => e.DueDate).ToList();
+                _budgets = (List<Budget>)await _unitOfWork.Budgets.GetAllAsync();
+                _selectedBudget = _budgets.FirstOrDefault();
                 _expensesForDeletion = new List<Expense>();
+                _expenses = new List<Expense>();
+                if (_selectedBudget != null)
+                {
+                    await SetExpenses(_selectedBudget.ID);
+                }
             }
             catch (Exception e)
             {
@@ -39,9 +46,15 @@ namespace CoinConstraint.Client.Infrastructure.Services
             return _expenses;
         }
 
-        public List<Expense> GetExpensesByBudget(int budgetID)
+        public async Task<List<Expense>> GetExpensesByBudget(int budgetID)
         {
-            return _expenses.Where(e => e.BudgetID == budgetID).ToList();
+            await SetExpenses(budgetID);
+            return _expenses;
+        }
+
+        public async Task SetExpenses(int budgetID)
+        {
+            _expenses = await _unitOfWork.Expenses.GetExpensesByBudget(budgetID);
         }
 
         public void MarkExpenseForDeletion(Expense expense)
@@ -49,7 +62,7 @@ namespace CoinConstraint.Client.Infrastructure.Services
             _expensesForDeletion.Add(expense);
         }
 
-        public async Task SaveChanges()
+        public async Task SaveExpenses()
         {
             try
             {

@@ -28,7 +28,7 @@ public class BudgetController : ControllerBase
         }
         catch (System.Exception e)
         {
-            Console.WriteLine($"There was an error retrieving bills: {e.Message}");
+            Console.WriteLine($"There was an error retrieving budgets: {e.Message}");
             throw;
         }
     }

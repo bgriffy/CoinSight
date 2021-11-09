@@ -33,6 +33,21 @@ public class ExpensesController : ControllerBase
         }
     }
 
+    [HttpGet("{budgetID}")]
+    public async Task<ActionResult<List<Expense>>> GetExpensesByBudget(int budgetID)
+    {
+        try
+        {
+            var expenses = _expenseRepository.GetExpensesByBudget(budgetID);
+            return Ok(expenses);
+        }
+        catch (System.Exception e)
+        {
+            Console.WriteLine($"There was an error retrieving expenses: {e.Message}");
+            throw;
+        }
+    }
+
     [HttpPost]
     public async Task SaveNewExpenseAsync(Expense expense)
     {

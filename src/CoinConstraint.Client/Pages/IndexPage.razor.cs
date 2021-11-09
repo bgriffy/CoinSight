@@ -51,7 +51,7 @@ namespace CoinConstraint.Client.Pages
         private async Task SaveChanges()
         {
             await _loadSpinner.ShowLoadSpinner("Saving changes...");
-            await BudgetingService.SaveChanges();
+            await BudgetingService.SaveExpenses();
             await _loadSpinner.HideLoadSpinner();
         }
     }

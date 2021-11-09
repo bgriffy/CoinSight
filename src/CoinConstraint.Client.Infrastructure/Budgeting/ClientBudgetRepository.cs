@@ -9,7 +9,7 @@ namespace CoinConstraint.Client.Infrastructure.Budgeting
     {
         private readonly HttpClient _httpClient;
 
-        public ClientBudgetRepository(HttpClient httpClient) : base(httpClient, "api/Budgets")
+        public ClientBudgetRepository(HttpClient httpClient) : base(httpClient, "api/Budget")
         {
             _httpClient = httpClient;
         }
