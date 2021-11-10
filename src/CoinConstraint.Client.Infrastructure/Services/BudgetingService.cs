@@ -41,7 +41,18 @@ namespace CoinConstraint.Client.Infrastructure.Services
             }
         }
 
-        public List<Expense> GetAllExpenses()
+        public async Task SetSelectedBudget(Budget selectedBudget)
+        {
+            _selectedBudget = selectedBudget;
+            await SetExpenses(_selectedBudget.ID);
+        }
+
+        public List<Budget> GetAllBudgets()
+        {
+            return _budgets;
+        }
+
+        public List<Expense> GetExpenses()
         {
             return _expenses;
         }

@@ -3,12 +3,25 @@
 @using CoinConstraint.Domain.AggregateModels.BudgetAggregate;
 @inject IBudgetingService BudgetingService 
 
-
 <LoadSpinnerComponent @ref="_loadSpinner" @bind-LoadSpinnerIsHidden="_expensesAreLoaded"></LoadSpinnerComponent>
 
 @if(_expensesAreLoaded)
 {
-    <h3>Expenses</h3>
+    <Column ColumnSize="ColumnSize.Is8" Margin="Margin.Is4.OnY">
+        <Field Horizontal="true">
+            <Label Margin="Margin.Is4.FromRight.Is2.FromTop">Budgets</Label>
+            <FieldBody>
+                <SelectList TItem=Budget
+                        TValue="int"
+                        Data=@_budgets
+                        TextField=@((budget) => budget.Title)
+                        ValueField=@((budget) => budget.ID)
+                        SelectedValue=@_selectedBudget.ID
+                        SelectedValueChanged=@(async(budgetID) => await HandleBudgetChange(budgetID))>
+                </SelectList>
+            </FieldBody>
+        </Field>
+    </Column>
 
     <DataGrid TItem="Expense"
               @bind-SelectedRow="@_selectedExpense"
