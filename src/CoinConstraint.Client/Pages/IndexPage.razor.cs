@@ -1,4 +1,5 @@
-﻿using Blazorise.DataGrid;
+﻿using Blazorise;
+using Blazorise.DataGrid;
 using CoinConstraint.Client.Components;
 using CoinConstraint.Domain.AggregateModels.BudgetAggregate;
 using System.Collections.Generic;
@@ -14,7 +15,8 @@ namespace CoinConstraint.Client.Pages
         private List<Budget> _budgets;
         private Budget _selectedBudget; 
         private LoadSpinnerComponent _loadSpinner;
-        private bool _expensesAreLoaded = false;
+        private bool _pageIsLoaded = false;
+        private Modal _budgetModal;
 
         protected override async Task OnInitializedAsync()
         {
@@ -67,6 +69,11 @@ namespace CoinConstraint.Client.Pages
         private void HandleDeletedExpense(Expense expense)
         {
             BudgetingService.MarkExpenseForDeletion(expense);
+        }
+
+        private void AddNewBudget()
+        {
+            _budgetModal.Show();
         }
 
         private async Task SaveChanges()

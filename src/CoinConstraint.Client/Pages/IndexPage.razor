@@ -3,25 +3,64 @@
 @using CoinConstraint.Domain.AggregateModels.BudgetAggregate;
 @inject IBudgetingService BudgetingService 
 
-<LoadSpinnerComponent @ref="_loadSpinner" @bind-LoadSpinnerIsHidden="_expensesAreLoaded"></LoadSpinnerComponent>
+<LoadSpinnerComponent @ref="_loadSpinner" @bind-LoadSpinnerIsHidden="_pageIsLoaded"></LoadSpinnerComponent>
 
-@if(_expensesAreLoaded)
+<Modal @ref="_budgetModal">
+    <ModalContent Centered="true">
+        <ModalHeader>
+            <ModalTitle>Budget</ModalTitle>
+            <CloseButton></CloseButton>
+        </ModalHeader>
+
+        <ModalBody>
+            <Field>
+                <Label>Name</Label>
+                <TextEdit></TextEdit>
+            </Field>
+
+            <Field>
+                <Label>Start Date</Label>
+                <DateEdit TValue="DateTime" Date="DateTime.Now"></DateEdit>
+            </Field>
+
+            <Field>
+                <Label>End Date</Label>
+                <DateEdit TValue="DateTime" Date="DateTime.Now"></DateEdit>
+            </Field>
+        </ModalBody>
+
+        <ModalFooter>
+            <Button Size="Size.Small" Padding="Padding.Is2.OnX.Is1.OnY" Margin="Margin.Is1.FromRight" Color="Color.Success" Clicked="@(() => _budgetModal.Hide())">Save</Button>
+            <Button Size="Size.Small" Disabled="@(_selectedExpense == null)" Padding="Padding.Is2.OnX.Is1.OnY" Margin="Margin.Is1.FromRight" Color="Color.Secondary" Clicked="@(() => _budgetModal.Hide())">Cancel</Button>
+        </ModalFooter>
+
+
+        </ModalContent>
+</Modal>
+
+@if(_pageIsLoaded)
 {
-    <Column ColumnSize="ColumnSize.Is8" Margin="Margin.Is4.OnY">
-        <Field Horizontal="true">
-            <Label Margin="Margin.Is4.FromRight.Is2.FromTop">Budgets</Label>
-            <FieldBody>
-                <SelectList TItem=Budget
-                        TValue="int"
-                        Data=@_budgets
-                        TextField=@((budget) => budget.Title)
-                        ValueField=@((budget) => budget.ID)
-                        SelectedValue=@_selectedBudget.ID
-                        SelectedValueChanged=@(async(budgetID) => await HandleBudgetChange(budgetID))>
-                </SelectList>
-            </FieldBody>
-        </Field>
-    </Column>
+    <Row>
+        <Column ColumnSize="ColumnSize.Is2" Margin="Margin.Is4.OnY">
+            <Field Horizontal="true">
+                <Label Margin="Margin.Is4.FromRight.Is2.FromTop">Budgets</Label>
+                <FieldBody>
+                    <SelectList TItem=Budget
+                            TValue="int"
+                            Data=@_budgets
+                            TextField=@((budget) => budget.Title)
+                            ValueField=@((budget) => budget.ID)
+                            SelectedValue=@_selectedBudget.ID
+                            SelectedValueChanged=@(async(budgetID) => await HandleBudgetChange(budgetID))>
+                    </SelectList>
+                </FieldBody>
+            </Field>
+        </Column>
+
+        <Column ColumnSize="ColumnSize.Is2" Margin="Margin.Is4.OnY">
+            <Button Color="Color.Success" Size="Size.Small" Clicked=AddNewBudget>Add Budget</Button>
+        </Column>
+    </Row>
 
     <DataGrid TItem="Expense"
               @bind-SelectedRow="@_selectedExpense"
