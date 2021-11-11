@@ -8,22 +8,22 @@
         <ModalBody>
             <Field>
                 <Label>Name</Label>
-                <TextEdit></TextEdit>
+                <TextEdit @bind-Text="_budget.Title"></TextEdit>
             </Field>
 
             <Field>
                 <Label>Start Date</Label>
-                <DateEdit TValue="DateTime" Date="DateTime.Now"></DateEdit>
+                <DateEdit TValue="DateTime" @bind-Date="_budget.StartDate"></DateEdit>
             </Field>
 
             <Field>
                 <Label>End Date</Label>
-                <DateEdit TValue="DateTime" Date="DateTime.Now"></DateEdit>
+                <DateEdit TValue="DateTime" @bind-Date="_budget.EndDate"></DateEdit>
             </Field>
         </ModalBody>
 
         <ModalFooter>
-            <Button Size="Size.Small" Padding="Padding.Is2.OnX.Is1.OnY" Margin="Margin.Is1.FromRight" Color="Color.Success" Clicked="@(() => _budgetModal.Hide())">Save</Button>
+            <Button Size="Size.Small" Padding="Padding.Is2.OnX.Is1.OnY" Margin="Margin.Is1.FromRight" Color="Color.Success" Clicked="@(async() => await Save())">Save</Button>
             <Button Size="Size.Small" Padding="Padding.Is2.OnX.Is1.OnY" Margin="Margin.Is1.FromRight" Color="Color.Secondary" Clicked="@(() => _budgetModal.Hide())">Cancel</Button>
         </ModalFooter>
 

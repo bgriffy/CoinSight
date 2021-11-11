@@ -5,7 +5,8 @@
 
 <LoadSpinnerComponent @ref="_loadSpinner" @bind-LoadSpinnerIsHidden="_pageIsLoaded"></LoadSpinnerComponent>
 
-<BudgetDetailModalComponent @ref="_budgetModal">
+<BudgetDetailModalComponent @ref="_budgetModal"
+                            NewBudgetAdded=HandleNewBudget>
 </BudgetDetailModalComponent>
 
 @if(_pageIsLoaded)

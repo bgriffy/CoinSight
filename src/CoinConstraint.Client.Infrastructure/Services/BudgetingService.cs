@@ -73,7 +73,45 @@ namespace CoinConstraint.Client.Infrastructure.Services
             _expensesForDeletion.Add(expense);
         }
 
-        public async Task SaveExpenses()
+        public void AddNewBudget(Budget budget)
+        {
+            _budgets.Add(budget);
+        }
+
+        public async Task SaveChanges()
+        {
+            try
+            {
+                await SaveBudgets();
+                await SaveExpenses();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"There was an error saving changes from the budgeting service: {e.Message}");
+                throw;
+            }
+        }
+
+        private async Task SaveBudgets()
+        {
+            try
+            {
+                foreach (var budget in _budgets)
+                {
+                    if (budget.IsNew)
+                    {
+                        await _unitOfWork.Budgets.AddAsync(budget);
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"There was an error saving budgets from the budgeting service: {e.Message}");
+                throw;
+            }
+        }
+
+        private async Task SaveExpenses()
         {
             try
             {
@@ -98,7 +136,7 @@ namespace CoinConstraint.Client.Infrastructure.Services
             }
             catch (Exception e)
             {
-                Console.WriteLine($"There was an error saving changes from the budgeting service: {e.Message}");
+                Console.WriteLine($"There was an error saving expenses from the budgeting service: {e.Message}");
                 throw;
             }
 

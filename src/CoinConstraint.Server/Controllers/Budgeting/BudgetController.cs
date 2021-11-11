@@ -32,4 +32,19 @@ public class BudgetController : ControllerBase
             throw;
         }
     }
+
+    [HttpPost]
+    public async Task SaveNewBudgetAsync(Budget budget)
+    {
+        try
+        {
+            await _budgetRepository.AddAsync(budget);
+            await _budgetRepository.SaveChangesAsync();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine($"Error saving new expense: {e.Message}");
+            throw;
+        }
+    }
 }

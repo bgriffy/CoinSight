@@ -17,10 +17,16 @@ namespace CoinConstraint.Client.Pages
         private LoadSpinnerComponent _loadSpinner;
         private bool _pageIsLoaded = false;
         private BudgetDetailModalComponent _budgetModal;
+        private bool _isDirty;
 
         protected override async Task OnInitializedAsync()
         {
             await BudgetingService.Init();
+            await LoadData();
+        }
+
+        public async Task LoadData()
+        {
             await LoadBudgets();
             await LoadExpenses();
             await _loadSpinner.HideLoadSpinner();
@@ -59,16 +65,19 @@ namespace CoinConstraint.Client.Pages
         {
             e.Item.IsNew = true;
             e.Item.BudgetID = _selectedBudget.ID;
+            _isDirty = true; 
         }
 
         private void HandleUpdatedExpense(SavedRowItem<Expense, Dictionary<string, object>> e)
         {
             e.Item.IsUpdated = true;
+            _isDirty = true;
         }
 
         private void HandleDeletedExpense(Expense expense)
         {
             BudgetingService.MarkExpenseForDeletion(expense);
+            _isDirty = true;
         }
 
         private void AddNewBudget()
@@ -76,11 +85,17 @@ namespace CoinConstraint.Client.Pages
             _budgetModal.Show();
         }
 
+        private async void HandleNewBudget(Budget newBudget)
+        {
+            BudgetingService.AddNewBudget(newBudget);
+            await LoadData();
+        }
+
         private async Task SaveChanges()
         {
             await _loadSpinner.ShowLoadSpinner("Saving changes...");
             await Task.Delay(5000);
-            await BudgetingService.SaveExpenses();
+            await BudgetingService.SaveChanges();
             await _loadSpinner.HideLoadSpinner();
         }
     }

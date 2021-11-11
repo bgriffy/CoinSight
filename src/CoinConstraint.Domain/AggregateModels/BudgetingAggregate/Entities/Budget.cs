@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CoinConstraint.Domain.AggregateModels.BudgetAggregate
 {
@@ -10,11 +11,11 @@ namespace CoinConstraint.Domain.AggregateModels.BudgetAggregate
         [Key]
         public int ID { get; set; }
 
-        public string Title { get; set; }
+        public string Title { get; set; } = "";
 
-        public DateTime StartDate { get; set; }
+        public DateTime StartDate { get; set; } = DateTime.Now;
 
-        public DateTime EndDate { get; set; }
+        public DateTime EndDate { get; set; } = DateTime.Now;
 
         public List<Total> Totals { get; set; }
 
@@ -25,5 +26,8 @@ namespace CoinConstraint.Domain.AggregateModels.BudgetAggregate
         public Guid UUID { get; set; }
 
         public User User { get; set; }
+
+        [NotMapped]
+        public bool IsNew { get; set; }
     }
 }

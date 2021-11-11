@@ -6,12 +6,13 @@ namespace CoinConstraint.Application.Budgeting
 {
     public interface IBudgetingService
     {
+        void AddNewBudget(Budget budget);
         List<Budget> GetAllBudgets();
         List<Expense> GetExpenses();
         Task<List<Expense>> GetExpensesByBudget(int budgetID);
         Task Init();
         void MarkExpenseForDeletion(Expense expense);
-        Task SaveExpenses();
+        Task SaveChanges();
         Task SetSelectedBudget(Budget selectedBudget);
     }
 }
