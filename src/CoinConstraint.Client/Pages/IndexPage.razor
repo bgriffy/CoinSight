@@ -5,38 +5,8 @@
 
 <LoadSpinnerComponent @ref="_loadSpinner" @bind-LoadSpinnerIsHidden="_pageIsLoaded"></LoadSpinnerComponent>
 
-<Modal @ref="_budgetModal">
-    <ModalContent Centered="true">
-        <ModalHeader>
-            <ModalTitle>Budget</ModalTitle>
-            <CloseButton></CloseButton>
-        </ModalHeader>
-
-        <ModalBody>
-            <Field>
-                <Label>Name</Label>
-                <TextEdit></TextEdit>
-            </Field>
-
-            <Field>
-                <Label>Start Date</Label>
-                <DateEdit TValue="DateTime" Date="DateTime.Now"></DateEdit>
-            </Field>
-
-            <Field>
-                <Label>End Date</Label>
-                <DateEdit TValue="DateTime" Date="DateTime.Now"></DateEdit>
-            </Field>
-        </ModalBody>
-
-        <ModalFooter>
-            <Button Size="Size.Small" Padding="Padding.Is2.OnX.Is1.OnY" Margin="Margin.Is1.FromRight" Color="Color.Success" Clicked="@(() => _budgetModal.Hide())">Save</Button>
-            <Button Size="Size.Small" Disabled="@(_selectedExpense == null)" Padding="Padding.Is2.OnX.Is1.OnY" Margin="Margin.Is1.FromRight" Color="Color.Secondary" Clicked="@(() => _budgetModal.Hide())">Cancel</Button>
-        </ModalFooter>
-
-
-        </ModalContent>
-</Modal>
+<BudgetDetailModalComponent @ref="_budgetModal">
+</BudgetDetailModalComponent>
 
 @if(_pageIsLoaded)
 {

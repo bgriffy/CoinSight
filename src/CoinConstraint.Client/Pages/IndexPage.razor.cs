@@ -16,7 +16,7 @@ namespace CoinConstraint.Client.Pages
         private Budget _selectedBudget; 
         private LoadSpinnerComponent _loadSpinner;
         private bool _pageIsLoaded = false;
-        private Modal _budgetModal;
+        private BudgetDetailModalComponent _budgetModal;
 
         protected override async Task OnInitializedAsync()
         {
