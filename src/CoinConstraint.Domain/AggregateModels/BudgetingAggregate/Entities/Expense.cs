@@ -22,7 +22,7 @@ namespace CoinConstraint.Domain.AggregateModels.BudgetAggregate
 
         public bool Paid { get; set; }
 
-        public DateTime DueDate { get; set; }
+        public DateTime DueDate { get; set; } = DateTime.Now;
 
         public decimal Amount { get; set; }
 
