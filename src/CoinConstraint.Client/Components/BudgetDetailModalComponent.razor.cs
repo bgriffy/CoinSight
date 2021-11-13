@@ -15,7 +15,7 @@ namespace CoinConstraint.Client.Components
         [Parameter]
         public EventCallback<Budget> NewBudgetAdded{get; set;}
 
-        public void Show()
+        public void ShowNewBudget()
         {
             _budget = new Budget();
             _budget.IsNew = true;

@@ -17,6 +17,7 @@ namespace CoinConstraint.Client.Pages
         private LoadSpinnerComponent _loadSpinner;
         private bool _pageIsLoaded = false;
         private BudgetDetailModalComponent _budgetModal;
+        private ExpenseDetailComponent _expenseModal;
         private bool _isDirty;
 
         protected override async Task OnInitializedAsync()
@@ -58,20 +59,21 @@ namespace CoinConstraint.Client.Pages
             await BudgetingService.SetSelectedBudget(_selectedBudget);
             await LoadExpenses();
             await _loadSpinner.HideLoadSpinner();
+  
+          StateHasChanged();
+        }
+
+        private void HandleNewExpense(Expense newExpense)
+        {
+            newExpense.BudgetID = _selectedBudget.ID;
+            _expenses.Add(newExpense);
+            _isDirty = true;
             StateHasChanged();
         }
-
-        private void HandleNewExpense(SavedRowItem<Expense, Dictionary<string, object>> e)
+        private void HandleUpdatedExpense(Expense updatedExpense)
         {
-            e.Item.IsNew = true;
-            e.Item.BudgetID = _selectedBudget.ID;
-            _isDirty = true; 
-        }
-
-        private void HandleUpdatedExpense(SavedRowItem<Expense, Dictionary<string, object>> e)
-        {
-            e.Item.IsUpdated = true;
             _isDirty = true;
+            StateHasChanged();
         }
 
         private void HandleDeletedExpense(Expense expense)
@@ -82,19 +84,29 @@ namespace CoinConstraint.Client.Pages
 
         private void AddNewBudget()
         {
-            _budgetModal.Show();
+            _budgetModal.ShowNewBudget();
         }
 
-        private async void HandleNewBudget(Budget newBudget)
+        private async Task HandleNewBudget(Budget newBudget)
         {
             BudgetingService.AddNewBudget(newBudget);
             await LoadData();
         }
 
+        private void AddNewExpense()
+        {
+            _expenseModal.ShowNewExpense();
+        }
+
+        private void EditExpense(Expense expense)
+        {
+            _expenseModal.ShowExpense(expense);
+        }
+
         private async Task SaveChanges()
         {
             await _loadSpinner.ShowLoadSpinner("Saving changes...");
-            await Task.Delay(5000);
+            await Task.Delay(1000);
             await BudgetingService.SaveChanges();
             await _loadSpinner.HideLoadSpinner();
         }

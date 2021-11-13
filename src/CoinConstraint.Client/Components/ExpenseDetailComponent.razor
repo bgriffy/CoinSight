@@ -1,0 +1,78 @@
+﻿
+<Modal @ref="_expenseModal">
+    <ModalContent Centered="true">
+        <ModalHeader>
+            <ModalTitle>Expense</ModalTitle>
+            <CloseButton></CloseButton>
+        </ModalHeader>
+
+        <ModalBody>
+            <Row>
+                <Column ColumnSize="ColumnSize.IsHalf">
+                    <Field>
+                        <Label>Name</Label>
+                        <TextEdit @bind-Text="_expense.Title"></TextEdit>
+                    </Field>
+                </Column>
+                <Column ColumnSize="ColumnSize.IsHalf">
+                    <Field>
+                        <Label>Description</Label>
+                        <TextEdit @bind-Text="_expense.Description"></TextEdit>
+                    </Field>
+                </Column>
+            </Row>
+
+            <Row>
+                <Column ColumnSize="ColumnSize.IsHalf">
+                    <Field>
+                        <Label>Amount</Label>
+                        <NumericEdit TValue="Decimal" @bind-Value="_expense.Amount"></NumericEdit>
+                    </Field>
+                </Column>
+                <Column ColumnSize="ColumnSize.IsHalf">
+                    <Field>
+                        <Label>Due Date</Label>
+                        <DateEdit TValue="DateTime" @bind-Date="_expense.DueDate"></DateEdit>
+                    </Field>
+                </Column>
+            </Row>
+
+                <Row Margin="Margin.Is3">
+                    <Div Padding="Padding.Is5.FromRight">
+                        <Field Horizontal="true">
+                            <Label Margin="Margin.Is2.FromRight">Pay Now</Label>
+                            <Check @bind-Checked="_expense.Pay"></Check>
+                        </Field>
+                    </Div>
+
+                    <Div Padding="Padding.Is5.OnX">
+                        <Field Horizontal="true">
+                            <Label Margin="Margin.Is2.FromRight">Paid</Label>
+                            <Check @bind-Checked="_expense.Paid"></Check>
+                        </Field>
+                    </Div>
+
+                    <Div Padding="Padding.Is5.FromLeft">
+                        <Field Horizontal="true">
+                            <Label Margin="Margin.Is2.FromRight">Auto-Pay</Label>
+                            <Check @bind-Checked="_expense.Automatic"></Check>
+                        </Field>
+                    </Div>
+                </Row>
+
+            <Row>
+                <Column>
+                    <Field>
+                        <Label>Note</Label>
+                        <MemoEdit Rows="3" @bind-Text="_expense.Note"></MemoEdit>
+                    </Field>
+                </Column>
+            </Row>
+        </ModalBody>
+
+        <ModalFooter>
+            <Button Size="Size.Small" Padding="Padding.Is2.OnX.Is1.OnY" Margin="Margin.Is1.FromRight" Color="Color.Success" Clicked="@(async() => await Save())">Save</Button>
+            <Button Size="Size.Small" Padding="Padding.Is2.OnX.Is1.OnY" Margin="Margin.Is1.FromRight" Color="Color.Secondary" Clicked="@(() => _expenseModal.Hide())">Cancel</Button>
+        </ModalFooter>
+    </ModalContent>
+</Modal>
