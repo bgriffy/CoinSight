@@ -12,6 +12,7 @@ namespace CoinConstraint.Application.Budgeting
         Task<List<Expense>> GetExpensesByBudget(int budgetID);
         Task Init();
         void MarkExpenseForDeletion(Expense expense);
+        Task SaveBudgets();
         Task SaveChanges();
         Task SetSelectedBudget(Budget selectedBudget);
     }

@@ -18,6 +18,7 @@ namespace CoinConstraint.Client.Pages
         private bool _pageIsLoaded = false;
         private BudgetDetailModalComponent _budgetModal;
         private ExpenseDetailComponent _expenseModal;
+        private BudgetsModalComponent _budgetsModal;
         private bool _isDirty;
 
         protected override async Task OnInitializedAsync()
@@ -101,6 +102,19 @@ namespace CoinConstraint.Client.Pages
         private void EditExpense(Expense expense)
         {
             _expenseModal.ShowExpense(expense);
+        }
+
+        private void OpenBudgetManagement()
+        {
+            _budgetsModal.Show();
+        }
+
+        private async Task SaveBudgets()
+        {
+            await _loadSpinner.ShowLoadSpinner("Saving budgets...");
+            await Task.Delay(1000);
+            await BudgetingService.SaveBudgets();
+            await _loadSpinner.HideLoadSpinner();
         }
 
         private async Task SaveChanges()

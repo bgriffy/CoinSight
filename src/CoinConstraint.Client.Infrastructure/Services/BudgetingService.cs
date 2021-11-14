@@ -92,7 +92,7 @@ namespace CoinConstraint.Client.Infrastructure.Services
             }
         }
 
-        private async Task SaveBudgets()
+        public async Task SaveBudgets()
         {
             try
             {

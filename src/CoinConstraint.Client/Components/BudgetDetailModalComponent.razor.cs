@@ -17,12 +17,7 @@ namespace CoinConstraint.Client.Components
 
         public void ShowNewBudget()
         {
-            _budget = new Budget();
             _budget.IsNew = true;
-            //TODO: Remove these. Leaving here for testing temporarily. 
-            _budget.Bills = new List<Bill>();
-            _budget.User = new User();
-            _budget.Totals = new List<Total>();
             _budgetModal.Show();
         }
 

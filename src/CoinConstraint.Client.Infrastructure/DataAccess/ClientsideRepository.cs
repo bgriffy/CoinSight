@@ -24,12 +24,14 @@ namespace CoinConstraint.Client.Infrastructure.DataAccess
 
         public async Task AddAsync(T entity)
         {
-            await _httpClient.PostAsJsonAsync<T>(_apiEndpoint, entity);
+            var json = JsonConvert.SerializeObject(entity);
+            await _httpClient.PostAsync(_apiEndpoint, new StringContent(json, Encoding.UTF8, "application/json"));
         }
 
         public async Task AddRangeAsync(IEnumerable<T> entities)
         {
-            await _httpClient.PostAsJsonAsync(_apiEndpoint, entities);
+            var json = JsonConvert.SerializeObject(entities);
+            await _httpClient.PostAsync(_apiEndpoint, new StringContent(json, Encoding.UTF8, "application/json"));
         }
 
         public async Task<IEnumerable<T>> FindAsync(Expression<Func<T, bool>> predicate)

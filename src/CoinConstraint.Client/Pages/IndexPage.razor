@@ -1,7 +1,7 @@
 ﻿@page "/"
 @using Blazorise.DataGrid
 @using CoinConstraint.Domain.AggregateModels.BudgetAggregate;
-@inject IBudgetingService BudgetingService 
+@inject IBudgetingService BudgetingService
 
 <LoadSpinnerComponent @ref="_loadSpinner" @bind-LoadSpinnerIsHidden="_pageIsLoaded"></LoadSpinnerComponent>
 
@@ -14,42 +14,43 @@
                         ExpenseUpdated=HandleUpdatedExpense>
 </ExpenseDetailComponent>
 
-@if(_pageIsLoaded)
-{
-    <Row>
-        <Column ColumnSize="ColumnSize.Is2" Margin="Margin.Is4.OnY">
-            <Field Horizontal="true">
-                <Label Margin="Margin.Is4.FromRight.Is2.FromTop">Budgets</Label>
-                <FieldBody>
-                    <SelectList TItem=Budget
-                            TValue="int"
-                            Data=@_budgets
-                            TextField=@((budget) => budget.Title)
-                            ValueField=@((budget) => budget.ID)
-                            SelectedValue=@_selectedBudget.ID
-                            SelectedValueChanged=@(async(budgetID) => await HandleBudgetChange(budgetID))>
-                    </SelectList>
-                </FieldBody>
-            </Field>
-        </Column>
+<BudgetsModalComponent @ref="_budgetsModal"
+                       Budgets="_budgets"
+                       BudgetAdded=HandleNewBudget
+                       BudgetsSaved="@(async() => await SaveBudgets())">
+</BudgetsModalComponent>
 
-        <Column ColumnSize="ColumnSize.Is2" Margin="Margin.Is4.OnY">
-            <Button Color="Color.Success" Size="Size.Small" Clicked=AddNewBudget>Add Budget</Button>
-        </Column>
-    </Row>
+@if (_pageIsLoaded)
+{
+    <Field Horizontal="true" Margin="Margin.Is1.FromLeft">
+        <Label Margin="Margin.Is4.FromRight.Is2.FromTop">Budgets</Label>
+        <FieldBody>
+            <SelectList TItem=Budget
+                    TValue="int"
+                    Data=@_budgets
+                    TextField=@((budget) => budget.Title)
+                    ValueField=@((budget) => budget.ID)
+                    SelectedValue=@_selectedBudget.ID
+                    SelectedValueChanged=@(async(budgetID) => await HandleBudgetChange(budgetID))>
+            </SelectList>
+        </FieldBody>
+        <Button Margin="Margin.Is2.FromBottom.Is2.FromTop.OnMobile.Is0.FromTop.OnTablet.Is4.FromLeft.OnTablet" Color="Color.Success" Size="Size.Small" Clicked=OpenBudgetManagement>Manage Budgets</Button>
+    </Field>
+
+
 
     <DataGrid TItem="Expense"
-              @bind-SelectedRow="@_selectedExpense"
-              Data="@_expenses"
-              CommandMode="DataGridCommandMode.ButtonRow"
-              Filterable="false"
-              Editable="true"
-              EditMode="DataGridEditMode.Popup"
-              FilterMethod="DataGridFilterMethod.StartsWith"
-              PageSize="10"
-              RowRemoved="@HandleDeletedExpense"
-              ShowPageSizes="false"
-              ShowPager="true">
+          @bind-SelectedRow="@_selectedExpense"
+          Data="@_expenses"
+          CommandMode="DataGridCommandMode.ButtonRow"
+          Filterable="false"
+          Editable="true"
+          EditMode="DataGridEditMode.Popup"
+          FilterMethod="DataGridFilterMethod.StartsWith"
+          PageSize="10"
+          RowRemoved="@HandleDeletedExpense"
+          ShowPageSizes="false"
+          ShowPager="true">
 
         <DataGridColumns>
             <DataGridCommandColumn TItem="Expense" Width="170px">
@@ -83,18 +84,8 @@
                         </FieldBody>
                     </Field>
                 </EditTemplate>
-            </DataGridColumn>   
+            </DataGridColumn>
         </DataGridColumns>
-        <PopupTitleTemplate>
-            @if (context.EditState == DataGridEditState.Edit)
-            {
-                @($"{context.LocalizationString} Expense \"{context.Item.Title}\"")
-            }
-            else
-            {
-                @($"{context.LocalizationString} Expense")
-            }
-        </PopupTitleTemplate>
         <ButtonRowTemplate>
             <Button Size="Size.Small" Padding="Padding.Is2.OnX.Is1.OnY" Margin="Margin.Is1.FromRight" Color="Color.Success" Clicked=AddNewExpense>Add</Button>
             <Button Size="Size.Small" Disabled="@(_selectedExpense == null)" Padding="Padding.Is2.OnX.Is1.OnY" Margin="Margin.Is1.FromRight" Color="Color.Secondary" Clicked="@(() => EditExpense(context.EditCommand.Item))">Edit</Button>

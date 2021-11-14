@@ -1,0 +1,69 @@
+﻿@using Blazorise.DataGrid
+@using CoinConstraint.Domain.AggregateModels.BudgetAggregate
+
+
+
+<Modal @ref="_budgetsModal">
+    <ModalContent Centered="true">
+        <ModalHeader>
+            <ModalTitle>Budgets</ModalTitle>
+            <CloseButton></CloseButton>
+        </ModalHeader>
+
+        <ModalBody>
+
+            <BudgetDetailModalComponent @ref="_budgetDetailModal"
+                            NewBudgetAdded=HandleNewBudget>
+            </BudgetDetailModalComponent>
+
+            <DataGrid TItem="Budget"
+                      @bind-SelectedRow="@_selectedBudget"
+                      Data="@Budgets"
+                      CommandMode="DataGridCommandMode.ButtonRow"
+                      Filterable="false"
+                      Editable="true"
+                      EditMode="DataGridEditMode.Popup"
+                      FilterMethod="DataGridFilterMethod.StartsWith"
+                      PageSize="10"
+                      RowRemoved="@HandleDeletedBudget"
+                      ShowPageSizes="false"
+                      ShowPager="true">
+
+                <DataGridColumns>
+                    <DataGridCommandColumn TItem="Budget" Width="170px">
+                        <SaveCommandTemplate>
+                            <Button Type="ButtonType.Submit" PreventDefaultOnSubmit Color="Color.Primary" Clicked="@context.Clicked">@context.LocalizationString</Button>
+                        </SaveCommandTemplate>
+                        <CancelCommandTemplate>
+                            <Button Color="Color.Secondary" Clicked="@context.Clicked">@context.LocalizationString</Button>
+                        </CancelCommandTemplate>
+                        <EditCommandTemplate>
+                            <Button Color="Color.Primary" Clicked="@(() => EditBudget(context.Item))">@context.LocalizationString</Button>
+                        </EditCommandTemplate>
+                    </DataGridCommandColumn>
+                    <DataGridColumn TItem="Budget" Editable="true" Field="@nameof(Budget.Title)" Caption="Name" Sortable="false" />
+                    <DataGridColumn TItem="Budget" Editable="true" Field="@nameof(Budget.StartDate)" Caption="Start Date" Sortable="false">
+                        <DisplayTemplate>
+                            @($"{( context as Budget )?.StartDate.Date.ToString("dd/MM/yyyy")}")
+                        </DisplayTemplate>
+                    </DataGridColumn>
+                    <DataGridColumn TItem="Budget" Editable="true" Field="@nameof(Budget.EndDate)" Caption="End Date" Sortable="false">
+                        <DisplayTemplate>
+                            @($"{( context as Budget )?.EndDate.Date.ToString("dd/MM/yyyy")}")
+                        </DisplayTemplate>
+                    </DataGridColumn>
+                </DataGridColumns>
+                <ButtonRowTemplate>
+                    <Button Size="Size.Small" Padding="Padding.Is2.OnX.Is1.OnY" Margin="Margin.Is1.FromRight" Color="Color.Success" Clicked=AddNewBudget>Add</Button>
+                    <Button Size="Size.Small" Disabled="@(_selectedBudget == null)" Padding="Padding.Is2.OnX.Is1.OnY" Margin="Margin.Is1.FromRight" Color="Color.Secondary" Clicked="@(() => EditBudget(context.EditCommand.Item))">Edit</Button>
+                    <Button Size="Size.Small" Disabled="@(_selectedBudget == null)" Padding="Padding.Is2.OnX.Is1.OnY" Margin="Margin.Is1.FromRight" Color="Color.Danger" Clicked="context.DeleteCommand.Clicked">Delete</Button>
+                </ButtonRowTemplate>
+            </DataGrid>
+        </ModalBody>
+
+        <ModalFooter>
+            <Button Size="Size.Small" Padding="Padding.Is2.OnX.Is1.OnY" Margin="Margin.Is1.FromRight" Color="Color.Primary" Clicked="@(async() => await Save())">Save</Button>
+            <Button Size="Size.Small" Padding="Padding.Is2.OnX.Is1.OnY" Margin="Margin.Is1.FromRight" Color="Color.Secondary" Clicked="@(() => _budgetsModal.Hide())">Cancel</Button>
+        </ModalFooter>
+    </ModalContent>
+</Modal>

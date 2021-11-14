@@ -8,6 +8,6 @@ namespace CoinConstraint.Domain.AggregateModels.BudgetAggregate
         [Key]
         public int ID { get; set; }
 
-        public DateTime DueDate { get; set; }
+        public DateTime DueDate { get; set; } = DateTime.Now;
     } 
 }
