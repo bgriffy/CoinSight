@@ -14,7 +14,7 @@ public partial class ExpenseDetailComponent
     public EventCallback<Expense> ExpenseAdded { get; set; }
 
     [Parameter]
-    public EventCallback<Expense> ExpenseUpdated { get; set; }
+    public EventCallback ExpenseUpdated { get; set; }
 
     protected override void OnInitialized()
     {
@@ -43,7 +43,7 @@ public partial class ExpenseDetailComponent
         else
         {
             _expense.IsUpdated = true;
-            await ExpenseUpdated.InvokeAsync(_expense);
+            await ExpenseUpdated.InvokeAsync();
         }
         _expenseModal.Hide();
     }

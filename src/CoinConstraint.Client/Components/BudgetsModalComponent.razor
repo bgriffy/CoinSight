@@ -13,7 +13,8 @@
         <ModalBody>
 
             <BudgetDetailModalComponent @ref="_budgetDetailModal"
-                            NewBudgetAdded=HandleNewBudget>
+                            NewBudgetAdded=HandleNewBudget
+                            BudgetModified=HandleModifiedBudget>
             </BudgetDetailModalComponent>
 
             <DataGrid TItem="Budget"
@@ -44,12 +45,12 @@
                     <DataGridColumn TItem="Budget" Editable="true" Field="@nameof(Budget.Title)" Caption="Name" Sortable="false" />
                     <DataGridColumn TItem="Budget" Editable="true" Field="@nameof(Budget.StartDate)" Caption="Start Date" Sortable="false">
                         <DisplayTemplate>
-                            @($"{( context as Budget )?.StartDate.Date.ToString("dd/MM/yyyy")}")
+                            @($"{( context as Budget )?.StartDate.Date.ToString("MM/dd/yyyy")}")
                         </DisplayTemplate>
                     </DataGridColumn>
                     <DataGridColumn TItem="Budget" Editable="true" Field="@nameof(Budget.EndDate)" Caption="End Date" Sortable="false">
                         <DisplayTemplate>
-                            @($"{( context as Budget )?.EndDate.Date.ToString("dd/MM/yyyy")}")
+                            @($"{( context as Budget )?.EndDate.Date.ToString("MM/dd/yyyy")}")
                         </DisplayTemplate>
                     </DataGridColumn>
                 </DataGridColumns>

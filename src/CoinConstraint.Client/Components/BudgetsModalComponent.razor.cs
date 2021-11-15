@@ -24,19 +24,17 @@ namespace CoinConstraint.Client.Components
         public List<Budget> Budgets { get; set; } = new List<Budget> { new Budget() };
 
         [Parameter]
-        public EventCallback BudgetsModified { get; set; }
+        public EventCallback BudgetModified { get; set; }
 
         [Parameter]
-        public EventCallback BudgetsSaved { get; set; }
+        public EventCallback<Budget> BudgetDeleted { get; set; }
 
         [Parameter]
         public EventCallback<Budget> BudgetAdded { get; set; }
 
-        private void HandleDeletedBudget()
-        {
-            _isDirty = true;
-        }
-        
+        [Parameter]
+        public EventCallback BudgetsSaveRequested { get; set; }
+
         public void AddNewBudget()
         {
             _budgetDetailModal.ShowNewBudget();
@@ -45,13 +43,27 @@ namespace CoinConstraint.Client.Components
 
         public void EditBudget(Budget budget)
         {
-
+            _budgetDetailModal.Show(_selectedBudget);
         }
 
         private async Task HandleNewBudget(Budget newBudget)
         {
             _isDirty = true;
             await BudgetAdded.InvokeAsync(newBudget);
+            StateHasChanged();
+        }
+
+        private async Task HandleModifiedBudget()
+        {
+            _isDirty = true;
+            await BudgetModified.InvokeAsync();
+            StateHasChanged();
+        }
+
+        private async Task HandleDeletedBudget(Budget budget)
+        {
+            _isDirty = true;
+            await BudgetDeleted.InvokeAsync(budget);
             StateHasChanged();
         }
 
@@ -68,7 +80,7 @@ namespace CoinConstraint.Client.Components
         private async Task Save()
         {
             Close();
-            await BudgetsSaved.InvokeAsync();
+            await BudgetsSaveRequested.InvokeAsync();
         }
     }
 }

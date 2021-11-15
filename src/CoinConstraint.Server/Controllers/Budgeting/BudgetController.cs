@@ -1,9 +1,6 @@
 ﻿using CoinConstraint.Domain.AggregateModels.BudgetAggregate;
 using CoinConstraint.Domain.AggregateModels.BudgetAggregate.Repositories;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace CoinConstraint.Server.Controllers.Budgeting;
 
@@ -43,7 +40,37 @@ public class BudgetController : ControllerBase
         }
         catch (Exception e)
         {
-            Console.WriteLine($"Error saving new expense: {e.Message}");
+            Console.WriteLine($"Error saving new budget: {e.Message}");
+            throw;
+        }
+    }
+
+    [HttpPut]
+    public async Task UpdateBudget(Budget budget)
+    {
+        try
+        {
+            _budgetRepository.Update(budget);
+            await _budgetRepository.SaveChangesAsync();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine($"Error updating existing budget: {e.Message}");
+            throw;
+        }
+    }
+
+    [HttpDelete]
+    public async Task DeleteBudget(Budget budget)
+    {
+        try
+        {
+            _budgetRepository.Remove(budget);
+            await _budgetRepository.SaveChangesAsync();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine($"Error deleting budget: {e.Message}");
             throw;
         }
     }

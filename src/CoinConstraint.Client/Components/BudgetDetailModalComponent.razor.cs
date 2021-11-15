@@ -13,7 +13,10 @@ namespace CoinConstraint.Client.Components
         private Budget _budget = new Budget();
 
         [Parameter]
-        public EventCallback<Budget> NewBudgetAdded{get; set;}
+        public EventCallback<Budget> NewBudgetAdded { get; set; }
+
+        [Parameter]
+        public EventCallback BudgetModified { get; set; }
 
         public void ShowNewBudget()
         {
@@ -37,6 +40,11 @@ namespace CoinConstraint.Client.Components
             if (_budget.IsNew)
             {
                 await NewBudgetAdded.InvokeAsync(_budget);  
+            }
+            else
+            {
+                _budget.IsUpdated = true;
+                await BudgetModified.InvokeAsync();
             }
             Close();
         }

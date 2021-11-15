@@ -1,6 +1,4 @@
-﻿using Blazorise;
-using Blazorise.DataGrid;
-using CoinConstraint.Client.Components;
+﻿using CoinConstraint.Client.Components;
 using CoinConstraint.Domain.AggregateModels.BudgetAggregate;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,7 +14,6 @@ namespace CoinConstraint.Client.Pages
         private Budget _selectedBudget; 
         private LoadSpinnerComponent _loadSpinner;
         private bool _pageIsLoaded = false;
-        private BudgetDetailModalComponent _budgetModal;
         private ExpenseDetailComponent _expenseModal;
         private BudgetsModalComponent _budgetsModal;
         private bool _isDirty;
@@ -54,6 +51,27 @@ namespace CoinConstraint.Client.Pages
             }
         }
 
+        private void OpenBudgetManagementModal()
+        {
+            _budgetsModal.Show();
+        }
+
+        private void OpenExpenseDetailModal()
+        {
+            _expenseModal.ShowNewExpense();
+        }
+
+        private void OpenExpenseDetailModal(Expense expense)
+        {
+            _expenseModal.ShowExpense(expense);
+        }
+
+        private void HandleUpdatedData()
+        {
+            _isDirty = true;
+            StateHasChanged();
+        }
+
         public async Task HandleBudgetChange(int budgetID)
         {
             _selectedBudget = _budgets.FirstOrDefault(b => b.ID == budgetID);
@@ -64,15 +82,18 @@ namespace CoinConstraint.Client.Pages
           StateHasChanged();
         }
 
+        private async Task HandleNewBudget(Budget newBudget)
+        {
+            BudgetingService.AddNewBudget(newBudget);
+            await LoadData();
+        }
+
+
+
         private void HandleNewExpense(Expense newExpense)
         {
             newExpense.BudgetID = _selectedBudget.ID;
             _expenses.Add(newExpense);
-            _isDirty = true;
-            StateHasChanged();
-        }
-        private void HandleUpdatedExpense(Expense updatedExpense)
-        {
             _isDirty = true;
             StateHasChanged();
         }
@@ -83,30 +104,10 @@ namespace CoinConstraint.Client.Pages
             _isDirty = true;
         }
 
-        private void AddNewBudget()
+        private void HandleDeletedBudget(Budget budget)
         {
-            _budgetModal.ShowNewBudget();
-        }
-
-        private async Task HandleNewBudget(Budget newBudget)
-        {
-            BudgetingService.AddNewBudget(newBudget);
-            await LoadData();
-        }
-
-        private void AddNewExpense()
-        {
-            _expenseModal.ShowNewExpense();
-        }
-
-        private void EditExpense(Expense expense)
-        {
-            _expenseModal.ShowExpense(expense);
-        }
-
-        private void OpenBudgetManagement()
-        {
-            _budgetsModal.Show();
+            BudgetingService.MarkBudgetForDeletion(budget);
+            _isDirty = true;
         }
 
         private async Task SaveBudgets()

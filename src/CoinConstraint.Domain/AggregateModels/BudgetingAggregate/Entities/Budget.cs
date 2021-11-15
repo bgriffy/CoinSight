@@ -30,5 +30,8 @@ namespace CoinConstraint.Domain.AggregateModels.BudgetAggregate
 
         [NotMapped]
         public bool IsNew { get; set; }
+
+        [NotMapped]
+        public bool IsUpdated { get; set; }
     }
 }
