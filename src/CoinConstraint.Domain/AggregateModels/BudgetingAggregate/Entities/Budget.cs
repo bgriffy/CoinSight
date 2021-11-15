@@ -30,6 +30,8 @@ namespace CoinConstraint.Domain.AggregateModels.BudgetAggregate
 
         public decimal BudgetedAmount { get; set; }
 
+        public decimal ExpensedAmount { get; set; }
+
         [NotMapped]
         public bool IsNew { get; set; }
 
