@@ -17,10 +17,6 @@ namespace CoinConstraint.Domain.AggregateModels.BudgetAggregate
 
         public Guid UUID { get; set; }
 
-        public User User { get; set; } = new User();
-
         public int BudgetID { get; set; } = 0;
-
-        public Budget Budget { get; set; } =  new Budget();
     }
 }

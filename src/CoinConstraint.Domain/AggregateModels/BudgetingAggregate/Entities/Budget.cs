@@ -28,6 +28,8 @@ namespace CoinConstraint.Domain.AggregateModels.BudgetAggregate
 
         public User User { get; set; } = new User();
 
+        public decimal BudgetedAmount { get; set; }
+
         [NotMapped]
         public bool IsNew { get; set; }
 
