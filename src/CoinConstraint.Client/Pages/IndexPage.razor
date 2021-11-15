@@ -35,6 +35,12 @@
         <Button Margin="Margin.Is2.FromBottom.Is2.FromTop.OnMobile.Is0.FromTop.OnTablet.Is4.FromLeft.OnTablet" Color="Color.Success" Size="Size.Small" Clicked=OpenBudgetManagementModal>Manage Budgets</Button>
     </Field>
 
+    <Field Margin="Margin.Is1.FromLeft.Is4.FromTop" Horizontal="true">
+        <Label Margin="Margin.Is4.FromRight.Is2.FromTop">Budget Amount</Label>
+        <FieldBody>
+            <NumericEdit TValue="Decimal" @bind-Value="_selectedBudget.BudgetedAmount"></NumericEdit>
+        </FieldBody>
+    </Field>
 
 
     <DataGrid TItem="Expense"
