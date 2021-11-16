@@ -1,6 +1,7 @@
 ﻿@page "/"
 @using Blazorise.DataGrid
 @using CoinConstraint.Domain.AggregateModels.BudgetAggregate;
+@using System.Globalization
 @inject IBudgetingService BudgetingService
 
 <LoadSpinnerComponent @ref="_loadSpinner" @bind-LoadSpinnerIsHidden="_pageIsLoaded"></LoadSpinnerComponent>
@@ -34,8 +35,8 @@
         </FieldBody>
         <Button Margin="Margin.Is2.FromBottom.Is2.FromTop.OnMobile.Is0.FromTop.OnTablet.Is4.FromLeft.OnTablet" Color="Color.Success" Size="Size.Small" Clicked=OpenBudgetManagementModal>Manage Budgets</Button>
     </Field>
-   
-    <DataGrid TItem="Expense"
+
+     <DataGrid TItem="Expense"
           @bind-SelectedRow="@_selectedExpense"
           Data="@_expenses"
           CommandMode="DataGridCommandMode.ButtonRow"
@@ -94,23 +95,26 @@
         </ButtonRowTemplate>
     </DataGrid>
 
-    <Card Margin="Margin.Is4.OnY">
-        <Row>
-            <Field Margin="Margin.Is4.FromLeft.Is2.FromTop" ColumnSize="ColumnSize.Is4">
-                <Label Margin="Margin.Is4.FromRight.Is2.FromTop">Budget Amount</Label>
-                <FieldBody>
-                    <NumericEdit TValue="Decimal" @bind-Value="_selectedBudget.BudgetedAmount"></NumericEdit>
-                </FieldBody>
-            </Field>
+    <div>
+        <Card Margin="Margin.Is4.OnY">
+            <CardHeader>Totals</CardHeader>
+            <Row>
+                <Field Margin="Margin.Is4.FromLeft.Is2.FromTop" ColumnSize="ColumnSize.Is4">
+                    <Label Class="index-page-total-label" Margin="Margin.Is4.FromRight.Is2.FromTop">Budget Amount</Label>
+                    <FieldBody>
+                        <TextEdit MaskType="MaskType.Numeric" Size="Size.Small" Text="@_budgetAmountText" TextChanged=HandleBudgetAmountChange></TextEdit>
+                    </FieldBody>
+                </Field>
 
-            <Field Margin="Margin.Is1.FromLeft.Is2.FromTop" ColumnSize="ColumnSize.Is4">
-                <Label Margin="Margin.Is4.FromRight.Is2.FromTop">Expensed Amount</Label>
-                <FieldBody>
-                    <NumericEdit TValue="Decimal" Disabled="true" Value="_selectedBudget.ExpensedAmount"></NumericEdit>
-                </FieldBody>
-            </Field>
-        </Row>
-    </Card>
+                <Field Margin="Margin.Is1.FromLeft.Is2.FromTop" ColumnSize="ColumnSize.Is4">
+                    <Label Class="index-page-total-label" Margin="Margin.Is4.FromRight.Is2.FromTop">Expensed Amount</Label>
+                    <FieldBody>
+                        <TextEdit Size="Size.Small" MaskType="MaskType.Numeric" Disabled="true" Text="@_selectedBudget.ExpensedAmount.ToString()"></TextEdit>
+                    </FieldBody>
+                </Field>
+            </Row>
+        </Card>
+    </div>
 
     <Button Size="Size.Small" Clicked="@(async() => await SaveChanges())" Margin="Margin.Is2.FromTop" Padding="Padding.Is2.OnX.Is1.OnY" Color="Color.Primary"><Icon Name="IconName.Save" /> Save</Button>
 }

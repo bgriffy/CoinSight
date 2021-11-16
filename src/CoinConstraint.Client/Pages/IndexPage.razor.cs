@@ -1,5 +1,6 @@
 ﻿using CoinConstraint.Client.Components;
 using CoinConstraint.Domain.AggregateModels.BudgetAggregate;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -16,7 +17,9 @@ namespace CoinConstraint.Client.Pages
         private bool _pageIsLoaded = false;
         private ExpenseDetailComponent _expenseModal;
         private BudgetsModalComponent _budgetsModal;
+        private string _budgetAmountText;
         private bool _isDirty;
+
 
         protected override async Task OnInitializedAsync()
         {
@@ -48,6 +51,11 @@ namespace CoinConstraint.Client.Pages
             if((_expenses?.Count ?? 0) > 0)
             {
                 _selectedExpense = _expenses[0];
+            }
+
+            if (_selectedBudget != null)
+            {
+                _budgetAmountText = _selectedBudget.BudgetedAmount.ToString();
             }
         }
 
@@ -110,6 +118,22 @@ namespace CoinConstraint.Client.Pages
             _isDirty = true;
         }
 
+        private void HandleBudgetAmountChange(string text)
+        {
+            _budgetAmountText = text;
+            _isDirty = true;
+        }
+
+        private void SyncData()
+        {
+            decimal newBudgetAmountValue = String.IsNullOrWhiteSpace(_budgetAmountText) ? 0 : decimal.Parse(_budgetAmountText);
+            if(newBudgetAmountValue != _selectedBudget.BudgetedAmount)
+            {
+                _selectedBudget.IsUpdated = true;
+                _selectedBudget.BudgetedAmount = newBudgetAmountValue;
+            }
+        }
+
         private async Task SaveBudgets()
         {
             await _loadSpinner.ShowLoadSpinner("Saving budgets...");
@@ -121,7 +145,7 @@ namespace CoinConstraint.Client.Pages
         private async Task SaveChanges()
         {
             await _loadSpinner.ShowLoadSpinner("Saving changes...");
-            _selectedBudget.IsUpdated = true;
+            SyncData();
             await Task.Delay(1000);
             await BudgetingService.SaveChanges();
             await _loadSpinner.HideLoadSpinner();
