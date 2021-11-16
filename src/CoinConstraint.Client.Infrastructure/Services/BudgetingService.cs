@@ -14,7 +14,6 @@ namespace CoinConstraint.Client.Infrastructure.Services
         private Budget _selectedBudget;
         private List<Budget> _budgets;
         private List<Budget> _budgetsForDeletion;
-        private List<Expense> _expenses;
         private List<Expense> _expensesForDeletion;
 
         public BudgetingService(IClientsideCCUnitOfWork unitOfWork)
@@ -30,7 +29,6 @@ namespace CoinConstraint.Client.Infrastructure.Services
                 _budgetsForDeletion = new List<Budget>();
                 _selectedBudget = _budgets.FirstOrDefault();
                 _expensesForDeletion = new List<Expense>();
-                _expenses = new List<Expense>();
                 if (_selectedBudget != null)
                 {
                     await SetExpenses(_selectedBudget.ID);
@@ -56,18 +54,18 @@ namespace CoinConstraint.Client.Infrastructure.Services
 
         public List<Expense> GetExpenses()
         {
-            return _expenses;
+            return _selectedBudget.Expenses;
         }
 
         public async Task<List<Expense>> GetExpensesByBudget(int budgetID)
         {
             await SetExpenses(budgetID);
-            return _expenses;
+            return _selectedBudget.Expenses;
         }
 
         public async Task SetExpenses(int budgetID)
         {
-            _expenses = await _unitOfWork.Expenses.GetExpensesByBudget(budgetID);
+            _selectedBudget.Expenses = await _unitOfWork.Expenses.GetExpensesByBudget(budgetID);
         }
 
         public void MarkExpenseForDeletion(Expense expense)
@@ -90,7 +88,7 @@ namespace CoinConstraint.Client.Infrastructure.Services
             try
             {
                 await SaveBudgets();
-                await SaveExpenses();
+                await RemoveDeletedExpenses();
             }
             catch (Exception e)
             {
@@ -131,26 +129,10 @@ namespace CoinConstraint.Client.Infrastructure.Services
             }
         }
 
-        private async Task SaveExpenses()
+        private async Task RemoveDeletedExpenses()
         {
             try
             {
-                foreach (var expense in _expenses)
-                {
-                    if (expense.IsNew)
-                    {
-                        await _unitOfWork.Expenses.AddAsync(expense);
-                    }
-                    else if (expense.IsUpdated)
-                    {
-                        await _unitOfWork.Expenses.UpdateAsync(expense);
-                    }
-
-                    expense.IsUpdated = false;
-                }
-
-                //await _unitOfWork.Expenses.RemoveRangeAsync(_expensesForDeletion);
-
                 foreach (var expense in _expensesForDeletion)
                 {
                     await _unitOfWork.Expenses.RemoveAsync(expense);

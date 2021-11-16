@@ -106,7 +106,7 @@
             <Field Margin="Margin.Is1.FromLeft.Is2.FromTop" ColumnSize="ColumnSize.Is4">
                 <Label Margin="Margin.Is4.FromRight.Is2.FromTop">Expensed Amount</Label>
                 <FieldBody>
-                    <NumericEdit TValue="Decimal" @bind-Value="_selectedBudget.ExpensedAmount"></NumericEdit>
+                    <NumericEdit TValue="Decimal" Disabled="true" Value="_selectedBudget.ExpensedAmount"></NumericEdit>
                 </FieldBody>
             </Field>
         </Row>

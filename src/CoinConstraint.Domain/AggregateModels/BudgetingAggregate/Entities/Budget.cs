@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
 using System.Text.Json.Serialization;
 
 namespace CoinConstraint.Domain.AggregateModels.BudgetAggregate
@@ -30,7 +31,10 @@ namespace CoinConstraint.Domain.AggregateModels.BudgetAggregate
 
         public decimal BudgetedAmount { get; set; }
 
-        public decimal ExpensedAmount { get; set; }
+        public decimal ExpensedAmount 
+        { 
+            get => Expenses.Sum(e => e.Amount);
+        }
 
         [NotMapped]
         public bool IsNew { get; set; }
