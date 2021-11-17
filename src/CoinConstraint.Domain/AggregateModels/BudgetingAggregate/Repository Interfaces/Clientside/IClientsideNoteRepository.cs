@@ -1,4 +1,4 @@
-﻿namespace CoinConstraint.Domain.AggregateModels.BudgetingAggregate.Repository_Interfaces.Clientside;
+﻿namespace CoinConstraint.Domain.AggregateModels.BudgetingAggregate.RepositoryInterfaces.Clientside;
 
 public interface IClientsideNoteRepository : IClientsideRepository<Note>
 {

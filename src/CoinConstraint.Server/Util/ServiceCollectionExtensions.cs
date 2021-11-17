@@ -1,6 +1,4 @@
-﻿using CoinConstraint.Server.Infrastructure.Users;
-
-namespace CoinConstraint.Server.Util;
+﻿namespace CoinConstraint.Server.Util;
 
 public static class ServiceCollectionExtensions
 {
@@ -17,5 +15,6 @@ public static class ServiceCollectionExtensions
         serviceCollection.AddScoped<IReminderRepository, ReminderRepository>();
         serviceCollection.AddScoped<ITotalRepository, TotalRepository>();
         serviceCollection.AddScoped<IUserRepository, UserRepository>();
+        serviceCollection.AddScoped<INoteRepository, NoteRepository>();
     }
 }

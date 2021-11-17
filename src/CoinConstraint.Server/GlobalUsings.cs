@@ -6,3 +6,4 @@ global using CoinConstraint.Domain.AggregateModels.UserAggregate.Entities;
 global using CoinConstraint.Server.Infrastructure.Budgeting;
 global using CoinConstraint.Server.Infrastructure.DataAccess;
 global using Microsoft.AspNetCore.Mvc;
+global using CoinConstraint.Server.Infrastructure.Users;

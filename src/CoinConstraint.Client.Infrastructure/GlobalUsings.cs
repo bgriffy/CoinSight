@@ -13,4 +13,4 @@ global using System.Net.Http;
 global using System.Net.Http.Json;
 global using System.Text;
 global using System.Threading.Tasks;
-
+global using CoinConstraint.Domain.AggregateModels.BudgetingAggregate.RepositoryInterfaces.Clientside; 
