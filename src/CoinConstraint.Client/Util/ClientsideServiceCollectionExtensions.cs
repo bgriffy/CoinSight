@@ -1,12 +1,8 @@
 ﻿using CoinConstraint.Application.Budgeting;
 using CoinConstraint.Application.DataAccess;
-using CoinConstraint.Client.Infrastructure.Budgeting;
 using CoinConstraint.Client.Infrastructure.DataAccess;
 using CoinConstraint.Client.Infrastructure.Services;
-using CoinConstraint.Domain.AggregateModels.BudgetAggregate.Repositories;
-using CoinConstraint.Domain.AggregateModels.BudgetAggregate.Repositories.Client;
-using CoinConstraint.Domain.AggregateModels.BudgetAggregate.Repositories.Clientside;
-using Microsoft.Extensions.DependencyInjection;
+using CoinConstraint.Client.Infrastructure.Users;
 
 namespace CoinConstraint.Client.Util
 {

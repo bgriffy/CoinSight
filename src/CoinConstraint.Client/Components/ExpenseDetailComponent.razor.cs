@@ -1,13 +1,10 @@
-﻿using Blazorise;
-using CoinConstraint.Domain.AggregateModels.BudgetAggregate;
-using Microsoft.AspNetCore.Components;
-using System.Threading.Tasks;
+﻿using CoinConstraint.Domain.AggregateModels.BudgetingAggregate.Entities;
 
 namespace CoinConstraint.Client.Components;
 
 public partial class ExpenseDetailComponent
 {
-    private Modal _expenseModal;
+    private Blazorise.Modal _expenseModal;
     private Expense _expense;
 
     [Parameter]
@@ -18,7 +15,7 @@ public partial class ExpenseDetailComponent
 
     protected override void OnInitialized()
     {
-        _expense = new Expense();   
+        _expense = new Expense();
     }
 
     public void ShowNewExpense()

@@ -1,8 +1,5 @@
-﻿using CoinConstraint.Domain.Interfaces;
+﻿namespace CoinConstraint.Domain.AggregateModels.BudgetingAggregate.RepositoryInterfaces.Serverside;
 
-namespace CoinConstraint.Domain.AggregateModels.BudgetAggregate.Repositories
+public interface IBudgetRepository : IServersideRepository<Budget>
 {
-    public interface IBudgetRepository : IServersideRepository<Budget>
-    {
-    }
 }

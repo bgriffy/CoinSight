@@ -1,0 +1,10 @@
+﻿global using CoinConstraint.Domain.AggregateModels.BudgetingAggregate.Entities;
+global using CoinConstraint.Domain.AggregateModels.UserAggregate.Entities;
+global using CoinConstraint.Domain.Interfaces;
+global using System;
+global using System.Collections.Generic;
+global using System.ComponentModel.DataAnnotations;
+global using System.ComponentModel.DataAnnotations.Schema;
+global using System.Linq;
+global using System.Linq.Expressions;
+global using System.Threading.Tasks;

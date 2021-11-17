@@ -1,17 +1,13 @@
-﻿using CoinConstraint.Client.Infrastructure.DataAccess;
-using CoinConstraint.Domain.AggregateModels.BudgetAggregate;
-using CoinConstraint.Domain.AggregateModels.BudgetAggregate.Repositories.Clientside;
-using System.Net.Http;
+﻿using CoinConstraint.Domain.AggregateModels.BudgetingAggregate.Entities;
 
-namespace CoinConstraint.Client.Infrastructure.Budgeting
+namespace CoinConstraint.Client.Infrastructure.Users;
+
+public class ClientReminderRepository : ClientsideRepository<Reminder>, IClientsideReminderRepository
 {
-    public class ClientReminderRepository : ClientsideRepository<Reminder>, IClientsideReminderRepository
-    {
-        private readonly HttpClient _httpClient;
+    private readonly HttpClient _httpClient;
 
-        public ClientReminderRepository(HttpClient httpClient) : base(httpClient, "api/Reminders")
-        {
-            _httpClient = httpClient;
-        }
+    public ClientReminderRepository(HttpClient httpClient) : base(httpClient, "api/Reminders")
+    {
+        _httpClient = httpClient;
     }
 }

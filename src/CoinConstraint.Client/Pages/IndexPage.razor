@@ -1,7 +1,4 @@
 ﻿@page "/"
-@using Blazorise.DataGrid
-@using CoinConstraint.Domain.AggregateModels.BudgetAggregate;
-@using System.Globalization
 @inject IBudgetingService BudgetingService
 
 <LoadSpinnerComponent @ref="_loadSpinner" @bind-LoadSpinnerIsHidden="_pageIsLoaded"></LoadSpinnerComponent>

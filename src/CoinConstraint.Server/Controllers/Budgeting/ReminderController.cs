@@ -1,8 +1,4 @@
-﻿using CoinConstraint.Domain.AggregateModels.BudgetAggregate;
-using CoinConstraint.Domain.AggregateModels.BudgetAggregate.Repositories;
-using Microsoft.AspNetCore.Mvc;
-
-namespace CoinConstraint.Server.Controllers.Budgeting;
+﻿namespace CoinConstraint.Server.Controllers.Budgeting;
 
 [Route("api/[controller]")]
 [ApiController]

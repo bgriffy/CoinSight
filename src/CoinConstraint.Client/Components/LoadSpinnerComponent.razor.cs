@@ -1,7 +1,4 @@
-﻿using Microsoft.AspNetCore.Components;
-using System.Threading.Tasks;
-
-namespace CoinConstraint.Client.Components;
+﻿namespace CoinConstraint.Client.Components;
 
 public partial class LoadSpinnerComponent
 {
@@ -16,7 +13,7 @@ public partial class LoadSpinnerComponent
 
     public async Task ShowLoadSpinner(string loadMessage = "")
     {
-        this.LoadSpinnerIsHidden = false; 
+        this.LoadSpinnerIsHidden = false;
         this.LoadMessage = loadMessage;
         await LoadSpinnerIsHiddenChanged.InvokeAsync(this.LoadSpinnerIsHidden);
         StateHasChanged();

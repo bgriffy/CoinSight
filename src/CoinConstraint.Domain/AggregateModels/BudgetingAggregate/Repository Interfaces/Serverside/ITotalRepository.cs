@@ -1,8 +1,4 @@
-﻿using CoinConstraint.Domain.Interfaces;
-
-namespace CoinConstraint.Domain.AggregateModels.BudgetAggregate.Repositories
+﻿namespace CoinConstraint.Domain.AggregateModels.BudgetingAggregate.RepositoryInterfaces.Serverside;
+public interface ITotalRepository : IServersideRepository<Total>
 {
-    public interface ITotalRepository : IServersideRepository<Total>
-    {
-    }
 }

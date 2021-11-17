@@ -1,36 +1,28 @@
-﻿using CoinConstraint.Domain.AggregateModels.BudgetAggregate.Repositories;
-using CoinConstraint.Domain.AggregateModels.UserAggregate;
-using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿namespace CoinConstraint.Server.Controllers.Users;
 
-namespace CoinConstraint.Server.Controllers.Users
+[Route("api/[controller]")]
+[ApiController]
+public class UsersController : ControllerBase
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class UsersController : ControllerBase
+    private readonly IUserRepository _userRepository;
+
+    public UsersController(IUserRepository userRepository)
     {
-        private readonly IUserRepository _userRepository;
+        _userRepository = userRepository;
+    }
 
-        public UsersController(IUserRepository userRepository)
+    [HttpGet]
+    public async Task<ActionResult<List<User>>> GetUsersAsync()
+    {
+        try
         {
-            _userRepository = userRepository;
+            var users = _userRepository.GetAll();
+            return Ok(users);
         }
-
-        [HttpGet]
-        public async Task<ActionResult<List<User>>> GetUsersAsync()
+        catch (System.Exception e)
         {
-            try
-            {
-                var users =  _userRepository.GetAll();
-                return Ok(users);
-            }
-            catch (System.Exception e)
-            {
-                Console.WriteLine($"There was an error retrieving totals: {e.Message}");
-                throw;
-            }
+            Console.WriteLine($"There was an error retrieving totals: {e.Message}");
+            throw;
         }
     }
 }

@@ -1,11 +1,4 @@
-﻿using CoinConstraint.Domain.AggregateModels.BudgetAggregate;
-using CoinConstraint.Domain.AggregateModels.BudgetAggregate.Repositories;
-using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-
-namespace CoinConstraint.Server.Controllers;
+﻿namespace CoinConstraint.Server.Controllers.Budgeting;
 
 [Route("api/[controller]")]
 [ApiController]
@@ -26,7 +19,7 @@ public class ExpensesController : ControllerBase
             var expenses = await _expenseRepository.GetAllAsync();
             return Ok(expenses);
         }
-        catch (System.Exception e)
+        catch (Exception e)
         {
             Console.WriteLine($"There was an error retrieving expenses: {e.Message}");
             throw;
@@ -41,7 +34,7 @@ public class ExpensesController : ControllerBase
             var expenses = _expenseRepository.GetExpensesByBudget(budgetID);
             return Ok(expenses);
         }
-        catch (System.Exception e)
+        catch (Exception e)
         {
             Console.WriteLine($"There was an error retrieving expenses: {e.Message}");
             throw;

@@ -1,6 +1,5 @@
-﻿using CoinConstraint.Domain.Interfaces;
+﻿namespace CoinConstraint.Domain.AggregateModels.BudgetAggregate.Repositories.Clientside;
 
-namespace CoinConstraint.Domain.AggregateModels.BudgetAggregate.Repositories.Clientside;
 public interface IClientsideBudgetRepository : IClientsideRepository<Budget>
 {
 }

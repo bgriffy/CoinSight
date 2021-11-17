@@ -1,15 +1,12 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿namespace CoinConstraint.Domain.AggregateModels.BudgetingAggregate.Entities;
 
-namespace CoinConstraint.Domain.AggregateModels.BudgetAggregate
+public class Total
 {
-    public class Total
-    {
-        [Key]
+    [Key]
 
-        public int ID { get; set; }
+    public int ID { get; set; }
 
-        public int Title { get; set; } = 0;
+    public int Title { get; set; } = 0;
 
-        public int BudgetID { get; set; } = 0;
-    }
+    public int BudgetID { get; set; } = 0;
 }

@@ -1,9 +1,5 @@
 ﻿using CoinConstraint.Client.Components;
-using CoinConstraint.Domain.AggregateModels.BudgetAggregate;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using CoinConstraint.Domain.AggregateModels.BudgetingAggregate.Entities;
 
 namespace CoinConstraint.Client.Pages
 {
@@ -12,7 +8,7 @@ namespace CoinConstraint.Client.Pages
         private List<Expense> _expenses;
         private Expense _selectedExpense;
         private List<Budget> _budgets;
-        private Budget _selectedBudget; 
+        private Budget _selectedBudget;
         private LoadSpinnerComponent _loadSpinner;
         private bool _pageIsLoaded = false;
         private ExpenseDetailComponent _expenseModal;
@@ -48,7 +44,7 @@ namespace CoinConstraint.Client.Pages
 
             _expenses = BudgetingService.GetExpenses();
 
-            if((_expenses?.Count ?? 0) > 0)
+            if ((_expenses?.Count ?? 0) > 0)
             {
                 _selectedExpense = _expenses[0];
             }
@@ -86,8 +82,8 @@ namespace CoinConstraint.Client.Pages
             await BudgetingService.SetSelectedBudget(_selectedBudget);
             await LoadExpenses();
             await _loadSpinner.HideLoadSpinner();
-  
-          StateHasChanged();
+
+            StateHasChanged();
         }
 
         private async Task HandleNewBudget(Budget newBudget)
@@ -127,7 +123,7 @@ namespace CoinConstraint.Client.Pages
         private void SyncData()
         {
             decimal newBudgetAmountValue = String.IsNullOrWhiteSpace(_budgetAmountText) ? 0 : decimal.Parse(_budgetAmountText);
-            if(newBudgetAmountValue != _selectedBudget.BudgetedAmount)
+            if (newBudgetAmountValue != _selectedBudget.BudgetedAmount)
             {
                 _selectedBudget.IsUpdated = true;
                 _selectedBudget.BudgetedAmount = newBudgetAmountValue;

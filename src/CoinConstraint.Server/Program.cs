@@ -1,4 +1,3 @@
-using CoinConstraint.Server.Infrastructure.DataAccess;
 using CoinConstraint.Server.Util;
 using Microsoft.EntityFrameworkCore;
 

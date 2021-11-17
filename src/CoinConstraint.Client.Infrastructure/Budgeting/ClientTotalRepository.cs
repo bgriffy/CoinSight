@@ -1,17 +1,13 @@
-﻿using CoinConstraint.Client.Infrastructure.DataAccess;
-using CoinConstraint.Domain.AggregateModels.BudgetAggregate;
-using CoinConstraint.Domain.AggregateModels.BudgetAggregate.Repositories.Clientside;
-using System.Net.Http;
+﻿using CoinConstraint.Domain.AggregateModels.BudgetingAggregate.Entities;
 
-namespace CoinConstraint.Client.Infrastructure.Budgeting
+namespace CoinConstraint.Client.Infrastructure.Users;
+
+public class ClientTotalRepository : ClientsideRepository<Total>, IClientsideTotalRepository
 {
-    public class ClientTotalRepository : ClientsideRepository<Total>, IClientsideTotalRepository
-    {
-        private readonly HttpClient _httpClient;
+    private readonly HttpClient _httpClient;
 
-        public ClientTotalRepository(HttpClient httpClient) : base(httpClient, "api/Totals")
-        {
-            _httpClient = httpClient;
-        }
+    public ClientTotalRepository(HttpClient httpClient) : base(httpClient, "api/Totals")
+    {
+        _httpClient = httpClient;
     }
 }
