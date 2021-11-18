@@ -9,9 +9,10 @@ public partial class BudgetsModalComponent
     private Budget _selectedBudget;
     private bool _isDirty = false;
 
+
     protected override void OnParametersSet()
     {
-        if (Budgets == null) return;
+        if (Budgets == null || _selectedBudget != null) return;
         _selectedBudget = Budgets.FirstOrDefault();
     }
 
@@ -44,6 +45,7 @@ public partial class BudgetsModalComponent
     private async Task HandleNewBudget(Budget newBudget)
     {
         _isDirty = true;
+        _selectedBudget = newBudget;
         await BudgetAdded.InvokeAsync(newBudget);
         StateHasChanged();
     }
@@ -58,6 +60,7 @@ public partial class BudgetsModalComponent
     private async Task HandleDeletedBudget(Budget budget)
     {
         _isDirty = true;
+        _selectedBudget = null;
         await BudgetDeleted.InvokeAsync(budget);
         StateHasChanged();
     }

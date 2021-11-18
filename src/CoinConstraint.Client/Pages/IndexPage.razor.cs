@@ -5,7 +5,6 @@ namespace CoinConstraint.Client.Pages
 {
     public partial class IndexPage
     {
-        private List<Expense> _expenses;
         private Expense _selectedExpense;
         private List<Budget> _budgets;
         private Budget _selectedBudget;
@@ -42,11 +41,9 @@ namespace CoinConstraint.Client.Pages
         {
             await _loadSpinner.ShowLoadSpinner("Loading expenses...");
 
-            _expenses = BudgetingService.GetExpenses();
-
-            if ((_expenses?.Count ?? 0) > 0)
+            if ((_selectedBudget.Expenses?.Count ?? 0) > 0)
             {
-                _selectedExpense = _expenses[0];
+                _selectedExpense = _selectedBudget.Expenses[0];
             }
 
             if (_selectedBudget != null)
@@ -69,12 +66,26 @@ namespace CoinConstraint.Client.Pages
         {
             _expenseModal.ShowExpense(expense);
         }
-
-        private void HandleUpdatedData()
+        
+        private void HandleUpdatedExpenses()
         {
             _isDirty = true;
+            _selectedBudget.IsUpdated = true;
+            Refresh();
+
+        }
+
+        private void HandleUpdatedBudgets()
+        {
+            _isDirty = true;
+            Refresh();
+        }
+
+        private void Refresh()
+        {
             StateHasChanged();
         }
+
 
         public async Task HandleBudgetChange(int budgetID)
         {
@@ -93,11 +104,11 @@ namespace CoinConstraint.Client.Pages
         }
 
 
-
         private void HandleNewExpense(Expense newExpense)
         {
             newExpense.BudgetID = _selectedBudget.ID;
-            _expenses.Add(newExpense);
+            _selectedBudget.Expenses.Add(newExpense);
+            _selectedBudget.IsUpdated = true; 
             _isDirty = true;
             StateHasChanged();
         }
@@ -105,6 +116,7 @@ namespace CoinConstraint.Client.Pages
         private void HandleDeletedExpense(Expense expense)
         {
             BudgetingService.MarkExpenseForDeletion(expense);
+            _selectedBudget.IsUpdated = true;
             _isDirty = true;
         }
 

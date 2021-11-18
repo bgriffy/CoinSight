@@ -28,7 +28,7 @@ public class Budget
         get => Expenses.Sum(e => e.Amount);
     }
 
-    public List<Note> Notes { get; set; }
+    public List<Note> Notes { get; set; } = new List<Note>();
 
     [NotMapped]
     public bool IsNew { get; set; }

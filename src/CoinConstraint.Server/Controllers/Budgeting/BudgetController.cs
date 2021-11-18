@@ -70,4 +70,19 @@ public class BudgetController : ControllerBase
             throw;
         }
     }
+
+    [HttpDelete]
+    public async Task DeleteBudgets(List<Budget> budgets)
+    {
+        try
+        {
+            _budgetRepository.RemoveRange(budgets);
+            await _budgetRepository.SaveChangesAsync();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine($"Error deleting budgets: {e.Message}");
+            throw;
+        }
+    }
 }

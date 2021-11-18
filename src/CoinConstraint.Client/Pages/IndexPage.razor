@@ -5,13 +5,13 @@
 
 <ExpenseDetailComponent @ref="_expenseModal"
                         ExpenseAdded=HandleNewExpense
-                        ExpenseUpdated=HandleUpdatedData>
+                        ExpenseUpdated=HandleUpdatedExpenses>
 </ExpenseDetailComponent>
 
 <BudgetsModalComponent @ref="_budgetsModal"
                        Budgets="_budgets"
                        BudgetAdded=HandleNewBudget
-                       BudgetModified=HandleUpdatedData
+                       BudgetModified=HandleUpdatedBudgets
                        BudgetDeleted=HandleDeletedBudget
                        BudgetsSaveRequested="@(async() => await SaveBudgets())">
 </BudgetsModalComponent>
@@ -35,7 +35,7 @@
 
      <DataGrid TItem="Expense"
           @bind-SelectedRow="@_selectedExpense"
-          Data="@_expenses"
+          Data="@_selectedBudget.Expenses"
           CommandMode="DataGridCommandMode.ButtonRow"
           Filterable="false"
           Editable="true"

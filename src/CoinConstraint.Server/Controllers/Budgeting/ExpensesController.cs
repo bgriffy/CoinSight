@@ -85,4 +85,19 @@ public class ExpensesController : ControllerBase
             throw;
         }
     }
+
+    [HttpDelete]
+    public async Task DeleteExpenses(List<Expense> expenses)
+    {
+        try
+        {
+            _expenseRepository.RemoveRange(expenses);
+            await _expenseRepository.SaveChangesAsync();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine($"Error deleting expenses: {e.Message}");
+            throw;
+        }
+    }
 }

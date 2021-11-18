@@ -15,6 +15,7 @@ public partial class BudgetDetailModalComponent
 
     public void ShowNewBudget()
     {
+        _budget = new Budget();
         _budget.IsNew = true;
         _budgetModal.Show();
     }

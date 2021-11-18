@@ -19,8 +19,7 @@ public class BudgetingService : IBudgetingService
     {
         try
         {
-            _budgets = (List<Budget>)await _unitOfWork.Budgets.GetAllAsync();
-            _budgetsForDeletion = new List<Budget>();
+            await LoadBudgets();
             _selectedBudget = _budgets.FirstOrDefault();
             _expensesForDeletion = new List<Expense>();
             if (_selectedBudget != null)
@@ -33,6 +32,12 @@ public class BudgetingService : IBudgetingService
             Console.WriteLine(e.Message);
             throw;
         }
+    }
+
+    private async Task LoadBudgets()
+    {
+        _budgets = (List<Budget>)await _unitOfWork.Budgets.GetAllAsync();
+        _budgetsForDeletion = new List<Budget>();
     }
 
     public async Task SetSelectedBudget(Budget selectedBudget)
@@ -69,6 +74,7 @@ public class BudgetingService : IBudgetingService
 
     public void AddNewBudget(Budget budget)
     {
+        budget.ID = (_budgets.Max(b => b.ID) + 1);
         _budgets.Add(budget);
     }
 
@@ -99,22 +105,19 @@ public class BudgetingService : IBudgetingService
             {
                 if (budget.IsNew)
                 {
+                    //TODO: Remove this later. Need to turn identity insert off. 
+                    budget.ID = 0;
                     await _unitOfWork.Budgets.AddAsync(budget);
-                    budget.IsNew = false;
                 }
                 else if (budget.IsUpdated)
                 {
                     await _unitOfWork.Budgets.UpdateAsync(budget);
-                    budget.IsUpdated = false;
                 }
+                budget.IsNew = false;
+                budget.IsUpdated = false;
+                budget.Expenses.ForEach(e => e.IsUpdated = false);
             }
-
-            foreach (var budget in _budgetsForDeletion)
-            {
-                await _unitOfWork.Budgets.RemoveAsync(budget);
-            }
-
-            _budgetsForDeletion.Clear();
+            await RemoveDeletedBudgets();
         }
         catch (Exception e)
         {
@@ -123,21 +126,31 @@ public class BudgetingService : IBudgetingService
         }
     }
 
+    public async Task RemoveDeletedBudgets()
+    {
+        try
+        {
+            await _unitOfWork.Budgets.RemoveRangeAsync(_budgetsForDeletion);
+            _budgetsForDeletion.Clear();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine($"There was an error removing budgets from the budgeting service: {e.Message}");
+            throw;
+        }
+    }
+
     private async Task RemoveDeletedExpenses()
     {
         try
         {
-            foreach (var expense in _expensesForDeletion)
-            {
-                await _unitOfWork.Expenses.RemoveAsync(expense);
-            }
+            await _unitOfWork.Expenses.RemoveRangeAsync(_expensesForDeletion);
+            _expensesForDeletion.Clear();
         }
         catch (Exception e)
         {
-            Console.WriteLine($"There was an error saving expenses from the budgeting service: {e.Message}");
+            Console.WriteLine($"There was an error removing expenses from the budgeting service: {e.Message}");
             throw;
         }
-
-        _expensesForDeletion.Clear();
     }
 }
