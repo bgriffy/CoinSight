@@ -48,7 +48,7 @@ public class ClientsideRepository<T> : IClientsideRepository<T> where T : class
 
     public async Task RemoveRangeAsync(IEnumerable<T> entities)
     {
-        var request = new HttpRequestMessage(HttpMethod.Delete, _apiEndpoint);
+        var request = new HttpRequestMessage(HttpMethod.Delete, $"{_apiEndpoint}/DeleteMultiple");
         request.Content = new StringContent(JsonConvert.SerializeObject(entities), Encoding.UTF8, "application/json");
         await _httpClient.SendAsync(request);
     }

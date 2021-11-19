@@ -71,7 +71,7 @@ public class BudgetController : ControllerBase
         }
     }
 
-    [HttpDelete]
+    [HttpDelete("DeleteMultiple")]
     public async Task DeleteBudgets(List<Budget> budgets)
     {
         try
