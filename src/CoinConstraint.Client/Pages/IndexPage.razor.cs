@@ -22,6 +22,10 @@ namespace CoinConstraint.Client.Pages
             await LoadData();
         }
 
+
+        public List<Budget> BudgetsForDropdown { get => _budgets.Where(b=> b.ID != 0).ToList(); }
+
+
         public async Task LoadData()
         {
             await LoadBudgets();

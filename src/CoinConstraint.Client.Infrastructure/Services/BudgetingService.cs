@@ -74,7 +74,6 @@ public class BudgetingService : IBudgetingService
 
     public void AddNewBudget(Budget budget)
     {
-        budget.ID = (_budgets.Max(b => b.ID) + 1);
         _budgets.Add(budget);
     }
 
@@ -105,9 +104,8 @@ public class BudgetingService : IBudgetingService
             {
                 if (budget.IsNew)
                 {
-                    //TODO: Remove this later. Need to turn identity insert off. 
-                    budget.ID = 0;
-                    await _unitOfWork.Budgets.AddAsync(budget);
+                    var newID = await _unitOfWork.Budgets.AddBudget(budget);
+                    budget.ID = newID ?? 0;
                 }
                 else if (budget.IsUpdated)
                 {
@@ -117,6 +115,7 @@ public class BudgetingService : IBudgetingService
                 budget.IsUpdated = false;
                 budget.Expenses.ForEach(e => e.IsUpdated = false);
             }
+
             await RemoveDeletedBudgets();
         }
         catch (Exception e)

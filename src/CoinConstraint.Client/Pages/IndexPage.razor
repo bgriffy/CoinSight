@@ -23,7 +23,7 @@
         <FieldBody>
             <SelectList TItem=Budget
                     TValue="int"
-                    Data=@_budgets
+                    Data=@this.BudgetsForDropdown
                     TextField=@((budget) => budget.Title)
                     ValueField=@((budget) => budget.ID)
                     SelectedValue=@_selectedBudget.ID

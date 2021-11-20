@@ -6,4 +6,5 @@ public interface IClientsideRepository<T> : IAsyncableRepository<T> where T : cl
     Task RemoveAsync(T entity);
     Task RemoveRangeAsync(IEnumerable<T> entities);
     Task RemoveAllAsync();
+    Task<string?> AddAsyncAndReturnIdentity(T entity);
 }

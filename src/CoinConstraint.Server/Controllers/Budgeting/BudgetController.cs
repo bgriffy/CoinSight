@@ -27,12 +27,13 @@ public class BudgetController : ControllerBase
     }
 
     [HttpPost]
-    public async Task SaveNewBudgetAsync(Budget budget)
+    public async Task<ActionResult<int>> SaveNewBudgetAsync(Budget budget)
     {
         try
         {
             await _budgetRepository.AddAsync(budget);
             await _budgetRepository.SaveChangesAsync();
+            return Ok(budget.ID);
         }
         catch (Exception e)
         {

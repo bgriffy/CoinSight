@@ -17,6 +17,20 @@ public class ClientsideRepository<T> : IClientsideRepository<T> where T : class
         await _httpClient.PostAsync(_apiEndpoint, new StringContent(json, Encoding.UTF8, "application/json"));
     }
 
+    public async Task<string?> AddAsyncAndReturnIdentity(T entity)
+    {
+        var json = JsonConvert.SerializeObject(entity);
+        var response = await _httpClient.PostAsync(_apiEndpoint, new StringContent(json, Encoding.UTF8, "application/json"));
+        if (response == null)
+        {
+            Console.WriteLine("Error: POST API request from Clientside repository did not return a response.");
+            return null;
+        }
+        var newRecordID = await response.Content.ReadAsStringAsync();
+        return newRecordID;
+    }
+
+
     public async Task AddRangeAsync(IEnumerable<T> entities)
     {
         var json = JsonConvert.SerializeObject(entities);

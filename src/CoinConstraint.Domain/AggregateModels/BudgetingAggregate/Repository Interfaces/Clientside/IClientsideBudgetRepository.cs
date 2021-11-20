@@ -2,4 +2,5 @@
 
 public interface IClientsideBudgetRepository : IClientsideRepository<Budget>
 {
+    Task<int?> AddBudget(Budget budget);
 }

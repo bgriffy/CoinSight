@@ -10,4 +10,19 @@ public class ClientBudgetRepository : ClientsideRepository<Budget>, IClientsideB
     {
         _httpClient = httpClient;
     }
+
+    public async Task<int?> AddBudget(Budget budget)
+    {
+        try
+        {
+            var newRecordID = await base.AddAsyncAndReturnIdentity(budget);
+            return Int32.Parse((String.IsNullOrWhiteSpace(newRecordID) ? "0" : newRecordID));
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine($"There was an error adding a new budget from ClientBudgetRepository: {e.Message}");
+            throw;
+        }
+    }
+
 }
