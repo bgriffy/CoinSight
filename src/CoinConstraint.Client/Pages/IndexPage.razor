@@ -93,24 +93,28 @@
     </DataGrid>
 
     <Row>
-        <Column ColumnSize=ColumnSize.IsHalf>
+        <Column ColumnSize=ColumnSize.IsThird>
             <div>
-                <Card Margin="Margin.Is4.OnY">
-                    <CardHeader>Notes</CardHeader>
-                    <CardBody>
+                <Card Margin="Margin.Is4.OnY" Style="height: 250px; overflow: scroll">
+                    <CardHeader>
+                            Notes
+                            <Button><Icon IconSize="IconSize.Large" TextColor="TextColor.Success" Name="@("fas fa-plus-square")"></Icon></Button>
+                    </CardHeader>
+                    <CardBody Padding="Padding.Is0.FromBottom">
                         <DataGrid TItem="Note"
                               @bind-SelectedRow="@_selectedNote"
+                              Class="budget-notes"
                               Data="@_selectedBudget.Notes"
                               CommandMode="DataGridCommandMode.ButtonRow"
                               Filterable="false"
                               Editable="true"
                               EditMode="DataGridEditMode.Popup"
                               FilterMethod="DataGridFilterMethod.StartsWith"
-                              PageSize="10"
+                              PageSize="_selectedBudget.Notes.Count"
                               RowRemoved="StateHasChanged"
                               ShowPageSizes="false"
                               ShowCaptions="false"
-                              ShowPager="true">
+                              ShowPager="false">
 
                             <DataGridColumns>
                                 <DataGridColumn TItem="Note" Editable="true" Field="@nameof(Note.NoteText)" Sortable="false" />
@@ -121,7 +125,7 @@
             </div>
         </Column>
 
-        <Column ColumnSize=ColumnSize.IsHalf>
+        <Column ColumnSize=ColumnSize.IsThird>
             <div>
                 <Card Margin="Margin.Is4.OnY">
                     <CardHeader>Totals</CardHeader>
