@@ -1,4 +1,6 @@
-﻿namespace CoinConstraint.Application.DataAccess;
+﻿using CoinConstraint.Domain.AggregateModels.BudgetingAggregate.RepositoryInterfaces.Clientside;
+
+namespace CoinConstraint.Application.DataAccess;
 
 public interface IClientsideCCUnitOfWork
 {
@@ -8,4 +10,5 @@ public interface IClientsideCCUnitOfWork
     IClientsideReminderRepository Reminders { get; set; }
     IClientsideTotalRepository Totals { get; set; }
     IClientsideUserRepository Users { get; }
+    IClientsideNoteRepository Notes { get; }
 }

@@ -8,4 +8,5 @@ public interface ICCUnitOfWork
     IReminderRepository Reminders { get; set; }
     ITotalRepository Totals { get; set; }
     IUserRepository Users { get; }
+    INoteRepository Notes { get; }
 }

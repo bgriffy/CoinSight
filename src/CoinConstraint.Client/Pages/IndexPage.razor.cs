@@ -5,9 +5,10 @@ namespace CoinConstraint.Client.Pages
 {
     public partial class IndexPage
     {
-        private Expense _selectedExpense;
         private List<Budget> _budgets;
         private Budget _selectedBudget;
+        private Expense _selectedExpense;
+        private Note _selectedNote;
         private LoadSpinnerComponent _loadSpinner;
         private bool _pageIsLoaded = false;
         private ExpenseDetailComponent _expenseModal;
@@ -39,6 +40,13 @@ namespace CoinConstraint.Client.Pages
             await _loadSpinner.ShowLoadSpinner("Loading budgets...");
             _budgets = BudgetingService.GetAllBudgets();
             _selectedBudget = _budgets.FirstOrDefault();
+
+            if(_selectedBudget != null)
+            {
+                var notes = _selectedBudget.Notes;
+                var rando = notes; 
+            }
+
         }
 
         private async Task LoadExpenses()

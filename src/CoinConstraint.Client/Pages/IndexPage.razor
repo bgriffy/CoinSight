@@ -92,26 +92,58 @@
         </ButtonRowTemplate>
     </DataGrid>
 
-    <div>
-        <Card Margin="Margin.Is4.OnY">
-            <CardHeader>Totals</CardHeader>
-            <Row>
-                <Field Margin="Margin.Is4.FromLeft.Is2.FromTop" ColumnSize="ColumnSize.Is4">
-                    <Label Class="index-page-total-label" Margin="Margin.Is4.FromRight.Is2.FromTop">Budget Amount</Label>
-                    <FieldBody>
-                        <TextEdit MaskType="MaskType.Numeric" Size="Size.Small" Text="@_budgetAmountText" TextChanged=HandleBudgetAmountChange></TextEdit>
-                    </FieldBody>
-                </Field>
+    <Row>
+        <Column ColumnSize=ColumnSize.IsHalf>
+            <div>
+                <Card Margin="Margin.Is4.OnY">
+                    <CardHeader>Notes</CardHeader>
+                    <CardBody>
+                        <DataGrid TItem="Note"
+                              @bind-SelectedRow="@_selectedNote"
+                              Data="@_selectedBudget.Notes"
+                              CommandMode="DataGridCommandMode.ButtonRow"
+                              Filterable="false"
+                              Editable="true"
+                              EditMode="DataGridEditMode.Popup"
+                              FilterMethod="DataGridFilterMethod.StartsWith"
+                              PageSize="10"
+                              RowRemoved="StateHasChanged"
+                              ShowPageSizes="false"
+                              ShowCaptions="false"
+                              ShowPager="true">
 
-                <Field Margin="Margin.Is1.FromLeft.Is2.FromTop" ColumnSize="ColumnSize.Is4">
-                    <Label Class="index-page-total-label" Margin="Margin.Is4.FromRight.Is2.FromTop">Expensed Amount</Label>
-                    <FieldBody>
-                        <TextEdit Size="Size.Small" MaskType="MaskType.Numeric" Disabled="true" Text="@_selectedBudget.ExpensedAmount.ToString()"></TextEdit>
-                    </FieldBody>
-                </Field>
-            </Row>
-        </Card>
-    </div>
+                            <DataGridColumns>
+                                <DataGridColumn TItem="Note" Editable="true" Field="@nameof(Note.NoteText)" Sortable="false" />
+                            </DataGridColumns>
+                        </DataGrid>
+                    </CardBody>
+                </Card>
+            </div>
+        </Column>
+
+        <Column ColumnSize=ColumnSize.IsHalf>
+            <div>
+                <Card Margin="Margin.Is4.OnY">
+                    <CardHeader>Totals</CardHeader>
+                    <Row>
+                        <Field Margin="Margin.Is4.FromLeft.Is2.FromTop" ColumnSize="ColumnSize.Is4.OnTablet.Is2.OnWidescreen">
+                            <Label Class="index-page-total-label" Margin="Margin.Is4.FromRight.Is2.FromTop">Budget Amount</Label>
+                            <FieldBody>
+                                <TextEdit MaskType="MaskType.Numeric" Size="Size.Small" Text="@_budgetAmountText" TextChanged=HandleBudgetAmountChange></TextEdit>
+                            </FieldBody>
+                        </Field>
+
+                        <Field Margin="Margin.Is1.FromLeft.Is2.FromTop" ColumnSize="ColumnSize.Is4.OnTablet.Is2.OnWidescreen">
+                            <Label Class="index-page-total-label" Margin="Margin.Is4.FromRight.Is2.FromTop">Expensed Amount</Label>
+                            <FieldBody>
+                                <TextEdit Size="Size.Small" MaskType="MaskType.Numeric" Disabled="true" Text="@_selectedBudget.ExpensedAmount.ToString()"></TextEdit>
+                            </FieldBody>
+                        </Field>
+                    </Row>
+                </Card>
+            </div>
+        </Column>
+    </Row>
 
     <Button Size="Size.Small" Clicked="@(async() => await SaveChanges())" Margin="Margin.Is2.FromTop" Padding="Padding.Is2.OnX.Is1.OnY" Color="Color.Primary"><Icon Name="IconName.Save" /> Save</Button>
 }
