@@ -1,0 +1,42 @@
+﻿
+<Modal @ref="_noteModal">
+    <ModalContent Centered="true">
+        <ModalHeader>
+            <ModalTitle>Note</ModalTitle>
+            <CloseButton></CloseButton>
+        </ModalHeader>
+
+        <ModalBody>
+            <MemoEdit Rows="8" @bind-Text=this.NoteText />
+        </ModalBody>
+
+        <ModalFooter>
+            <Button Size="Size.Small" Padding="Padding.Is2.OnX.Is1.OnY" Margin="Margin.Is1.FromRight" Color="Color.Success" Clicked="@(async() => await Save())">Save</Button>
+            <Button Size="Size.Small" Padding="Padding.Is2.OnX.Is1.OnY" Margin="Margin.Is1.FromRight" Color="Color.Secondary" Clicked="@(() => _noteModal.Hide())">Cancel</Button>
+        </ModalFooter>
+    </ModalContent>
+</Modal>
+
+@code {
+    private Modal _noteModal;
+    private Note _note;
+
+    [Parameter]
+    public EventCallback<Note> NoteAdded { get; set; }
+
+    public string NoteText { get; set; } = "";
+
+    public void Show()
+    {
+        _note = new Note();
+        _note.IsNew = true;
+        _noteModal.Show();
+    }
+
+    private async Task Save()
+    {
+        _note.NoteText = this.NoteText;
+        await NoteAdded.InvokeAsync(_note);
+        _noteModal.Hide();
+    }
+}

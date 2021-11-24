@@ -13,6 +13,7 @@ namespace CoinConstraint.Client.Pages
         private bool _pageIsLoaded = false;
         private ExpenseDetailComponent _expenseModal;
         private BudgetsModalComponent _budgetsModal;
+        private NoteModalComponent _noteModal;
         private string _budgetAmountText;
         private bool _isDirty;
 
@@ -74,6 +75,11 @@ namespace CoinConstraint.Client.Pages
             _expenseModal.ShowNewExpense();
         }
 
+        private void OpenNoteModalForNewNote()
+        {
+            _noteModal.Show();
+        }
+
         private void OpenExpenseDetailModal(Expense expense)
         {
             _expenseModal.ShowExpense(expense);
@@ -121,6 +127,15 @@ namespace CoinConstraint.Client.Pages
             newExpense.BudgetID = _selectedBudget.ID;
             _selectedBudget.Expenses.Add(newExpense);
             _selectedBudget.IsUpdated = true; 
+            _isDirty = true;
+            StateHasChanged();
+        }
+
+        private void HandleNewNote(Note note)
+        {
+            note.BudgetID = _selectedBudget.ID;
+            _selectedBudget.Notes.Add(note);
+            _selectedBudget.IsUpdated = true;
             _isDirty = true;
             StateHasChanged();
         }

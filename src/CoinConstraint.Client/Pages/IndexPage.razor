@@ -16,6 +16,11 @@
                        BudgetsSaveRequested="@(async() => await SaveBudgets())">
 </BudgetsModalComponent>
 
+<NoteModalComponent @ref="_noteModal" NoteAdded=HandleNewNote>
+</NoteModalComponent>
+
+
+
 @if (_pageIsLoaded)
 {
     <Field Horizontal="true" Margin="Margin.Is1.FromLeft">
@@ -98,7 +103,7 @@
                 <Card Margin="Margin.Is4.OnY" Style="height: 250px; overflow: scroll">
                     <CardHeader>
                             Notes
-                            <Button><Icon IconSize="IconSize.Large" TextColor="TextColor.Success" Name="@("fas fa-plus-square")"></Icon></Button>
+                            <Button Clicked="OpenNoteModalForNewNote"><Icon IconSize="IconSize.Large" TextColor="TextColor.Success" Name="@("fas fa-plus-square")"></Icon></Button>
                     </CardHeader>
                     <CardBody Padding="Padding.Is0.FromBottom">
                         <DataGrid TItem="Note"
@@ -108,8 +113,7 @@
                               CommandMode="DataGridCommandMode.ButtonRow"
                               Filterable="false"
                               Editable="true"
-                              EditMode="DataGridEditMode.Popup"
-                              FilterMethod="DataGridFilterMethod.StartsWith"
+                              EditMode="DataGridEditMode.Inline"
                               PageSize="_selectedBudget.Notes.Count"
                               RowRemoved="StateHasChanged"
                               ShowPageSizes="false"

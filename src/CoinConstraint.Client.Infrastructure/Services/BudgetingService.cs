@@ -109,7 +109,7 @@ public class BudgetingService : IBudgetingService
                 }
                 budget.IsNew = false;
                 budget.IsUpdated = false;
-                budget.Expenses.ForEach(e => e.IsUpdated = false);
+                budget.Expenses.ForEach(e => e.IsUpdated = false );
             }
 
             await RemoveDeletedBudgets();
