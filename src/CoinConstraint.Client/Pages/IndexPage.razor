@@ -1,5 +1,6 @@
 ﻿@page "/"
 @inject IBudgetingService BudgetingService
+@using CoinConstraint.Client.Infrastructure.Util;
 
 <LoadSpinnerComponent @ref="_loadSpinner" @bind-LoadSpinnerIsHidden="_pageIsLoaded"></LoadSpinnerComponent>
 
@@ -38,72 +39,86 @@
         <Button Margin="Margin.Is2.FromBottom.Is2.FromTop.OnMobile.Is0.FromTop.OnTablet.Is4.FromLeft.OnTablet" Color="Color.Success" Size="Size.Small" Clicked=OpenBudgetManagementModal>Manage Budgets</Button>
     </Field>
 
-     <DataGrid TItem="Expense"
-          @bind-SelectedRow="@_selectedExpense"
-          Data="@_selectedBudget.Expenses"
-          CommandMode="DataGridCommandMode.ButtonRow"
-          Filterable="false"
-          Editable="true"
-          EditMode="DataGridEditMode.Popup"
-          FilterMethod="DataGridFilterMethod.StartsWith"
-          PageSize="10"
-          RowRemoved="@HandleDeletedExpense"
-          ShowPageSizes="false"
-          ShowPager="true">
+    <Card>
+        <CardHeader>
+            Expenses
+        </CardHeader>
 
-        <DataGridColumns>
-            <DataGridCommandColumn TItem="Expense" Width="170px">
-                <SaveCommandTemplate>
-                    <Button Type="ButtonType.Submit" PreventDefaultOnSubmit Color="Color.Primary" Clicked="@context.Clicked">@context.LocalizationString</Button>
-                </SaveCommandTemplate>
-                <CancelCommandTemplate>
-                    <Button Color="Color.Secondary" Clicked="@context.Clicked">@context.LocalizationString</Button>
-                </CancelCommandTemplate>
-                <EditCommandTemplate>
-                    <Button Color="Color.Primary" Clicked="@(() => OpenExpenseDetailModal(context.Item))">@context.LocalizationString</Button>
-                </EditCommandTemplate>
-            </DataGridCommandColumn>
-            <DataGridColumn TItem="Expense" Editable="true" Field="@nameof(Expense.Title)" Caption="Title" Sortable="false" />
-            <DataGridColumn TItem="Expense" Editable="true" Field="@nameof(Expense.Description)" Caption="Description" Sortable="false" />
-            <DataGridColumn TItem="Expense" Editable="true" Field="@nameof(Expense.Amount)" Caption="Amount" Sortable="false">
-                <DisplayTemplate>
-                    @String.Format("{0:C}", ( context as Expense )?.Amount)
-                </DisplayTemplate>
-            </DataGridColumn>
-            <DataGridColumn TItem="Expense" Editable="true" Field="@nameof(Expense.DueDate)" Caption="Due Date" Sortable="false">
-                <DisplayTemplate>
-                    @($"{( context as Expense )?.DueDate.Date.ToString("MM/dd/yyyy")}")
-                </DisplayTemplate>
-            </DataGridColumn>
-            <DataGridColumn TItem="Expense" Editable="true" Field="@nameof(Expense.Pay)" Caption="Pay Now" Sortable="false" />
-            <DataGridColumn TItem="Expense" Editable="true" Field="@nameof(Expense.Paid)" Caption="Paid" Sortable="false" />
-            <DataGridColumn TItem="Expense" Editable="true" Field="@nameof(Expense.Automatic)" Caption="Auto-Pay" Sortable="false" />
-            <DataGridColumn TItem="Expense" Editable="true" Field="@nameof(Expense.Note)" Caption="Note" Sortable="false">
-                <EditTemplate>
-                    <Field Horizontal="true">
-                        <Label>Test Note Lbl</Label>
-                        <FieldBody>
-                            <TextEdit Text="@((string)context.CellValue)" TextChanged="@( v => context.CellValue = v)"></TextEdit>
-                        </FieldBody>
-                    </Field>
-                </EditTemplate>
-            </DataGridColumn>
-        </DataGridColumns>
+        <CardBody>
+            <DataGrid TItem="Expense"
+                  @bind-SelectedRow="@_selectedExpense"
+                  Data="@_selectedBudget.Expenses"
+                  CommandMode="DataGridCommandMode.ButtonRow"
+                  Filterable="false"
+                  Editable="true"
+                  EditMode="DataGridEditMode.Popup"
+                  FilterMethod="DataGridFilterMethod.StartsWith"
+                  PageSize="10"
+                  RowRemoved="@HandleDeletedExpense"
+                  ShowPageSizes="false"
+                  ShowPager="true">
 
-        <ButtonRowTemplate>
-            <Button Size="Size.Small" Padding="Padding.Is2.OnX.Is1.OnY" Margin="Margin.Is1.FromRight" Color="Color.Success" Clicked=OpenExpenseDetailModal>Add</Button>
-            <Button Size="Size.Small" Disabled="@(_selectedExpense == null)" Padding="Padding.Is2.OnX.Is1.OnY" Margin="Margin.Is1.FromRight" Color="Color.Secondary" Clicked="@(() => OpenExpenseDetailModal(context.EditCommand.Item))">Edit</Button>
-            <Button Size="Size.Small" Disabled="@(_selectedExpense == null)" Padding="Padding.Is2.OnX.Is1.OnY" Margin="Margin.Is1.FromRight" Color="Color.Danger" Clicked="context.DeleteCommand.Clicked">Delete</Button>
-        </ButtonRowTemplate>
-    </DataGrid>
+                <DataGridColumns>
+                    <DataGridCommandColumn TItem="Expense" Width="170px">
+                        <SaveCommandTemplate>
+                            <Button Type="ButtonType.Submit" PreventDefaultOnSubmit Color="Color.Primary" Clicked="@context.Clicked">@context.LocalizationString</Button>
+                        </SaveCommandTemplate>
+                        <CancelCommandTemplate>
+                            <Button Color="Color.Secondary" Clicked="@context.Clicked">@context.LocalizationString</Button>
+                        </CancelCommandTemplate>
+                        <EditCommandTemplate>
+                            <Button Color="Color.Primary" Clicked="@(() => OpenExpenseDetailModal(context.Item))">@context.LocalizationString</Button>
+                        </EditCommandTemplate>
+                    </DataGridCommandColumn>
+                    <DataGridColumn TItem="Expense" Editable="true" Field="@nameof(Expense.Title)" Caption="Title" Sortable="false" />
+                    <DataGridColumn TItem="Expense" Editable="true" Field="@nameof(Expense.Description)" Caption="Description" Sortable="false" />
+                    <DataGridColumn TItem="Expense" Editable="true" Field="@nameof(Expense.Amount)" Caption="Amount" Sortable="false">
+                        <DisplayTemplate>
+                            @String.Format("{0:C}", ( context as Expense )?.Amount)
+                        </DisplayTemplate>
+                    </DataGridColumn>
+                    <DataGridColumn TItem="Expense" Editable="true" Field="@nameof(Expense.DueDate)" Caption="Due Date" Sortable="false">
+                        <DisplayTemplate>
+                            @($"{( context as Expense )?.DueDate.Date.ToString("MM/dd/yyyy")}")
+                        </DisplayTemplate>
+                    </DataGridColumn>
+                    <DataGridColumn TItem="Expense" Editable="true" Field="@nameof(Expense.Pay)" Caption="Pay Now" Sortable="false" />
+                    <DataGridColumn TItem="Expense" Editable="true" Field="@nameof(Expense.Paid)" Caption="Paid" Sortable="false" />
+                    <DataGridColumn TItem="Expense" Editable="true" Field="@nameof(Expense.Automatic)" Caption="Auto-Pay" Sortable="false" />
+                    <DataGridColumn TItem="Expense" Editable="true" Field="@nameof(Expense.Note)" Caption="Note" Sortable="false">
+                        <EditTemplate>
+                            <Field Horizontal="true">
+                                <Label>Test Note Lbl</Label>
+                                <FieldBody>
+                                    <TextEdit Text="@((string)context.CellValue)" TextChanged="@( v => context.CellValue = v)"></TextEdit>
+                                </FieldBody>
+                            </Field>
+                        </EditTemplate>
+                    </DataGridColumn>
+                </DataGridColumns>
+
+                <ButtonRowTemplate>
+                    <Button Size="Size.Small" Padding="Padding.Is2.OnX.Is1.OnY" Margin="Margin.Is1.FromRight" Color="Color.Success" Clicked=OpenExpenseDetailModal>Add</Button>
+                    <Button Size="Size.Small" Disabled="@(_selectedExpense == null)" Padding="Padding.Is2.OnX.Is1.OnY" Margin="Margin.Is1.FromRight" Color="Color.Secondary" Clicked="@(() => OpenExpenseDetailModal(context.EditCommand.Item))">Edit</Button>
+                    <Button Size="Size.Small" Disabled="@(_selectedExpense == null)" Padding="Padding.Is2.OnX.Is1.OnY" Margin="Margin.Is1.FromRight" Color="Color.Danger" Clicked="context.DeleteCommand.Clicked">Delete</Button>
+                </ButtonRowTemplate>
+            </DataGrid>
+        </CardBody>
+    </Card>
 
     <Row>
-        <Column ColumnSize=ColumnSize.IsThird>
+        <Column ColumnSize=ColumnSize.Is4.OnTablet.Is3.OnWidescreen>
             <div>
                 <Card Margin="Margin.Is4.OnY" Style="height: 250px; overflow: scroll">
                     <CardHeader>
-                            Notes
-                            <Button Clicked="OpenNoteModalForNewNote"><Icon IconSize="IconSize.Large" TextColor="TextColor.Success" Name="@("fas fa-plus-square")"></Icon></Button>
+                        <Row Flex=Flex.JustifyContent.Between>  
+                            <Div Margin=Margin.Is4.FromLeft>Notes</Div>
+                            <Div Padding=Padding.Is0 Margin="Margin.IsAuto.FromLeft">
+                                <Button Size=Size.ExtraSmall Clicked="OpenNoteModalForNewNote" Color=Color.Success><Icon Margin=Margin.Is2.FromRight IconSize="IconSize.Small" Name="@("fas fa-plus-square")">
+                                    </Icon>Create Note
+                                </Button>
+                            </Div>
+                        </Row>
                     </CardHeader>
                     <CardBody Padding="Padding.Is0.FromBottom">
                         <DataGrid TItem="Note"
@@ -121,7 +136,11 @@
                               ShowPager="false">
 
                             <DataGridColumns>
-                                <DataGridColumn TItem="Note" Editable="true" Field="@nameof(Note.NoteText)" Sortable="false" />
+                                <DataGridColumn TItem="Note" Editable="true" Field="@nameof(Note.NoteText)" Sortable="false" >
+                                    <DisplayTemplate>
+                                        @(context.NoteText.Truncate(50))
+                                    </DisplayTemplate>
+                                </DataGridColumn>
                             </DataGridColumns>
                         </DataGrid>
                     </CardBody>
@@ -129,7 +148,7 @@
             </div>
         </Column>
 
-        <Column ColumnSize=ColumnSize.IsThird>
+        <Column ColumnSize=ColumnSize.Is4.OnTablet.Is3.OnWidescreen>
             <div>
                 <Card Margin="Margin.Is4.OnY">
                     <CardHeader>Totals</CardHeader>
