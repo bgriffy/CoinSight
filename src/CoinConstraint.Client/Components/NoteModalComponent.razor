@@ -30,6 +30,7 @@
     {
         _note = new Note();
         _note.IsNew = true;
+        this.NoteText = _note.NoteText;
         _noteModal.Show();
     }
 
@@ -37,6 +38,6 @@
     {
         _note.NoteText = this.NoteText;
         await NoteAdded.InvokeAsync(_note);
-        _noteModal.Hide();
+        await _noteModal.Hide();
     }
 }
