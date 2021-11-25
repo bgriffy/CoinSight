@@ -1,6 +1,8 @@
 ﻿@page "/"
 @inject IBudgetingService BudgetingService
+@inject NavigationManager NavigationManager
 @using CoinConstraint.Client.Infrastructure.Util;
+
 
 <LoadSpinnerComponent @ref="_loadSpinner" @bind-LoadSpinnerIsHidden="_pageIsLoaded"></LoadSpinnerComponent>
 
@@ -120,9 +122,17 @@
                             @(context.Note.Truncate(50))
                         </DisplayTemplate>
                     </DataGridColumn>
+                    <DataGridColumn TItem="Expense" Editable="true" Field="@nameof(Expense.PaymentURL)" Width=125px ShowCaption=false Sortable="false">
+                        <DisplayTemplate>
+                            <Button Size="Size.ExtraSmall" Padding="Padding.Is3.OnX.Is1.OnY" Margin="Margin.Is0.FromRight"  Color="Color.Warning" Clicked="@(() => OpenPaymentURL(context))">
+                                <Icon Margin=Margin.Is2.FromRight IconSize="IconSize.Small" Name="@("fas fa-dollar-sign")"></Icon>Pay
+                            </Button>
+                        </DisplayTemplate>
+                    </DataGridColumn>
+
                     <DataGridCommandColumn TItem="Expense">
                         <EditCommandTemplate>
-                            <Button Size="Size.ExtraSmall" Padding="Padding.Is3.OnX.Is1.OnY" Margin="Margin.Is3.FromRight"  Color="Color.Secondary" Clicked="@(() => OpenExpenseDetailModal(context.Item))">
+                            <Button Size="Size.ExtraSmall" Padding="Padding.Is3.OnX.Is1.OnY" Margin="Margin.Is3.FromRight.Is0.FromLeft"  Color="Color.Secondary" Clicked="@(() => OpenExpenseDetailModal(context.Item))">
                                 <Icon Margin=Margin.Is2.FromRight IconSize="IconSize.Small" Name="@("fas fa-pen")"></Icon>@context.LocalizationString
                             </Button>
                         </EditCommandTemplate>

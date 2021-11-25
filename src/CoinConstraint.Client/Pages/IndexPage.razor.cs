@@ -80,6 +80,11 @@ namespace CoinConstraint.Client.Pages
             _noteModal.Show();
         }
 
+        private void OpenPaymentURL(Expense expense)
+        {
+            NavigationManager.NavigateTo(expense.PaymentURL);
+        }
+
         private void OpenExpenseDetailModal(Expense expense)
         {
             _expenseModal.ShowExpense(expense);

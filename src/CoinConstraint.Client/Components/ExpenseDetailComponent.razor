@@ -63,6 +63,15 @@
             <Row>
                 <Column>
                     <Field>
+                        <Label>Payment URL</Label>
+                        <TextEdit @bind-Text="_expense.PaymentURL"></TextEdit>
+                    </Field>
+                </Column>
+            </Row>
+
+            <Row>
+                <Column>
+                    <Field>
                         <Label>Note</Label>
                         <MemoEdit Rows="3" @bind-Text="_expense.Note"></MemoEdit>
                     </Field>
