@@ -29,4 +29,6 @@ public class Expense
 
     [NotMapped]
     public bool IsUpdated { get; set; }
+
+    public string PaymentURL { get; set; }
 }
