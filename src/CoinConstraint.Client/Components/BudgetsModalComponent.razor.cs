@@ -65,6 +65,12 @@ public partial class BudgetsModalComponent
         StateHasChanged();
     }
 
+    private void CloneBudget(Budget budget)
+    {
+        var newBudget = budget.Clone();
+        EditBudget(newBudget);
+    }
+
     public void Show()
     {
         _budgetsModal.Show();

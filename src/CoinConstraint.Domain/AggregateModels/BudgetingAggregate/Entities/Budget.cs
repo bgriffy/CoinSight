@@ -2,6 +2,7 @@
 
 public class Budget
 {
+
     [Key]
     public int ID { get; set; }
 
@@ -35,4 +36,22 @@ public class Budget
 
     [NotMapped]
     public bool IsUpdated { get; set; }
+
+    public Budget Clone()
+    {
+        return new Budget()
+        {
+            Title = Title,
+            StartDate = StartDate,
+            EndDate = EndDate,
+            Totals = Totals,
+            Bills = Bills,
+            Expenses = Expenses,
+            UUID = UUID,
+            User = User,
+            BudgetedAmount = BudgetedAmount,
+            Notes = Notes,
+            IsNew = true
+        };
+    }
 }

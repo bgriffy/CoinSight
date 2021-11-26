@@ -148,4 +148,10 @@ public class BudgetingService : IBudgetingService
             throw;
         }
     }
+    
+    public Budget CloneBudget(Budget budget)
+    {
+        var newBudget = budget.Clone();
+        return newBudget;
+    }
 }

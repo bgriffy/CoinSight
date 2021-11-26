@@ -5,6 +5,7 @@ namespace CoinConstraint.Application.Budgeting;
 public interface IBudgetingService
 {
     void AddNewBudget(Budget budget);
+    Budget CloneBudget(Budget budget);
     List<Budget> GetAllBudgets();
     Task Init();
     void MarkBudgetForDeletion(Budget budget);
