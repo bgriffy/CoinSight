@@ -24,8 +24,8 @@ public class BudgetingService : IBudgetingService
             _expensesForDeletion = new List<Expense>();
             if (_selectedBudget != null)
             {
-                await SetExpenses(_selectedBudget.ID);
-                await SetNotes(_selectedBudget.ID);
+                await SetExpenses(_selectedBudget);
+                await SetNotes(_selectedBudget);
             }
         }
         catch (Exception e)
@@ -44,8 +44,13 @@ public class BudgetingService : IBudgetingService
     public async Task SetSelectedBudget(Budget selectedBudget)
     {
         _selectedBudget = selectedBudget;
-        await SetExpenses(_selectedBudget.ID);
-        await SetNotes(_selectedBudget.ID);
+        await LoadBudgetData(_selectedBudget);
+    }
+
+    public async Task LoadBudgetData(Budget budget)
+    {
+        await SetExpenses(budget);
+        await SetNotes(budget);
     }
 
     public List<Budget> GetAllBudgets()
@@ -53,14 +58,14 @@ public class BudgetingService : IBudgetingService
         return _budgets;
     }
 
-    public async Task SetExpenses(int budgetID)
+    public async Task SetExpenses(Budget budget)
     {
-        _selectedBudget.Expenses = await _unitOfWork.Expenses.GetExpensesByBudget(budgetID);
+        budget.Expenses = await _unitOfWork.Expenses.GetExpensesByBudget(budget.ID);
     }
 
-    private async Task SetNotes(int budgetID)
+    private async Task SetNotes(Budget budget)
     {
-        _selectedBudget.Notes = await _unitOfWork.Notes.GetNotesByBudgetID(budgetID);
+        budget.Notes = await _unitOfWork.Notes.GetNotesByBudgetID(budget.ID);
     }
 
     public void MarkExpenseForDeletion(Expense expense)
@@ -164,11 +169,5 @@ public class BudgetingService : IBudgetingService
             Console.WriteLine($"There was an error removing expenses from the budgeting service: {e.Message}");
             throw;
         }
-    }
-    
-    public Budget CloneBudget(Budget budget)
-    {
-        var newBudget = budget.Clone();
-        return newBudget;
     }
 }

@@ -15,6 +15,7 @@
 <BudgetsModalComponent @ref="_budgetsModal"
                        Budgets="_budgets"
                        BudgetAdded=HandleNewBudget
+                       BudgetCloneRequested=HandleBudgetClone
                        BudgetModified=HandleUpdatedBudgets
                        BudgetDeleted=HandleDeletedBudget
                        BudgetsSaveRequested="@(async() => await SaveBudgets())">

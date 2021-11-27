@@ -127,6 +127,10 @@ namespace CoinConstraint.Client.Pages
             await LoadData();
         }
 
+        private async Task HandleBudgetClone(Budget budget)
+        {
+            await BudgetingService.LoadBudgetData(budget);
+        }
 
         private void HandleNewExpense(Expense newExpense)
         {

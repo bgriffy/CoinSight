@@ -31,6 +31,9 @@ public partial class BudgetsModalComponent
     [Parameter]
     public EventCallback BudgetsSaveRequested { get; set; }
 
+    [Parameter]
+    public EventCallback<Budget> BudgetCloneRequested { get; set; }
+
     public void AddNewBudget(Budget newBudget = null)
     {
         if(newBudget != null)
@@ -72,9 +75,10 @@ public partial class BudgetsModalComponent
         StateHasChanged();
     }
 
-    private void CloneBudget(Budget budget)
+    private async Task CloneBudget(Budget budgetToClone)
     {
-        var newBudget = budget.Clone();
+        await BudgetCloneRequested.InvokeAsync(budgetToClone);
+        var newBudget = budgetToClone.Clone();
         _selectedBudget = newBudget;
         EditBudget(newBudget);
     }
