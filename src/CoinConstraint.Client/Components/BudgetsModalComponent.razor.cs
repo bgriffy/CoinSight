@@ -31,9 +31,16 @@ public partial class BudgetsModalComponent
     [Parameter]
     public EventCallback BudgetsSaveRequested { get; set; }
 
-    public void AddNewBudget()
+    public void AddNewBudget(Budget newBudget = null)
     {
-        _budgetDetailModal.ShowNewBudget();
+        if(newBudget != null)
+        {
+            _budgetDetailModal.ShowNewBudget(newBudget);
+        }
+        else
+        {
+            _budgetDetailModal.ShowNewBudget();
+        }
 
     }
 
@@ -68,6 +75,7 @@ public partial class BudgetsModalComponent
     private void CloneBudget(Budget budget)
     {
         var newBudget = budget.Clone();
+        _selectedBudget = newBudget;
         EditBudget(newBudget);
     }
 

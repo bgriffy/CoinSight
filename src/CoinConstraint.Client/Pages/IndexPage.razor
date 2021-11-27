@@ -1,6 +1,7 @@
 ﻿@page "/"
 @inject IBudgetingService BudgetingService
 @inject NavigationManager NavigationManager
+@inject IJSRuntime JSRuntime
 @using CoinConstraint.Client.Infrastructure.Util;
 
 
@@ -61,6 +62,7 @@
                   ShowPager="true">
 
                 <DataGridColumns>
+
                     <DataGridColumn Width="150px" TextAlignment="TextAlignment.Left"  TItem="Expense" Editable="true" Field="@nameof(Expense.Title)" Caption="Title" Sortable="false" >
                         <CaptionTemplate>
                             <Div TextAlignment="TextAlignment.Left" >
@@ -68,11 +70,13 @@
                             </Div>
                         </CaptionTemplate>
                     </DataGridColumn>
+
                     <DataGridColumn Width=250px TItem="Expense" Editable="true" Field="@nameof(Expense.Description)" Caption="Description" Sortable="false" >
                          <DisplayTemplate>
                             @(context.Description.Truncate(50))
                         </DisplayTemplate>
                     </DataGridColumn>
+
                     <DataGridColumn TextAlignment="TextAlignment.Center" TItem="Expense" Width=150px Editable="true" Field="@nameof(Expense.Amount)" Caption="Amount" Sortable="false">
                         <CaptionTemplate>
                             <Div TextAlignment="TextAlignment.Center">
@@ -83,6 +87,7 @@
                             @String.Format("{0:C}", ( context as Expense )?.Amount)
                         </DisplayTemplate>
                     </DataGridColumn>
+
                     <DataGridColumn TextAlignment="TextAlignment.Center" Width=150px TItem="Expense" Editable="true" Field="@nameof(Expense.DueDate)" Caption="Due Date" Sortable="false">
                         <CaptionTemplate>
                             <Div TextAlignment="TextAlignment.Center">
@@ -93,6 +98,7 @@
                             @($"{( context as Expense )?.DueDate.Date.ToString("MM/dd/yyyy")}")
                         </DisplayTemplate>
                     </DataGridColumn>
+
                     <DataGridColumn Width=150px TItem="Expense" TextAlignment="TextAlignment.Center" Editable="true" Field="@nameof(Expense.Pay)" Caption="Pay Now" Sortable="false" >
                         <CaptionTemplate >
                             <Div TextAlignment="TextAlignment.Center">Pay Now</Div>
@@ -101,6 +107,7 @@
                                 <Check TValue="bool" Checked="context.Pay" Disabled="true" ReadOnly="true" />
                         </DisplayTemplate>
                     </DataGridColumn>
+
                     <DataGridColumn Width=150px TextAlignment="TextAlignment.Center" TItem="Expense" Editable="true" Field="@nameof(Expense.Paid)" Caption="Paid" Sortable="false" >
                         <CaptionTemplate >
                             <Div TextAlignment="TextAlignment.Center">Paid</Div>
@@ -109,6 +116,7 @@
                                 <Check TValue="bool" Checked="context.Paid" Disabled="true" ReadOnly="true" />
                         </DisplayTemplate>
                     </DataGridColumn>
+
                     <DataGridColumn Width=150px TextAlignment="TextAlignment.Center" TItem="Expense" Editable="true" Field="@nameof(Expense.Automatic)" Caption="Auto-Pay" Sortable="false" >
                         <CaptionTemplate >
                             <Div TextAlignment="TextAlignment.Center">Auto-Pay</Div>
@@ -117,14 +125,16 @@
                                 <Check TValue="bool" Checked="context.Automatic" Disabled="true" ReadOnly="true" />
                         </DisplayTemplate>
                     </DataGridColumn>
+
                     <DataGridColumn TItem="Expense" Editable="true" Field="@nameof(Expense.Note)" Width=250px Caption="Note" Sortable="false">
                         <DisplayTemplate>
                             @(context.Note.Truncate(50))
                         </DisplayTemplate>
                     </DataGridColumn>
-                    <DataGridColumn TItem="Expense" Editable="true" Field="@nameof(Expense.PaymentURL)" Width=125px ShowCaption=false Sortable="false">
+
+                    <DataGridColumn TItem="Expense" Editable="true" Field="@nameof(Expense.PaymentURL)" Width=95px ShowCaption=false Sortable="false">
                         <DisplayTemplate>
-                            <Button Size="Size.ExtraSmall" Padding="Padding.Is3.OnX.Is1.OnY" Margin="Margin.Is0.FromRight"  Color="Color.Warning" Clicked="@(() => OpenPaymentURL(context))">
+                            <Button Size="Size.ExtraSmall" Padding="Padding.Is3.OnX.Is1.OnY" Margin="Margin.Is0.OnX"  Color="Color.Warning" Clicked="@(async () => await OpenPaymentURLAsync(context))">
                                 <Icon Margin=Margin.Is2.FromRight IconSize="IconSize.Small" Name="@("fas fa-dollar-sign")"></Icon>Pay
                             </Button>
                         </DisplayTemplate>
@@ -132,7 +142,7 @@
 
                     <DataGridCommandColumn TItem="Expense">
                         <EditCommandTemplate>
-                            <Button Size="Size.ExtraSmall" Padding="Padding.Is3.OnX.Is1.OnY" Margin="Margin.Is3.FromRight.Is0.FromLeft"  Color="Color.Secondary" Clicked="@(() => OpenExpenseDetailModal(context.Item))">
+                            <Button Size="Size.ExtraSmall" Padding="Padding.Is3.OnX.Is1.OnY" Margin="Margin.Is4.FromRight.Is0.FromLeft"  Color="Color.Secondary" Clicked="@(() => OpenExpenseDetailModal(context.Item))">
                                 <Icon Margin=Margin.Is2.FromRight IconSize="IconSize.Small" Name="@("fas fa-pen")"></Icon>@context.LocalizationString
                             </Button>
                         </EditCommandTemplate>
@@ -143,6 +153,7 @@
                         </DeleteCommandTemplate>
                         <NewCommandTemplate></NewCommandTemplate>
                     </DataGridCommandColumn>
+
                 </DataGridColumns>
 
                 <ButtonRowTemplate>

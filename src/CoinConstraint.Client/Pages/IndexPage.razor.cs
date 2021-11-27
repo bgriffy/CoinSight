@@ -1,5 +1,6 @@
 ﻿using CoinConstraint.Client.Components;
 using CoinConstraint.Domain.AggregateModels.BudgetingAggregate.Entities;
+using Microsoft.JSInterop;
 
 namespace CoinConstraint.Client.Pages
 {
@@ -80,9 +81,9 @@ namespace CoinConstraint.Client.Pages
             _noteModal.Show();
         }
 
-        private void OpenPaymentURL(Expense expense)
+        private async Task OpenPaymentURLAsync(Expense expense)
         {
-            NavigationManager.NavigateTo(expense.PaymentURL);
+            await JSRuntime.InvokeAsync<object>("open", expense.PaymentURL, "_blank");
         }
 
         private void OpenExpenseDetailModal(Expense expense)
@@ -178,7 +179,7 @@ namespace CoinConstraint.Client.Pages
         {
             await _loadSpinner.ShowLoadSpinner("Saving budgets...");
             await Task.Delay(1000);
-            await BudgetingService.SaveBudgets();
+            await BudgetingService.SaveChanges();
             await _loadSpinner.HideLoadSpinner();
         }
 
@@ -187,7 +188,7 @@ namespace CoinConstraint.Client.Pages
             await _loadSpinner.ShowLoadSpinner("Saving changes...");
             SyncData();
             await Task.Delay(1000);
-            await BudgetingService.SaveChanges();
+            await BudgetingService.SaveChanges(removeDeletedExpenses: true);
             await _loadSpinner.HideLoadSpinner();
         }
     }

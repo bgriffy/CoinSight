@@ -30,5 +30,25 @@ public class Expense
     [NotMapped]
     public bool IsUpdated { get; set; }
 
-    public string PaymentURL { get; set; }
+    public string PaymentURL { get; set; } = "";
+
+    public Expense Clone()
+    {
+        var newExpense = new Expense()
+        {
+            ID = this.ID,
+            BudgetID = this.BudgetID,
+            Title = this.Title,
+            Description = this.Description,
+            Automatic = this.Automatic,
+            Pay = this.Pay,
+            Paid = this.Paid,
+            DueDate = this.DueDate,
+            Amount = this.Amount,
+            Note = this.Note,
+            PaymentURL = this.PaymentURL
+        };
+
+        return newExpense;
+    }
 }

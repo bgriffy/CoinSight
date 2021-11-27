@@ -78,21 +78,7 @@ public class BudgetingService : IBudgetingService
         _budgetsForDeletion.Add(budget);
     }
 
-    public async Task SaveChanges()
-    {
-        try
-        {
-            await SaveBudgets();
-            await RemoveDeletedExpenses();
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine($"There was an error saving changes from the budgeting service: {e.Message}");
-            throw;
-        }
-    }
-
-    public async Task SaveBudgets()
+    public async Task SaveChanges(bool removeDeletedExpenses = false)
     {
         try
         {
@@ -100,24 +86,55 @@ public class BudgetingService : IBudgetingService
             {
                 if (budget.IsNew)
                 {
-                    var newID = await _unitOfWork.Budgets.AddBudget(budget);
-                    budget.ID = newID ?? 0;
+                    await SaveNewBudget(budget);
                 }
                 else if (budget.IsUpdated)
                 {
-                    await _unitOfWork.Budgets.UpdateAsync(budget);
+                    await SaveBudget(budget);
                 }
-                budget.IsNew = false;
-                budget.IsUpdated = false;
-                budget.Expenses.ForEach(e => e.IsUpdated = false );
             }
 
             await RemoveDeletedBudgets();
+            
+            if(removeDeletedExpenses)
+            {
+                await RemoveDeletedExpenses();
+            }
         }
         catch (Exception e)
         {
             Console.WriteLine($"There was an error saving budgets from the budgeting service: {e.Message}");
             throw;
+        }
+    }
+
+    private async Task SaveBudget(Budget budget)
+    {
+        await _unitOfWork.Budgets.UpdateAsync(budget);
+
+        budget.IsNew = false;
+        budget.IsUpdated = false;
+
+        foreach (var expense in budget.Expenses)
+        {
+            budget.IsUpdated = false;
+            budget.IsNew = false; 
+        }
+    }
+
+    private async Task SaveNewBudget(Budget budget)
+    {
+        var newID = await _unitOfWork.Budgets.AddBudget(budget);
+        budget.ID = newID ?? 0;
+
+        budget.IsNew = false;
+        budget.IsUpdated = false;
+
+        foreach (var expense in budget.Expenses)
+        {
+            expense.BudgetID = budget.ID;
+            expense.IsUpdated = false;
+            expense.IsNew = false;
         }
     }
 

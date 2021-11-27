@@ -48,7 +48,7 @@
                             @($"{( context as Budget )?.EndDate.Date.ToString("MM/dd/yyyy")}")
                         </DisplayTemplate>
                     </DataGridColumn>
-                    <DataGridColumn TItem="Budget" Editable="false" Field="CloneButton" Width=125px ShowCaption=false Sortable="false">
+                    <DataGridColumn TItem="Budget" Editable="false" Field="@nameof(Budget.ID)" Width=125px ShowCaption=false Sortable="false">
                         <DisplayTemplate>
                             <Button Size="Size.ExtraSmall" Padding="Padding.Is1" Margin="Margin.Is4.OnX"  Color="Color.Warning" Clicked="@(() => CloneBudget(context))">
                                 Clone
@@ -57,7 +57,7 @@
                     </DataGridColumn>
                 </DataGridColumns>
                 <ButtonRowTemplate>
-                    <Button Size="Size.Small" Padding="Padding.Is2.OnX.Is1.OnY" Margin="Margin.Is1.FromRight" Color="Color.Success" Clicked=AddNewBudget>Add</Button>
+                    <Button Size="Size.Small" Padding="Padding.Is2.OnX.Is1.OnY" Margin="Margin.Is1.FromRight" Color="Color.Success" Clicked="@(() => AddNewBudget())">Add</Button>
                     <Button Size="Size.Small" Disabled="@(_selectedBudget == null)" Padding="Padding.Is2.OnX.Is1.OnY" Margin="Margin.Is1.FromRight" Color="Color.Secondary" Clicked="@(() => EditBudget(context.EditCommand.Item))">Edit</Button>
                     <Button Size="Size.Small" Disabled="@(_selectedBudget == null)" Padding="Padding.Is2.OnX.Is1.OnY" Margin="Margin.Is1.FromRight" Color="Color.Danger" Clicked="context.DeleteCommand.Clicked">Delete</Button>
                 </ButtonRowTemplate>

@@ -39,19 +39,36 @@ public class Budget
 
     public Budget Clone()
     {
-        return new Budget()
+        var newBudget = new Budget()
         {
             Title = Title,
             StartDate = StartDate,
             EndDate = EndDate,
             Totals = Totals,
-            Bills = Bills,
-            Expenses = Expenses,
+            Bills = this.Bills.ToList(),
             UUID = UUID,
             User = User,
             BudgetedAmount = BudgetedAmount,
-            Notes = Notes,
+            Notes = this.Notes.ToList(),
             IsNew = true
         };
+
+        foreach (var expense in this.Expenses)
+        {
+            newBudget.Expenses.Add(new Expense()
+            {
+                BudgetID = newBudget.ID,
+                Amount = expense.Amount,
+                Description = expense.Description,
+                DueDate = expense.DueDate,
+                Automatic = expense.Automatic,
+                Note = expense.Note,
+                Pay = expense.Pay,
+                Title = expense.Title,
+                PaymentURL = expense.PaymentURL
+            });
+        }
+
+        return newBudget;
     }
 }

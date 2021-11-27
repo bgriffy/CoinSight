@@ -13,10 +13,18 @@ public partial class BudgetDetailModalComponent
     [Parameter]
     public EventCallback BudgetModified { get; set; }
 
-    public void ShowNewBudget()
+    public void ShowNewBudget(Budget newBudget = null)
     {
-        _budget = new Budget();
-        _budget.IsNew = true;
+        if(newBudget == null)
+        {
+            _budget = new Budget();
+            _budget.IsNew = true;
+        }
+        else
+        {
+            _budget = newBudget;
+        }
+        
         _budgetModal.Show();
     }
 
