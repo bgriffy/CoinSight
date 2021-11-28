@@ -111,7 +111,7 @@ namespace CoinConstraint.Client.Pages
         }
 
 
-        public async Task HandleBudgetChange(int budgetID)
+        public async Task HandleBudgetChange(int? budgetID)
         {
             _selectedBudget = _budgets.FirstOrDefault(b => b.ID == budgetID);
             await BudgetingService.SetSelectedBudget(_selectedBudget);

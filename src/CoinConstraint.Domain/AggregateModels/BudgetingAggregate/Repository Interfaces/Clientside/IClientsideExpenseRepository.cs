@@ -2,6 +2,6 @@
 
 public interface IClientsideExpenseRepository : IClientsideRepository<Expense>
 {
-    Task<List<Expense>> GetExpensesByBudget(int budgetID);
+    Task<List<Expense>> GetExpensesByBudget(int? budgetID);
     Task SaveChangesAsync();
 }

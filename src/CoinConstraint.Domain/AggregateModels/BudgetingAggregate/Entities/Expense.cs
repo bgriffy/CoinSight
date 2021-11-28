@@ -6,7 +6,7 @@ public class Expense
     [Key]
     public int? ID { get; set; } = null;
 
-    public int BudgetID { get; set; } = 0;
+    public int? BudgetID { get; set; } = 0;
 
     public string Title { get; set; } = "";
 

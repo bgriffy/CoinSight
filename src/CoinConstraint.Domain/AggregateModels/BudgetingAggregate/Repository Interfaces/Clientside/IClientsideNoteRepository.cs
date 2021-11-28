@@ -2,5 +2,5 @@
 
 public interface IClientsideNoteRepository : IClientsideRepository<Note>
 {
-    Task<List<Note>> GetNotesByBudgetID(int budgetID);
+    Task<List<Note>> GetNotesByBudgetID(int? budgetID);
 }

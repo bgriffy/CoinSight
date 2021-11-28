@@ -4,7 +4,6 @@
 @inject IJSRuntime JSRuntime
 @using CoinConstraint.Client.Infrastructure.Util;
 
-
 <LoadSpinnerComponent @ref="_loadSpinner" @bind-LoadSpinnerIsHidden="_pageIsLoaded"></LoadSpinnerComponent>
 
 <ExpenseDetailComponent @ref="_expenseModal"
@@ -24,15 +23,13 @@
 <NoteModalComponent @ref="_noteModal" NoteAdded=HandleNewNote>
 </NoteModalComponent>
 
-
-
 @if (_pageIsLoaded)
 {
     <Field Horizontal="true" Margin="Margin.Is1.FromLeft">
         <Label Margin="Margin.Is4.FromRight.Is2.FromTop">Budgets</Label>
         <FieldBody>
             <SelectList TItem=Budget
-                    TValue="int"
+                    TValue="int?"
                     Data=@this.BudgetsForDropdown
                     TextField=@((budget) => budget.Title)
                     ValueField=@((budget) => budget.ID)

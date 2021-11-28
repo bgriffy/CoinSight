@@ -13,7 +13,7 @@ public class ClientExpenseRepository : ClientsideRepository<Expense>, IClientsid
         _endpoint = "api/Expenses";
     }
 
-    public async Task<List<Expense>> GetExpensesByBudget(int budgetID)
+    public async Task<List<Expense>> GetExpensesByBudget(int? budgetID)
     {
         var expenses = await _httpClient.GetFromJsonAsync<List<Expense>>($"{_endpoint}/{budgetID}");
         return expenses;

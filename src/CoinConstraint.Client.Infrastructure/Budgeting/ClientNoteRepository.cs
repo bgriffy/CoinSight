@@ -13,7 +13,7 @@ public class ClientNoteRepository : ClientsideRepository<Note>, IClientsideNoteR
         _endPoint = "api/Notes";
     }
 
-    public async Task<List<Note>> GetNotesByBudgetID(int budgetID)
+    public async Task<List<Note>> GetNotesByBudgetID(int? budgetID)
     {
         var notes = await _httpClient.GetFromJsonAsync<List<Note>>($"{_endPoint}/{budgetID}");
         return notes;

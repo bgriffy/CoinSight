@@ -4,7 +4,7 @@ public class Budget
 {
 
     [Key]
-    public int ID { get; set; }
+    public int? ID { get; set; }
 
     public string Title { get; set; } = "";
 
@@ -49,7 +49,6 @@ public class Budget
             UUID = UUID,
             User = User,
             BudgetedAmount = BudgetedAmount,
-            Notes = this.Notes.ToList(),
             IsNew = true
         };
 
@@ -57,7 +56,7 @@ public class Budget
         {
             newBudget.Expenses.Add(new Expense()
             {
-                BudgetID = newBudget.ID,
+                BudgetID = (int)(newBudget.ID ?? 0),
                 Amount = expense.Amount,
                 Description = expense.Description,
                 DueDate = expense.DueDate,
@@ -66,6 +65,15 @@ public class Budget
                 Pay = expense.Pay,
                 Title = expense.Title,
                 PaymentURL = expense.PaymentURL
+            });
+        }
+
+        foreach (var note in this.Notes)
+        {
+            newBudget.Notes.Add(new Note()
+            {
+                BudgetID = (int)(newBudget.ID ?? 0),
+                NoteText = note.NoteText
             });
         }
 
