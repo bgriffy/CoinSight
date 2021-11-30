@@ -23,7 +23,7 @@
         </ModalBody>
 
         <ModalFooter>
-            <Button Size="Size.Small" Padding="Padding.Is2.OnX.Is1.OnY" Margin="Margin.Is1.FromRight" Color="Color.Success" Clicked="@(async() => await Save())">Save</Button>
+            <Button Size="Size.Small" Padding="Padding.Is2.OnX.Is1.OnY" Margin="Margin.Is1.FromRight" Color="Color.Primary" Clicked="@(async() => await Save())"><Icon Name="IconName.Save" Margin="Margin.Is0.FromLeft.Is2.FromRight"/>Save</Button>
             <Button Size="Size.Small" Padding="Padding.Is2.OnX.Is1.OnY" Margin="Margin.Is1.FromRight" Color="Color.Secondary" Clicked="@(() => _budgetModal.Hide())">Cancel</Button>
         </ModalFooter>
 

@@ -42,7 +42,7 @@
 
                     <DataGridColumn TItem="Budget" Editable="false" Field="@nameof(Budget.ID)" Width=125px ShowCaption=false Sortable="false">
                         <DisplayTemplate>
-                            <Button Size="Size.ExtraSmall" Padding="Padding.Is2.OnX.Is1.OnY" Margin="Margin.Is4.FromLeft"  Color="Color.Warning" Clicked="@(() => CloneBudget(context))">
+                            <Button Size="Size.ExtraSmall" Padding="Padding.Is2.OnX.Is1.OnY" Margin="Margin.Is4.FromLeft"  Color="Color.Secondary" Clicked="@(() => CloneBudget(context))">
                                 <Icon Margin=Margin.Is2.FromRight IconSize="IconSize.Small" Name="@("far fa-copy")"></Icon>Clone
                             </Button>
                         </DisplayTemplate>
@@ -55,7 +55,7 @@
                             </Button>
                         </EditCommandTemplate>
                         <DeleteCommandTemplate>
-                            <Button Size="Size.ExtraSmall" Margin="Margin.Is2.OnX" Padding="Padding.Is2.OnX.Is1.OnY" Color="Color.Danger" Clicked="context.Clicked">
+                            <Button Size="Size.ExtraSmall" Margin="Margin.Is2.OnX" Padding="Padding.Is2.OnX.Is1.OnY" Color="Color.Secondary" Clicked="context.Clicked">
                                 <Icon Margin=Margin.Is2.FromRight IconSize="IconSize.Small" Name="@("fas fa-trash-alt")"></Icon>@context.LocalizationString
                             </Button>
                         </DeleteCommandTemplate>

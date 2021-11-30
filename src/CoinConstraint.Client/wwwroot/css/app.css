@@ -30,6 +30,57 @@ a, .btn-link {
     color: red;
 }
 
+.btn-success {
+    background-color: #25A18E !important;
+    border-color: #25A18E !important;
+}
+    .btn-success:hover {
+        background-color: #9FFFCB !important;
+        border-color: #9FFFCB !important;
+        color: #004E64 !important;
+    }
+
+/*.btn-success {
+    background-color: #9FFFCB !important;
+    border-color: #004E64 !important;
+    color: #004E64 !important;
+    border-width: 1px;
+}
+
+    .btn-success:hover {
+        background-color: #25A18E !important;
+        border-color: #25A18E !important;
+        color: white !important;
+    }*/
+
+.btn-primary {
+    background-color: #004E64 !important;
+    border-color: #004E64 !important;
+}
+
+    .btn-primary:hover {
+        background-color: #00A5CF !important;
+        border-color: #00A5CF !important;
+    }
+
+
+.btn-secondary {
+    background-color: rgba(0,0,0,.03) !important;
+    border-color: #004E64 !important;
+    color: #004E64 !important;
+}
+
+    /*.btn-secondary:hover {
+        background-color: #7AE582 !important;*/
+        /*border-color: #7AE582 !important;*/
+        /*color: #004E64 !important;
+    }*/
+
+    .btn-secondary:hover {
+        background-color: #9FFFCB !important;
+        color: #004E64 !important;
+    }
+
 #blazor-error-ui {
     background: lightyellow;
     bottom: 0;

@@ -38,7 +38,7 @@
             </SelectList>
         </FieldBody>
         <Button Margin="Margin.Is2.FromBottom.Is2.FromTop.OnMobile.Is0.FromTop.OnTablet.Is4.FromLeft.OnTablet" 
-            Color="Color.Secondary" 
+            Color="Color.Primary" 
             Size="Size.ExtraSmall" 
             Clicked=OpenBudgetManagementModal>
             <Icon Margin=Margin.Is2.FromRight IconSize="IconSize.Large" Name="@("fas fa-clipboard-list")"></Icon>Manage Budgets
@@ -137,7 +137,7 @@
 
                     <DataGridColumn TItem="Expense" Editable="true" Field="@nameof(Expense.PaymentURL)" Width=95px ShowCaption=false Sortable="false">
                         <DisplayTemplate>
-                            <Button Size="Size.ExtraSmall" Padding="Padding.Is3.OnX.Is1.OnY" Margin="Margin.Is0.OnX"  Color="Color.Warning" Clicked="@(async () => await OpenPaymentURLAsync(context))">
+                            <Button Size="Size.ExtraSmall" Color="Color.Secondary"  Padding="Padding.Is3.OnX.Is1.OnY" Margin="Margin.Is0.OnX" Clicked="@(async () => await OpenPaymentURLAsync(context))">
                                 <Icon Margin=Margin.Is2.FromRight IconSize="IconSize.Small" Name="@("fas fa-dollar-sign")"></Icon>Pay
                             </Button>
                         </DisplayTemplate>
@@ -145,12 +145,12 @@
 
                     <DataGridCommandColumn TItem="Expense">
                         <EditCommandTemplate>
-                            <Button Size="Size.ExtraSmall" Padding="Padding.Is3.OnX.Is1.OnY" Margin="Margin.Is4.FromRight.Is0.FromLeft"  Color="Color.Secondary" Clicked="@(() => OpenExpenseDetailModal(context.Item))">
+                            <Button Size="Size.ExtraSmall" Color="Color.Secondary"  Padding="Padding.Is3.OnX.Is1.OnY" Margin="Margin.Is4.FromRight.Is0.FromLeft"  Clicked="@(() => OpenExpenseDetailModal(context.Item))">
                                 <Icon Margin=Margin.Is2.FromRight IconSize="IconSize.Small" Name="@("fas fa-pen")"></Icon>@context.LocalizationString
                             </Button>
                         </EditCommandTemplate>
                         <DeleteCommandTemplate>
-                            <Button Size="Size.ExtraSmall" Padding="Padding.Is2.OnX.Is1.OnY" Color="Color.Danger" Clicked="context.Clicked">
+                            <Button Size="Size.ExtraSmall" Color="Color.Secondary"  Padding="Padding.Is2.OnX.Is1.OnY" Clicked="context.Clicked">
                                 <Icon Margin=Margin.Is2.FromRight IconSize="IconSize.Small" Name="@("fas fa-trash-alt")"></Icon>@context.LocalizationString
                             </Button>
                         </DeleteCommandTemplate>
