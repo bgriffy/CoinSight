@@ -1,5 +1,5 @@
 ﻿<Modal @ref="_budgetsModal">
-    <ModalContent Centered="true">
+    <ModalContent Size="ModalSize.Large" Centered="true">
         <ModalHeader>
             <ModalTitle>Budgets</ModalTitle>
             <CloseButton></CloseButton>
@@ -15,7 +15,7 @@
             <DataGrid TItem="Budget"
                       @bind-SelectedRow="@_selectedBudget"
                       Data="@Budgets"
-                      CommandMode="DataGridCommandMode.ButtonRow"
+                      CommandMode="DataGridCommandMode.Default"
                       Filterable="false"
                       Editable="true"
                       EditMode="DataGridEditMode.Popup"
@@ -26,47 +26,52 @@
                       ShowPager="true">
 
                 <DataGridColumns>
-                    <DataGridCommandColumn TItem="Budget" Width="170px">
-                        <SaveCommandTemplate>
-                            <Button Type="ButtonType.Submit" PreventDefaultOnSubmit Color="Color.Primary" Clicked="@context.Clicked">@context.LocalizationString</Button>
-                        </SaveCommandTemplate>
-                        <CancelCommandTemplate>
-                            <Button Color="Color.Secondary" Clicked="@context.Clicked">@context.LocalizationString</Button>
-                        </CancelCommandTemplate>
-                        <EditCommandTemplate>
-                            <Button Color="Color.Primary" Clicked="@(() => EditBudget(context.Item))">@context.LocalizationString</Button>
-                        </EditCommandTemplate>
-                    </DataGridCommandColumn>
                     <DataGridColumn TItem="Budget" Editable="true" Field="@nameof(Budget.Title)" Caption="Name" Sortable="false" />
+
                     <DataGridColumn TItem="Budget" Editable="true" Field="@nameof(Budget.StartDate)" Caption="Start Date" Sortable="false">
                         <DisplayTemplate>
                             @($"{( context as Budget )?.StartDate.Date.ToString("MM/dd/yyyy")}")
                         </DisplayTemplate>
                     </DataGridColumn>
+
                     <DataGridColumn TItem="Budget" Editable="true" Field="@nameof(Budget.EndDate)" Caption="End Date" Sortable="false">
                         <DisplayTemplate>
                             @($"{( context as Budget )?.EndDate.Date.ToString("MM/dd/yyyy")}")
                         </DisplayTemplate>
                     </DataGridColumn>
+
                     <DataGridColumn TItem="Budget" Editable="false" Field="@nameof(Budget.ID)" Width=125px ShowCaption=false Sortable="false">
                         <DisplayTemplate>
-                            <Button Size="Size.ExtraSmall" Padding="Padding.Is1" Margin="Margin.Is4.OnX"  Color="Color.Warning" Clicked="@(() => CloneBudget(context))">
-                                Clone
+                            <Button Size="Size.ExtraSmall" Padding="Padding.Is2.OnX.Is1.OnY" Margin="Margin.Is4.FromLeft"  Color="Color.Warning" Clicked="@(() => CloneBudget(context))">
+                                <Icon Margin=Margin.Is2.FromRight IconSize="IconSize.Small" Name="@("far fa-copy")"></Icon>Clone
                             </Button>
                         </DisplayTemplate>
                     </DataGridColumn>
+
+                    <DataGridCommandColumn TItem="Budget">
+                        <EditCommandTemplate>
+                            <Button Size="Size.ExtraSmall" Padding="Padding.Is3.OnX.Is1.OnY" Margin="Margin.Is4.FromRight.Is0.FromLeft"  Color="Color.Secondary" Clicked="@(() => EditBudget(context.Item))">
+                                <Icon Margin=Margin.Is2.FromRight IconSize="IconSize.Small" Name="@("fas fa-pen")"></Icon>@context.LocalizationString
+                            </Button>
+                        </EditCommandTemplate>
+                        <DeleteCommandTemplate>
+                            <Button Size="Size.ExtraSmall" Margin="Margin.Is2.OnX" Padding="Padding.Is2.OnX.Is1.OnY" Color="Color.Danger" Clicked="context.Clicked">
+                                <Icon Margin=Margin.Is2.FromRight IconSize="IconSize.Small" Name="@("fas fa-trash-alt")"></Icon>@context.LocalizationString
+                            </Button>
+                        </DeleteCommandTemplate>
+                        <NewCommandTemplate></NewCommandTemplate>
+                    </DataGridCommandColumn>
                 </DataGridColumns>
+
                 <ButtonRowTemplate>
-                    <Button Size="Size.Small" Padding="Padding.Is2.OnX.Is1.OnY" Margin="Margin.Is1.FromRight" Color="Color.Success" Clicked="@(() => AddNewBudget())">Add</Button>
-                    <Button Size="Size.Small" Disabled="@(_selectedBudget == null)" Padding="Padding.Is2.OnX.Is1.OnY" Margin="Margin.Is1.FromRight" Color="Color.Secondary" Clicked="@(() => EditBudget(context.EditCommand.Item))">Edit</Button>
-                    <Button Size="Size.Small" Disabled="@(_selectedBudget == null)" Padding="Padding.Is2.OnX.Is1.OnY" Margin="Margin.Is1.FromRight" Color="Color.Danger" Clicked="context.DeleteCommand.Clicked">Delete</Button>
+                    <Button Size="Size.Small" Padding="Padding.Is2.OnX.Is1.OnY" Margin="Margin.Is1.FromRight" Color="Color.Success" Clicked="@(() => AddNewBudget())"><Icon Margin=Margin.Is2.FromRight IconSize="IconSize.Small" Name="@("fas fa-plus-square")"></Icon>Add Budget</Button>
                 </ButtonRowTemplate>
             </DataGrid>
         </ModalBody>
 
         <ModalFooter>
-            <Button Size="Size.Small" Padding="Padding.Is2.OnX.Is1.OnY" Margin="Margin.Is1.FromRight" Color="Color.Primary" Clicked="@(async() => await Save())">Save</Button>
-            <Button Size="Size.Small" Padding="Padding.Is2.OnX.Is1.OnY" Margin="Margin.Is1.FromRight" Color="Color.Secondary" Clicked="@(() => _budgetsModal.Hide())">Cancel</Button>
+            <Button Size="Size.Medium" Padding="Padding.Is2.OnX.Is1.OnY" Margin="Margin.Is1.FromRight" Color="Color.Primary" Clicked="@(async() => await Save())"><Icon Margin=Margin.Is2.FromRight Name="IconName.Save" />Save</Button>
+            <Button Size="Size.Medium" Padding="Padding.Is2.OnX.Is1.OnY" Margin="Margin.Is1.FromRight" Color="Color.Secondary" Clicked="@(() => _budgetsModal.Hide())">Cancel</Button>
         </ModalFooter>
     </ModalContent>
 </Modal>
