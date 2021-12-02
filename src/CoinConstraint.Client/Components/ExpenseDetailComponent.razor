@@ -48,7 +48,7 @@
                     <Div Padding="Padding.Is5.OnX">
                         <Field Horizontal="true">
                             <Label Margin="Margin.Is2.FromRight">Paid</Label>
-                            <Check @bind-Checked="_expense.Paid"></Check>
+                            <Check @onclick:preventDefault="true" @onchange:stopPropagation="true" Checked="_expense.Paid"></Check>
                         </Field>
                     </Div>
 
@@ -80,7 +80,7 @@
         </ModalBody>
 
         <ModalFooter>
-            <Button Size="Size.Small" Padding="Padding.Is2.OnX.Is1.OnY" Margin="Margin.Is1.FromRight" Color="Color.Success" Clicked="@(async() => await Save())">Save</Button>
+            <Button Size="Size.Small" Color="Color.Primary" Padding="Padding.Is2.OnX.Is1.OnY" Margin="Margin.Is1.FromRight" Clicked="@(async() => await Save())"><Icon Margin="Margin.Is2.FromRight" Name="IconName.Save" />Save</Button>
             <Button Size="Size.Small" Padding="Padding.Is2.OnX.Is1.OnY" Margin="Margin.Is1.FromRight" Color="Color.Secondary" Clicked="@(() => _expenseModal.Hide())">Cancel</Button>
         </ModalFooter>
     </ModalContent>

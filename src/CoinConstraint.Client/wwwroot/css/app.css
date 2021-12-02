@@ -33,6 +33,7 @@ a, .btn-link {
 .btn-success {
     background-color: #25A18E !important;
     border-color: #25A18E !important;
+    color: white !important;
 }
     .btn-success:hover {
         background-color: #9FFFCB !important;

@@ -1,3 +1,8 @@
+<Blazorise.ThemeProvider Theme="@_theme">
+
+</Blazorise.ThemeProvider>
+
+
 <Router AppAssembly="@typeof(Program).Assembly" PreferExactMatches="@true">
     <Found Context="routeData">
         <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
@@ -8,3 +13,22 @@
         </LayoutView>
     </NotFound>
 </Router>
+
+@code {
+
+    private Theme _theme = new Theme
+    {
+        InputOptions = new ThemeInputOptions
+        {
+            CheckColor = "gray", 
+        }, 
+
+
+        ColorOptions = new ThemeColorOptions
+        { 
+            Primary = "#004E64",
+            Success = "#9FFFCB", 
+            Secondary = "##004E64"
+        }
+    };
+}
