@@ -100,3 +100,9 @@ a, .btn-link {
         right: 0.75rem;
         top: 0.5rem;
     }
+
+/* Sets background color checked checkboxes that are disabled. */
+/* Blazorise theming options apparently does not handle this. */
+.custom-checkbox .custom-control-input:disabled:checked ~ .custom-control-label::before {
+    background: gray !important;
+}

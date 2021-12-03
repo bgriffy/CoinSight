@@ -18,16 +18,13 @@ namespace CoinConstraint.Client.Pages
         private string _budgetAmountText;
         private bool _isDirty;
 
-
         protected override async Task OnInitializedAsync()
         {
             await BudgetingService.Init();
             await LoadData();
         }
 
-
         public List<Budget> BudgetsForDropdown { get => _budgets.Where(b=> b.ID != 0).ToList(); }
-
 
         public async Task LoadData()
         {
