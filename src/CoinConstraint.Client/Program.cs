@@ -10,14 +10,7 @@ public class Program
 
         builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 
-        builder.Services
-          .AddBlazorise(options =>
-          {
-              options.ChangeTextOnKeyPress = true;
-          })
-          .AddBootstrapProviders()
-          .AddFontAwesomeIcons();
-
+        builder.Services.AddThirdPartyServices();
         builder.Services.AddRepositores();
         builder.Services.AddDataAccessServices();
         builder.Services.AddApplicationServices();

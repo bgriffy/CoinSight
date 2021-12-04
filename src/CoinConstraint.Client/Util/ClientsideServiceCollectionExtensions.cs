@@ -23,4 +23,17 @@ public static class ClientsideServiceCollectionExtensions
     {
         serviceCollection.AddScoped<IBudgetingService, BudgetingService>();
     }
+
+    public static void AddThirdPartyServices(this IServiceCollection serviceCollection)
+    {
+        serviceCollection
+          .AddBlazorise(options =>
+          {
+              options.ChangeTextOnKeyPress = true;
+          })
+          .AddBootstrapProviders()
+          .AddFontAwesomeIcons();
+
+        serviceCollection.AddMediaQueryService();
+    }
 }

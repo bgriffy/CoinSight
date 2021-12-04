@@ -17,6 +17,9 @@ namespace CoinConstraint.Client.Pages
         private NoteModalComponent _noteModal;
         private string _budgetAmountText;
         private bool _isDirty;
+        private bool _isSmallScreen; 
+        private bool _isMediumScreen; 
+        private bool _isLargeScreen;
 
         protected override async Task OnInitializedAsync()
         {
