@@ -86,6 +86,16 @@
                                     Title   
                                 </Div>
                             </CaptionTemplate>
+                            <DisplayTemplate>
+                                @if (_isSmallScreen)
+                                {
+                                    <span>@(context.Title.Truncate(6))</span>
+                                }
+                                else
+                                {
+                                    <span>@(context.Title.Truncate(20))</span>
+                                }
+                            </DisplayTemplate>
                         </DataGridColumn>
 
                         <DataGridColumn Displayable="(!_isSmallScreen)" Width=250px TItem="Expense" Editable="true" Field="@nameof(Expense.Description)" Caption="Description" Sortable="false" >
@@ -134,7 +144,7 @@
                             </DisplayTemplate>
                         </DataGridColumn>
 
-                        <DataGridColumn Width=100px TextAlignment="TextAlignment.Center" TItem="Expense" Editable="true" Field="@nameof(Expense.Automatic)" Caption="Auto-Pay" Sortable="false" >
+                        <DataGridColumn Displayable="(!_isSmallScreen)" Width=100px TextAlignment="TextAlignment.Center" TItem="Expense" Editable="true" Field="@nameof(Expense.Automatic)" Caption="Auto-Pay" Sortable="false" >
                             <CaptionTemplate>
                                 <Div TextAlignment="TextAlignment.Center">Auto-Pay</Div>
                             </CaptionTemplate>
@@ -254,14 +264,14 @@
                 <Card Margin="Margin.Is4.OnY">
                     <CardHeader>Totals</CardHeader>
                     <Row>
-                        <Field Margin="Margin.Is4.FromLeft.Is2.FromTop" ColumnSize="ColumnSize.Is4.OnTablet.Is2.OnWidescreen">
+                        <Field Margin="Margin.Is4.FromLeft.Is2.FromTop" ColumnSize="ColumnSize.Is4.OnMobile.Is2.OnWidescreen">
                             <Label Class="index-page-total-label" Margin="Margin.Is4.FromRight.Is2.FromTop">Budget Amount</Label>
                             <FieldBody>
                                 <TextEdit MaskType="MaskType.Numeric" Size="Size.Small" Text="@_budgetAmountText" TextChanged=HandleBudgetAmountChange></TextEdit>
                             </FieldBody>
                         </Field>
 
-                        <Field Margin="Margin.Is1.FromLeft.Is2.FromTop" ColumnSize="ColumnSize.Is4.OnTablet.Is2.OnWidescreen">
+                        <Field Margin="Margin.Is1.FromLeft.Is2.FromTop" ColumnSize="ColumnSize.Is4.OnMobile.Is2.OnWidescreen">
                             <Label Class="index-page-total-label" Margin="Margin.Is4.FromRight.Is2.FromTop">Expensed Amount</Label>
                             <FieldBody>
                                 <TextEdit Size="Size.Small" MaskType="MaskType.Numeric" Disabled="true" Text="@_selectedBudget.ExpensedAmount.ToString()"></TextEdit>

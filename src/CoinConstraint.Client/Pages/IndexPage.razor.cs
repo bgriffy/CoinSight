@@ -152,6 +152,7 @@ namespace CoinConstraint.Client.Pages
 
         private void HandleDeletedExpense(Expense expense)
         {
+            if (expense.IsNew) return;
             BudgetingService.MarkExpenseForDeletion(expense);
             _selectedBudget.IsUpdated = true;
             _isDirty = true;
