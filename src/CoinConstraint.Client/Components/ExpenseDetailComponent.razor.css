@@ -1,0 +1,5 @@
+﻿@media (max-width: 600px) {
+    ::deep .expense-modal-body {
+        font-size: 0.80rem !important;
+    }
+}

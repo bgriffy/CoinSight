@@ -6,78 +6,80 @@
             <CloseButton></CloseButton>
         </ModalHeader>
 
-        <ModalBody>
-            <Row>
-                <Column ColumnSize="ColumnSize.IsHalf">
-                    <Field>
-                        <Label>Name</Label>
-                        <TextEdit @bind-Text="_expense.Title"></TextEdit>
-                    </Field>
-                </Column>
-                <Column ColumnSize="ColumnSize.IsHalf">
-                    <Field>
-                        <Label>Description</Label>
-                        <TextEdit @bind-Text="_expense.Description"></TextEdit>
-                    </Field>
-                </Column>
-            </Row>
+        <div>
+            <ModalBody Class="expense-modal-body">
+                <Row>
+                    <Column ColumnSize="ColumnSize.IsHalf">
+                        <Field>
+                            <Label>Name</Label>
+                            <TextEdit @bind-Text="_expense.Title"></TextEdit>
+                        </Field>
+                    </Column>
+                    <Column ColumnSize="ColumnSize.IsHalf">
+                        <Field>
+                            <Label>Description</Label>
+                            <TextEdit @bind-Text="_expense.Description"></TextEdit>
+                        </Field>
+                    </Column>
+                </Row>
 
-            <Row>
-                <Column ColumnSize="ColumnSize.IsHalf">
-                    <Field>
-                        <Label>Amount</Label>
-                        <NumericEdit TValue="Decimal" @bind-Value="_expense.Amount"></NumericEdit>
-                    </Field>
-                </Column>
-                <Column ColumnSize="ColumnSize.IsHalf">
-                    <Field>
-                        <Label>Due Date</Label>
-                        <DateEdit TValue="DateTime" @bind-Date="_expense.DueDate"></DateEdit>
-                    </Field>
-                </Column>
-            </Row>
+                <Row>
+                    <Column ColumnSize="ColumnSize.IsHalf">
+                        <Field>
+                            <Label>Amount</Label>
+                            <NumericEdit TValue="Decimal" @bind-Value="_expense.Amount"></NumericEdit>
+                        </Field>
+                    </Column>
+                    <Column ColumnSize="ColumnSize.IsHalf">
+                        <Field>
+                            <Label>Due Date</Label>
+                            <DateEdit TValue="DateTime" @bind-Date="_expense.DueDate"></DateEdit>
+                        </Field>
+                    </Column>
+                </Row>
 
-                <Row Margin="Margin.Is3">
-                    <Div Padding="Padding.Is5.FromRight">
+                <Row Margin="Margin.Is3" Flex=Flex.JustifyContent.Between>
+                    <Div>
                         <Field Horizontal="true">
                             <Label Margin="Margin.Is2.FromRight">Pay Now</Label>
                             <Check @bind-Checked="_expense.Pay"></Check>
                         </Field>
                     </Div>
 
-                    <Div Padding="Padding.Is5.OnX">
+                    <Div>
                         <Field Horizontal="true">
                             <Label Margin="Margin.Is2.FromRight">Paid</Label>
                             <Check @onclick:preventDefault="true" @onchange:stopPropagation="true" Checked="_expense.Paid"></Check>
                         </Field>
                     </Div>
 
-                    <Div Padding="Padding.Is5.FromLeft">
-                        <Field Horizontal="true">
-                            <Label Margin="Margin.Is2.FromRight">Auto-Pay</Label>
+                    <Div>
+                        <Field Horizontal="true" Padding=Padding.Is0>
+                            <Label Margin="Margin.Is0.FromRight.OnMobile.Is2.FromRight">Auto-Pay</Label>
                             <Check @bind-Checked="_expense.Automatic"></Check>
                         </Field>
                     </Div>
                 </Row>
 
-            <Row>
-                <Column>
-                    <Field>
-                        <Label>Payment URL</Label>
-                        <TextEdit @bind-Text="_expense.PaymentURL"></TextEdit>
-                    </Field>
-                </Column>
-            </Row>
+                <Row>
+                    <Column>
+                        <Field>
+                            <Label>Payment URL</Label>
+                            <TextEdit @bind-Text="_expense.PaymentURL"></TextEdit>
+                        </Field>
+                    </Column>
+                </Row>
 
-            <Row>
-                <Column>
-                    <Field>
-                        <Label>Note</Label>
-                        <MemoEdit Rows="3" @bind-Text="_expense.Note"></MemoEdit>
-                    </Field>
-                </Column>
-            </Row>
-        </ModalBody>
+                <Row>
+                    <Column>
+                        <Field>
+                            <Label>Note</Label>
+                            <MemoEdit Rows="3" @bind-Text="_expense.Note"></MemoEdit>
+                        </Field>
+                    </Column>
+                </Row>
+            </ModalBody>
+        </div>
 
         <ModalFooter>
             <Button Size="Size.Small" Color="Color.Primary" Padding="Padding.Is2.OnX.Is1.OnY" Margin="Margin.Is1.FromRight" Clicked="@(async() => await Save())"><Icon Margin="Margin.Is2.FromRight" Name="IconName.Save" />Save</Button>
