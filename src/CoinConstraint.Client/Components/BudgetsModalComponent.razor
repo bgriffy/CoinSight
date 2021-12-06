@@ -12,61 +12,91 @@
                             BudgetModified=HandleModifiedBudget>
             </BudgetDetailModalComponent>
 
-            <DataGrid TItem="Budget"
-                      @bind-SelectedRow="@_selectedBudget"
-                      Data="@Budgets"
-                      CommandMode="DataGridCommandMode.Default"
-                      Filterable="false"
-                      Editable="true"
-                      EditMode="DataGridEditMode.Popup"
-                      FilterMethod="DataGridFilterMethod.StartsWith"
-                      PageSize="10"
-                      RowRemoved="@HandleDeletedBudget"
-                      ShowPageSizes="false"
-                      ShowPager="true">
+            <MediaQuery Media="@Breakpoints.SmallDown" @bind-Matches="_isSmallScreen" />
+            <MediaQuery Media="@Breakpoints.OnlyMedium" @bind-Matches="_isMediumScreen" />
+            <MediaQuery Media="@Breakpoints.LargeUp" @bind-Matches="_isLargeScreen" />
 
-                <DataGridColumns>
-                    <DataGridColumn TItem="Budget" Editable="true" Field="@nameof(Budget.Title)" Caption="Name" Sortable="false" />
+            <div>
+                <DataGrid TItem="Budget"
+                          @bind-SelectedRow="@_selectedBudget"
+                          Data="@Budgets"
+                          Class="budgets-grid"
+                          CommandMode="_isSmallScreen ? DataGridCommandMode.ButtonRow : DataGridCommandMode.Default"
+                          Filterable="false"
+                          Editable="true"
+                          EditMode="DataGridEditMode.Popup"
+                          FilterMethod="DataGridFilterMethod.StartsWith"
+                          PageSize="10"
+                          RowRemoved="@HandleDeletedBudget"
+                          ShowPageSizes="false"
+                          ShowPager="true"
+                          Virtualize="true">
 
-                    <DataGridColumn TItem="Budget" Editable="true" Field="@nameof(Budget.StartDate)" Caption="Start Date" Sortable="false">
-                        <DisplayTemplate>
-                            @($"{( context as Budget )?.StartDate.Date.ToString("MM/dd/yyyy")}")
-                        </DisplayTemplate>
-                    </DataGridColumn>
+                    <DataGridColumns>
+                        <DataGridColumn TItem="Budget" Editable="true" Field="@nameof(Budget.Title)" Caption="Name" Sortable="false" />
 
-                    <DataGridColumn TItem="Budget" Editable="true" Field="@nameof(Budget.EndDate)" Caption="End Date" Sortable="false">
-                        <DisplayTemplate>
-                            @($"{( context as Budget )?.EndDate.Date.ToString("MM/dd/yyyy")}")
-                        </DisplayTemplate>
-                    </DataGridColumn>
+                       
 
-                    <DataGridColumn TItem="Budget" Editable="false" Field="@nameof(Budget.ID)" Width=125px ShowCaption=false Sortable="false">
-                        <DisplayTemplate>
-                            <Button Size="Size.ExtraSmall" Padding="Padding.Is2.OnX.Is1.OnY" Margin="Margin.Is4.FromLeft"  Color="Color.Secondary" Clicked="@(() => CloneBudget(context))">
-                                <Icon Margin=Margin.Is2.FromRight IconSize="IconSize.Small" Name="@("far fa-copy")"></Icon>Clone
+
+                        @if (!_isSmallScreen)
+                        {
+                            <DataGridColumn TItem="Budget" Editable="true" Field="@nameof(Budget.StartDate)" Caption="Start Date" Sortable="false">
+                                <DisplayTemplate>
+                                    @($"{( context as Budget )?.StartDate.Date.ToString("MM/dd/yyyy")}")
+                                </DisplayTemplate>
+                            </DataGridColumn>
+                            <DataGridColumn TItem="Budget" Editable="true" Field="@nameof(Budget.EndDate)" Caption="End Date" Sortable="false">
+                                <DisplayTemplate>
+                                    @($"{( context as Budget )?.EndDate.Date.ToString("MM/dd/yyyy")}")
+                                </DisplayTemplate>
+                            </DataGridColumn>
+                        }
+                        else
+                        {
+                            <DataGridColumn Width=150px TItem="Budget" Editable="false" Caption="Date Range" Sortable="false">
+                                <DisplayTemplate>
+                                    @($"{( context as Budget )?.StartDate.Date.ToString("MM/dd/yyyy")}") - @($"{( context as Budget )?.EndDate.Date.ToString("MM/dd/yyyy")}")
+                                </DisplayTemplate>
+                            </DataGridColumn>
+                        }
+
+                        <DataGridColumn TItem="Budget" Editable="false" Field="@nameof(Budget.ID)" Width=125px ShowCaption=false Sortable="false">
+                            <DisplayTemplate>
+                                <Button Size="Size.ExtraSmall" Padding="Padding.Is2.OnX.Is1.OnY" Margin="Margin.Is0.FromLeft.OnMobile.Is4.FromLeft.OnTablet"  Color="Color.Secondary" Clicked="@(() => CloneBudget(context))">
+                                    <Icon Margin=Margin.Is2.FromRight IconSize="IconSize.Small" Name="@("far fa-copy")"></Icon>Clone
+                                </Button>
+                            </DisplayTemplate>
+                        </DataGridColumn>
+
+                        <DataGridCommandColumn Displayable="(!_isSmallScreen)" TItem="Budget">
+                            <EditCommandTemplate>
+                                <Button Size="Size.ExtraSmall" Padding="Padding.Is3.OnX.Is1.OnY" Margin="Margin.Is4.FromRight.Is0.FromLeft"  Color="Color.Secondary" Clicked="@(() => EditBudget(context.Item))">
+                                    <Icon Margin=Margin.Is2.FromRight IconSize="IconSize.Small" Name="@("fas fa-pen")"></Icon>@context.LocalizationString
+                                </Button>
+                            </EditCommandTemplate>
+                            <DeleteCommandTemplate>
+                                <Button Size="Size.ExtraSmall" Margin="Margin.Is2.OnX" Padding="Padding.Is2.OnX.Is1.OnY" Color="Color.Secondary" Clicked="context.Clicked">
+                                    <Icon Margin=Margin.Is2.FromRight IconSize="IconSize.Small" Name="@("fas fa-trash-alt")"></Icon>@context.LocalizationString
+                                </Button>
+                            </DeleteCommandTemplate>
+                            <NewCommandTemplate></NewCommandTemplate>
+                        </DataGridCommandColumn>
+                    </DataGridColumns>
+
+                    <ButtonRowTemplate>
+                        <Button Size="Size.Small" Padding="Padding.Is2.OnX.Is1.OnY" Margin="Margin.Is1.FromRight" Color="Color.Success" Clicked="@(() => AddNewBudget())"><Icon Margin=Margin.Is2.FromRight IconSize="IconSize.Small" Name="@("fas fa-plus-square")"></Icon>Add Budget</Button>
+                        @if (_isSmallScreen)
+                        {
+                            <Button Size="Size.ExtraSmall" Color="Color.Secondary"  Padding="Padding.Is3.OnX.Is1.OnY" Margin="Margin.Is1.FromRight.Is0.FromLeft"  Clicked="@(() => EditBudget(context.EditCommand.Item))">
+                                <Icon Margin=Margin.Is2.FromRight IconSize="IconSize.Small" Name="@("fas fa-pen")"></Icon>Edit
                             </Button>
-                        </DisplayTemplate>
-                    </DataGridColumn>
-
-                    <DataGridCommandColumn TItem="Budget">
-                        <EditCommandTemplate>
-                            <Button Size="Size.ExtraSmall" Padding="Padding.Is3.OnX.Is1.OnY" Margin="Margin.Is4.FromRight.Is0.FromLeft"  Color="Color.Secondary" Clicked="@(() => EditBudget(context.Item))">
-                                <Icon Margin=Margin.Is2.FromRight IconSize="IconSize.Small" Name="@("fas fa-pen")"></Icon>@context.LocalizationString
-                            </Button>
-                        </EditCommandTemplate>
-                        <DeleteCommandTemplate>
-                            <Button Size="Size.ExtraSmall" Margin="Margin.Is2.OnX" Padding="Padding.Is2.OnX.Is1.OnY" Color="Color.Secondary" Clicked="context.Clicked">
-                                <Icon Margin=Margin.Is2.FromRight IconSize="IconSize.Small" Name="@("fas fa-trash-alt")"></Icon>@context.LocalizationString
-                            </Button>
-                        </DeleteCommandTemplate>
-                        <NewCommandTemplate></NewCommandTemplate>
-                    </DataGridCommandColumn>
-                </DataGridColumns>
-
-                <ButtonRowTemplate>
-                    <Button Size="Size.Small" Padding="Padding.Is2.OnX.Is1.OnY" Margin="Margin.Is1.FromRight" Color="Color.Success" Clicked="@(() => AddNewBudget())"><Icon Margin=Margin.Is2.FromRight IconSize="IconSize.Small" Name="@("fas fa-plus-square")"></Icon>Add Budget</Button>
-                </ButtonRowTemplate>
-            </DataGrid>
+                            <Button Size="Size.ExtraSmall" Color="Color.Secondary"  Padding="Padding.Is2.OnX.Is1.OnY" Margin=Margin.Is0.OnX Clicked="context.DeleteCommand.Clicked">
+                                <Icon Margin=Margin.Is2.FromRight IconSize="IconSize.Small" Name="@("fas fa-trash-alt")"></Icon>Delete
+                            </Button>   
+                        }
+                    </ButtonRowTemplate>
+                </DataGrid>
+            </div>
         </ModalBody>
 
         <ModalFooter>

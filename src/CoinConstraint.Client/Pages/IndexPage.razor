@@ -73,10 +73,11 @@
                       Editable="true"
                       EditMode="DataGridEditMode.Popup"
                       FilterMethod="DataGridFilterMethod.StartsWith"
-                      PageSize="10"
                       RowRemoved="@HandleDeletedExpense"
                       ShowPageSizes="false"
-                      ShowPager="true">
+                      ShowPager="true"
+                      Virtualize="true"
+                      VirtualizeOptions="@(new() { DataGridHeight = "400px"})">
 
                     <DataGridColumns>
 

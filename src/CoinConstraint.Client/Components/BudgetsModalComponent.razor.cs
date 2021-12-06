@@ -8,7 +8,9 @@ public partial class BudgetsModalComponent
     private BudgetDetailModalComponent _budgetDetailModal;
     private Budget _selectedBudget;
     private bool _isDirty = false;
-
+    private bool _isSmallScreen;
+    private bool _isMediumScreen;
+    private bool _isLargeScreen;
 
     protected override void OnParametersSet()
     {
