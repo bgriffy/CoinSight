@@ -1,12 +1,32 @@
 using CoinConstraint.Server.Util;
 using Microsoft.EntityFrameworkCore;
+using CoinConstraint.Server.Infrastructure.DataAccess;
+using CoinConstraint.Server.Models;
+using Microsoft.AspNetCore.Authentication;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+var defaultConnectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+var authDBConnectionString = builder.Configuration.GetConnectionString("AuthConnection"); 
+
 builder.Services.AddDbContext<CoinConstraintContext>(options =>
-              options.UseSqlServer(connectionString));
+              options.UseSqlServer(defaultConnectionString));
+
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    options.UseSqlServer(authDBConnectionString));
+
+builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+
+builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
+    .AddEntityFrameworkStores<ApplicationDbContext>();
+
+builder.Services.AddIdentityServer()
+    .AddApiAuthorization<ApplicationUser, ApplicationDbContext>();
+
+builder.Services.AddAuthentication()
+    .AddIdentityServerJwt();
+
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 builder.Services.AddRepositores();
@@ -17,6 +37,7 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
+    app.UseMigrationsEndPoint();
     app.UseWebAssemblyDebugging();
 }
 else
@@ -33,6 +54,9 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseIdentityServer();
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapRazorPages();
 app.MapControllers();

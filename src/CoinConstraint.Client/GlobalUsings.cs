@@ -19,5 +19,4 @@ global using CoinConstraint.Client.Infrastructure.DataAccess;
 global using CoinConstraint.Client.Infrastructure.Services;
 global using CoinConstraint.Client.Infrastructure.Users;
 global using CoinConstraint.Domain.AggregateModels.BudgetingAggregate.RepositoryInterfaces.Clientside;
-global using CoinConstraint.Server.Infrastructure.Users;
 global using BlazorPro.BlazorSize;
