@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using CoinConstraint.Server.Infrastructure.DataAccess;
 using CoinConstraint.Server.Models;
 using Microsoft.AspNetCore.Authentication;
+using System.IdentityModel.Tokens.Jwt;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -54,6 +55,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 app.UseIdentityServer();
 app.UseAuthentication();
 app.UseAuthorization();

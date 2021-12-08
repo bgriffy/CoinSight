@@ -1,5 +1,6 @@
 ﻿using CoinConstraint.Client.Components;
 using CoinConstraint.Domain.AggregateModels.BudgetingAggregate.Entities;
+using CoinConstraint.Server.Models;
 using Microsoft.JSInterop;
 
 namespace CoinConstraint.Client.Pages
@@ -20,6 +21,7 @@ namespace CoinConstraint.Client.Pages
         private bool _isSmallScreen; 
         private bool _isMediumScreen; 
         private bool _isLargeScreen;
+        private ApplicationUser _currentUser; 
 
         protected override async Task OnInitializedAsync()
         {
