@@ -1,24 +1,36 @@
-﻿using CoinConstraint.Domain.AggregateModels.BudgetingAggregate.Entities;
+﻿using CoinConstraint.Client.Infrastructure.Util;
+using CoinConstraint.Domain.AggregateModels.BudgetingAggregate.Entities;
+using Microsoft.AspNetCore.Components.Authorization;
 
 namespace CoinConstraint.Client.Infrastructure.Services;
 
 public class BudgetingService : IBudgetingService
 {
     private readonly IClientsideCCUnitOfWork _unitOfWork;
+    private readonly AuthenticationStateProvider _authStateProvider;
     private Budget _selectedBudget;
     private List<Budget> _budgets;
     private List<Budget> _budgetsForDeletion;
     private List<Expense> _expensesForDeletion;
+    private Guid _currentUserID; 
+    
 
-    public BudgetingService(IClientsideCCUnitOfWork unitOfWork)
+    public BudgetingService(IClientsideCCUnitOfWork unitOfWork, AuthenticationStateProvider authStateProvider)
     {
         _unitOfWork = unitOfWork;
+        _authStateProvider = authStateProvider;
+        
     }
 
     public async Task Init()
     {
         try
         {
+            
+            var authState = await _authStateProvider.GetAuthenticationStateAsync();
+            var userID = authState.User.GetUserId();
+            _currentUserID = String.IsNullOrEmpty(userID) ? Guid.Empty : new Guid(userID);
+
             await LoadBudgets();
             _selectedBudget = _budgets.FirstOrDefault();
             _expensesForDeletion = new List<Expense>();
@@ -27,6 +39,7 @@ public class BudgetingService : IBudgetingService
                 await SetExpenses(_selectedBudget);
                 await SetNotes(_selectedBudget);
             }
+
         }
         catch (Exception e)
         {
@@ -89,6 +102,8 @@ public class BudgetingService : IBudgetingService
         {
             foreach (var budget in _budgets)
             {
+                budget.UUID = _currentUserID;
+
                 if (budget.IsNew)
                 {
                     await SaveNewBudget(budget);
@@ -134,6 +149,7 @@ public class BudgetingService : IBudgetingService
 
         budget.IsNew = false;
         budget.IsUpdated = false;
+        budget.UUID = _currentUserID;
 
         foreach (var expense in budget.Expenses)
         {

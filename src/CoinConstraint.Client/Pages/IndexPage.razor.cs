@@ -1,5 +1,6 @@
 ﻿using CoinConstraint.Client.Components;
 using CoinConstraint.Domain.AggregateModels.BudgetingAggregate.Entities;
+using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.JSInterop;
 
 namespace CoinConstraint.Client.Pages
@@ -20,6 +21,9 @@ namespace CoinConstraint.Client.Pages
         private bool _isSmallScreen; 
         private bool _isMediumScreen; 
         private bool _isLargeScreen;
+
+        [CascadingParameter]
+        public Task<AuthenticationState> AuthenticationStateTask { get; set; }
 
         protected override async Task OnInitializedAsync()
         {

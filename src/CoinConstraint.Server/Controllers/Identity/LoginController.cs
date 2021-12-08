@@ -29,10 +29,13 @@ namespace AddIdentityWasm.Server.Controllers
 
             if (!result.Succeeded) return BadRequest(new LoginResponse { Successful = false, Error = "Username and password are invalid." });
 
+            var user = await _signInManager.UserManager.FindByEmailAsync(login.Email);
+
             var claims = new[]
             {
-            new Claim(ClaimTypes.Name, login.Email)
-        };
+                new Claim(ClaimTypes.Name, login.Email), 
+                new Claim(ClaimTypes.NameIdentifier, user.Id)
+            };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JwtSecurityKey"]));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
