@@ -26,6 +26,21 @@ public class BudgetController : ControllerBase
         }
     }
 
+    [HttpGet("{userID}")]
+    public async Task<ActionResult<List<Budget>>> GetBudgetsByUser(Guid userID)
+    {
+        try
+        {
+            var budgets = await _budgetRepository.GetBudgetsByUser(userID);
+            return Ok(budgets);
+        }
+        catch (System.Exception e)
+        {
+            Console.WriteLine($"There was an error retrieving budgets by user: {e.Message}");
+            throw;
+        }
+    }
+
     [HttpPost]
     public async Task<ActionResult<int>> SaveNewBudgetAsync(Budget budget)
     {

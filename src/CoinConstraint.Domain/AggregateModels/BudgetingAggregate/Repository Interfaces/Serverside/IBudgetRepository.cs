@@ -2,4 +2,5 @@
 
 public interface IBudgetRepository : IServersideRepository<Budget>
 {
+    Task<List<Budget>> GetBudgetsByUser(Guid userID);
 }
