@@ -1,7 +1,4 @@
-﻿using CoinConstraint.Client.Infrastructure.Util;
-using CoinConstraint.Domain.AggregateModels.BudgetingAggregate.Entities;
-using Microsoft.AspNetCore.Components.Authorization;
-
+﻿using CoinConstraint.Domain.AggregateModels.BudgetingAggregate.Entities;
 namespace CoinConstraint.Client.Infrastructure.Services;
 
 public class BudgetingService : IBudgetingService
@@ -50,7 +47,7 @@ public class BudgetingService : IBudgetingService
 
     private async Task LoadBudgets()
     {
-        _budgets = (List<Budget>)await _unitOfWork.Budgets.GetAllAsync();
+        _budgets = (List<Budget>)await _unitOfWork.Budgets.GetBudgetsByUser(_currentUserID);
         _budgetsForDeletion = new List<Budget>();
     }
 

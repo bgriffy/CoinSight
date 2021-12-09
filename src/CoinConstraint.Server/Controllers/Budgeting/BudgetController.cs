@@ -1,4 +1,6 @@
-﻿namespace CoinConstraint.Server.Controllers.Budgeting;
+﻿using Microsoft.AspNetCore.Identity;
+
+namespace CoinConstraint.Server.Controllers.Budgeting;
 
 [Route("api/[controller]")]
 [ApiController]
@@ -6,7 +8,7 @@ public class BudgetController : ControllerBase
 {
     private readonly IBudgetRepository _budgetRepository;
 
-    public BudgetController(IBudgetRepository budgetRepository)
+    public BudgetController(IBudgetRepository budgetRepository, UserManager<IdentityUser> userManager)
     {
         _budgetRepository = budgetRepository;
     }
@@ -22,6 +24,21 @@ public class BudgetController : ControllerBase
         catch (System.Exception e)
         {
             Console.WriteLine($"There was an error retrieving budgets: {e.Message}");
+            throw;
+        }
+    }
+
+    [HttpGet("{userID}")]
+    public async Task<ActionResult<List<Budget>>> GetBudgetsByUser(Guid userID)
+    {
+        try
+        {
+            var budgets = await _budgetRepository.GetBudgetsByUser(userID);
+            return Ok(budgets);
+        }
+        catch (System.Exception e)
+        {
+            Console.WriteLine($"There was an error retrieving budgets by user: {e.Message}");
             throw;
         }
     }
