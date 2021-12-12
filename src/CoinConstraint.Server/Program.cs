@@ -4,12 +4,14 @@ using CoinConstraint.Server.Infrastructure.DataAccess;
 using CoinConstraint.Server.Models;
 using Microsoft.AspNetCore.Authentication;
 using System.IdentityModel.Tokens.Jwt;
+using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 var defaultConnectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-var authDBConnectionString = builder.Configuration.GetConnectionString("AuthConnection"); 
+
+var authDBConnectionString = builder.Configuration.GetConnectionString("AuthConnection");
 
 builder.Services.AddDbContext<CoinConstraintContext>(options =>
               options.UseSqlServer(defaultConnectionString));

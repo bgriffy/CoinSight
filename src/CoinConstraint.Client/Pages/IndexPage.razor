@@ -7,7 +7,7 @@
 <MediaQuery Media="@Breakpoints.OnlyMedium" @bind-Matches="_isMediumScreen" />
 <MediaQuery Media="@Breakpoints.LargeUp" @bind-Matches="_isLargeScreen" />
 
-<LoadSpinnerComponent @ref="_loadSpinner" @bind-LoadSpinnerIsHidden="_pageIsLoaded"></LoadSpinnerComponent>
+<LoadSpinnerComponent @ref="_loadSpinner"></LoadSpinnerComponent>
 
 <ExpenseDetailComponent @ref="_expenseModal"
                         ExpenseAdded=HandleNewExpense

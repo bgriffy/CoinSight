@@ -3,10 +3,10 @@
 public partial class LoadSpinnerComponent
 {
     [Parameter]
-    public string LoadMessage { get; set; } = "Loading...";
+    public string LoadMessage { get; set; }
 
     [Parameter]
-    public bool LoadSpinnerIsHidden { get; set; }
+    public bool LoadSpinnerIsHidden { get; set; } = true;
 
     [Parameter]
     public EventCallback<bool> LoadSpinnerIsHiddenChanged { get; set; }

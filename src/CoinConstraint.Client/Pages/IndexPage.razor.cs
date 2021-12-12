@@ -12,7 +12,6 @@ namespace CoinConstraint.Client.Pages
         private Expense _selectedExpense;
         private Note _selectedNote;
         private LoadSpinnerComponent _loadSpinner;
-        private bool _pageIsLoaded = false;
         private ExpenseDetailComponent _expenseModal;
         private BudgetsModalComponent _budgetsModal;
         private NoteModalComponent _noteModal;
@@ -21,6 +20,7 @@ namespace CoinConstraint.Client.Pages
         private bool _isSmallScreen; 
         private bool _isMediumScreen; 
         private bool _isLargeScreen;
+        private bool _pageIsLoaded; 
 
         protected override async Task OnInitializedAsync()
         {
@@ -35,6 +35,7 @@ namespace CoinConstraint.Client.Pages
             await LoadBudgets();
             await LoadExpenses();
             await _loadSpinner.HideLoadSpinner();
+            _pageIsLoaded = true;
             StateHasChanged();
         }
 
