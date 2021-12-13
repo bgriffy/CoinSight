@@ -10,14 +10,13 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 var defaultConnectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-
-var authDBConnectionString = builder.Configuration.GetConnectionString("AuthConnection");
+var connectionString = builder.Configuration.GetConnectionString("AuthConnection");
 
 builder.Services.AddDbContext<CoinConstraintContext>(options =>
               options.UseSqlServer(defaultConnectionString));
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(authDBConnectionString));
+    options.UseSqlServer(connectionString));
 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
@@ -28,7 +27,8 @@ builder.Services.AddIdentityServer()
     .AddApiAuthorization<ApplicationUser, ApplicationDbContext>();
 
 builder.Services.AddAuthentication()
-    .AddIdentityServerJwt();
+    .AddIdentityServerJwt()
+    .AddCookie();
 
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();

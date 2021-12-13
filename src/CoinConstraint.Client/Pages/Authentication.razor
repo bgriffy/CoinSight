@@ -1,17 +1,30 @@
 ﻿@page "/authentication/{action}"
 @using Microsoft.AspNetCore.Components.WebAssembly.Authentication
-<RemoteAuthenticatorView Action="@Action">
+
+<RemoteAuthenticatorView OnLogOutSucceeded=OnLogOutSucceeded Action="@Action">
     <LoggingIn></LoggingIn> 
-    <CompletingLoggingIn></CompletingLoggingIn>
+    <CompletingLoggingIn>
+        <LoadSpinnerComponent LoadSpinnerIsHidden=false LoadMessage="Logging in..."/>
+    </CompletingLoggingIn>
     <LogInFailed></LogInFailed>
     <LogOut></LogOut>
-    <CompletingLogOut></CompletingLogOut>
+    <CompletingLogOut>
+        <LoadSpinnerComponent LoadSpinnerIsHidden=false LoadMessage="Logging out..."/>
+    </CompletingLogOut>
     <LogOutFailed></LogOutFailed>
-    <LogOutSucceeded></LogOutSucceeded>
+    <LogOutSucceeded>
+    </LogOutSucceeded>
     <UserProfile></UserProfile>
-    <Registering></Registering>
+    <Registering>
+        <LoadSpinnerComponent LoadSpinnerIsHidden=false LoadMessage="Registering user..."/>
+    </Registering>
 </RemoteAuthenticatorView>
 
 @code{
     [Parameter] public string? Action { get; set; }
+
+    public void OnLogOutSucceeded()
+    {
+        NavigationManager.NavigateTo("/");
+    }
 }
