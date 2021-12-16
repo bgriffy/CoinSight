@@ -1,4 +1,6 @@
-﻿namespace CoinConstraint.Client.Infrastructure.DataAccess;
+﻿using Newtonsoft.Json;
+
+namespace CoinConstraint.Client.Infrastructure.DataAccess;
 
 public class ClientsideRepository<T> : IClientsideRepository<T> where T : class
 {

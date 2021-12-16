@@ -1,13 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Identity;
-using CoinConstraint.Server.Infrastructure.Models;
+﻿using CoinConstraint.Server.Infrastructure.Models;
 using CoinConstraint.Server.Infrastructure.Responses;
+using Microsoft.AspNetCore.Identity;
 
-namespace CoinConstraint.Server.Controllers.Users;
+namespace CoinConstraint.Server.Controllers.Identity;
 
 [Route("api/[controller]")]
 [ApiController]
