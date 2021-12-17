@@ -1,4 +1,8 @@
-﻿namespace CoinConstraint.Client.Util;
+﻿using CoinConstraint.Application.Identity;
+using CoinConstraint.Client.Infrastructure.Authentication;
+using Microsoft.AspNetCore.Components.Authorization;
+
+namespace CoinConstraint.Client.Util;
 
 public static class ClientsideServiceCollectionExtensions
 {
@@ -36,4 +40,11 @@ public static class ClientsideServiceCollectionExtensions
 
         serviceCollection.AddMediaQueryService();
     }
+
+    public static void AddAuthServices(this IServiceCollection serviceCollection)
+    {
+        serviceCollection.AddScoped<AuthenticationStateProvider, CCAuthenticationStateProvider>();
+        serviceCollection.AddScoped<IAuthService, AuthService>();
+    }
+
 }

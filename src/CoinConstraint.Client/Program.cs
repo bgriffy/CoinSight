@@ -14,6 +14,7 @@ public class Program
         builder.Services.AddRepositores();
         builder.Services.AddDataAccessServices();
         builder.Services.AddApplicationServices();
+        builder.Services.AddAuthServices();
 
         await builder.Build().RunAsync();
     }
