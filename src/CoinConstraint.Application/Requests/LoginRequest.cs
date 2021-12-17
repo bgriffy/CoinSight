@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace CoinConstraint.Server.Infrastructure.Requests;
+namespace CoinConstraint.Application.Requests;
 
 public class LoginRequest
 {

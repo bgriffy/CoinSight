@@ -1,5 +1,5 @@
-﻿using CoinConstraint.Server.Infrastructure.Requests;
-using CoinConstraint.Server.Infrastructure.Responses;
+﻿using CoinConstraint.Application.Requests;
+using CoinConstraint.Application.Responses;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;

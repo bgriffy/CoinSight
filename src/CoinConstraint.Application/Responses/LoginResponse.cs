@@ -1,4 +1,4 @@
-﻿namespace CoinConstraint.Server.Infrastructure.Responses;
+﻿namespace CoinConstraint.Application.Responses;
 
 public class LoginResponse
 {

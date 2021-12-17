@@ -1,5 +1,5 @@
-﻿using CoinConstraint.Server.Infrastructure.Models;
-using CoinConstraint.Server.Infrastructure.Responses;
+﻿using CoinConstraint.Application.Requests;
+using CoinConstraint.Application.Responses;
 using Microsoft.AspNetCore.Identity;
 
 namespace CoinConstraint.Server.Controllers.Identity;
