@@ -3,8 +3,6 @@
 @inject IAuthService AuthService
 @inject NavigationManager NavigationManager
 
-<h1>Login</h1>
-
 @if (ShowErrors)
 {
     <div class="alert alert-danger" role="alert">
@@ -12,23 +10,29 @@
     </div>
 }
 
-<div class="card">
-    <div class="card-body">
-        <h5 class="card-title">Please enter your details</h5>
-        <EditForm Model="loginRequest" OnValidSubmit="HandleLogin">
-            <DataAnnotationsValidator />
-            <Microsoft.AspNetCore.Components.Forms.ValidationSummary />
-            <div class="form-group">
-                <label for="email">Email address</label>
-                <InputText Id="email" Class="form-control" @bind-Value="loginRequest.Email" />
-                <ValidationMessage For="@(() => loginRequest.Email)" />
+<div class="row mt-5">
+    <div class="col-md-6 offset-md-3">
+        <div class="card">
+            <div class="card-body">
+                <h2 class="mb-3">Sign in</h2>
+                <p class="mb-3">Login with your credentials.</p>
+                <p class="mb-4">Don't have an account? <a href="Register">Register here</a>.</p>
+                <EditForm Model="loginRequest" OnValidSubmit="HandleLogin">
+                    <DataAnnotationsValidator />
+                    <Microsoft.AspNetCore.Components.Forms.ValidationSummary />
+                    <div class="form-group">
+                        <label for="email">Email address</label>
+                        <InputText Id="email" Class="form-control" @bind-Value="loginRequest.Email" />
+                        <ValidationMessage For="@(() => loginRequest.Email)" />
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <InputText Id="password" type="password" Class="form-control" @bind-Value="loginRequest.Password" />
+                        <ValidationMessage For="@(() => loginRequest.Password)" />
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </EditForm>
             </div>
-            <div class="form-group">
-                <label for="password">Password</label>
-                <InputText Id="password" type="password" Class="form-control" @bind-Value="loginRequest.Password" />
-                <ValidationMessage For="@(() => loginRequest.Password)" />
-            </div>
-            <button type="submit" class="btn btn-primary">Submit</button>
-        </EditForm>
+        </div>
     </div>
 </div>

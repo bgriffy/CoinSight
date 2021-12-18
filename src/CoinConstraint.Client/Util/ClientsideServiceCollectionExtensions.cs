@@ -1,4 +1,5 @@
-﻿using CoinConstraint.Application.Identity;
+﻿using Blazored.LocalStorage;
+using CoinConstraint.Application.Identity;
 using CoinConstraint.Client.Infrastructure.Authentication;
 using Microsoft.AspNetCore.Components.Authorization;
 
@@ -37,12 +38,13 @@ public static class ClientsideServiceCollectionExtensions
           })
           .AddBootstrapProviders()
           .AddFontAwesomeIcons();
-
+        serviceCollection.AddBlazoredLocalStorage();
         serviceCollection.AddMediaQueryService();
     }
 
     public static void AddAuthServices(this IServiceCollection serviceCollection)
     {
+        serviceCollection.AddAuthorizationCore();
         serviceCollection.AddScoped<AuthenticationStateProvider, CCAuthenticationStateProvider>();
         serviceCollection.AddScoped<IAuthService, AuthService>();
     }
