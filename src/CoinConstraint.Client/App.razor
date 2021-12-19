@@ -1,3 +1,4 @@
+@using CoinConstraint.Client.Pages
 <Blazorise.ThemeProvider Theme="@_theme">
 
 </Blazorise.ThemeProvider>
@@ -10,7 +11,7 @@
                     <NotAuthorized>
                         @if (context.User.Identity?.IsAuthenticated != true)
                         {
-                            <RedirectToLogin />
+                            <LoginPage />
                         }
                         else
                         {
