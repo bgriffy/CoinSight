@@ -4,8 +4,6 @@
 @inject IAuthService AuthService
 @inject NavigationManager NavigationManager
 
-<h1>Register</h1>
-
 @if (ShowErrors)
 {
     <div class="alert alert-danger" role="alert">
@@ -16,28 +14,33 @@
     </div>
 }
 
-<div class="card">
-    <div class="card-body">
-        <h5 class="card-title">Please enter your details</h5>
-        <EditForm Model="RegisterRequest" OnValidSubmit="HandleRegistration">
-            <DataAnnotationsValidator />
-            <Microsoft.AspNetCore.Components.Forms.ValidationSummary />
-            <div class="form-group">
-                <label for="email">Email address</label>
-                <InputText Id="email" class="form-control" @bind-Value="RegisterRequest.Email" />
-                <ValidationMessage For="@(() => RegisterRequest.Email)" />
+<div class="row mt-5">
+    <div class="col-md-6 offset-md-3">
+        <div class="card">
+            <div class="card-body">
+                <h2 class="mb-3">Register</h2>
+                <p class="mb-4">Already have an account? <a href="Login">Sign In</a>.</p>
+                <EditForm Model="RegisterRequest" OnValidSubmit="HandleRegistration">
+                    <DataAnnotationsValidator />
+                    <Microsoft.AspNetCore.Components.Forms.ValidationSummary />
+                    <div class="form-group">
+                        <label for="email">Email address</label>
+                        <InputText Id="email" class="form-control" @bind-Value="RegisterRequest.Email" />
+                        <ValidationMessage For="@(() => RegisterRequest.Email)" />
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <InputText Id="password" type="password" class="form-control" @bind-Value="RegisterRequest.Password" />
+                        <ValidationMessage For="@(() => RegisterRequest.Password)" />
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Confirm Password</label>
+                        <InputText Id="password" type="password" class="form-control" @bind-Value="RegisterRequest.ConfirmPassword" />
+                        <ValidationMessage For="@(() => RegisterRequest.ConfirmPassword)" />
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </EditForm>
             </div>
-            <div class="form-group">
-                <label for="password">Password</label>
-                <InputText Id="password" type="password" class="form-control" @bind-Value="RegisterRequest.Password" />
-                <ValidationMessage For="@(() => RegisterRequest.Password)" />
-            </div>
-            <div class="form-group">
-                <label for="password">Confirm Password</label>
-                <InputText Id="password" type="password" class="form-control" @bind-Value="RegisterRequest.ConfirmPassword" />
-                <ValidationMessage For="@(() => RegisterRequest.ConfirmPassword)" />
-            </div>
-            <button type="submit" class="btn btn-primary">Submit</button>
-        </EditForm>
+        </div>
     </div>
 </div>
