@@ -1,8 +1,8 @@
 ﻿@page "/"
+@using CoinConstraint.Client.Infrastructure.Extensions
 @inject IBudgetingService BudgetingService
 @inject NavigationManager NavigationManager
 @inject IJSRuntime JSRuntime
-@using CoinConstraint.Client.Infrastructure.Util;
 @attribute [Authorize]
 
 <MediaQuery Media="@Breakpoints.SmallDown" @bind-Matches="_isSmallScreen" />

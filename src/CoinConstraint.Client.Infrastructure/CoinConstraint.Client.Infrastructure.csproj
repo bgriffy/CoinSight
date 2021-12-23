@@ -14,6 +14,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CoinConstraint.Application\CoinConstraint.Application.csproj" />
+    <ProjectReference Include="..\CoinConstraint.Shared\CoinConstraint.Shared.csproj" />
   </ItemGroup>
 
 </Project>

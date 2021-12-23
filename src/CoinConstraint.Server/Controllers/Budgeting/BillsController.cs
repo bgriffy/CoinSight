@@ -2,6 +2,7 @@
 
 [Route("api/[controller]")]
 [ApiController]
+[Authorize]
 public class BillsController : ControllerBase
 {
     private readonly IBillRepository _billRepository;

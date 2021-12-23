@@ -7,3 +7,5 @@ global using CoinConstraint.Server.Infrastructure.Budgeting;
 global using CoinConstraint.Server.Infrastructure.DataAccess;
 global using Microsoft.AspNetCore.Mvc;
 global using CoinConstraint.Server.Infrastructure.Users;
+global using Microsoft.AspNetCore.Authorization;
+global using CoinConstraint.Shared.Extensions;

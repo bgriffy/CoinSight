@@ -1,4 +1,4 @@
-﻿namespace CoinConstraint.Client.Infrastructure.Util;
+﻿namespace CoinConstraint.Client.Infrastructure.Extensions;
 
 public static class StringExtension
 {

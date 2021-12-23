@@ -17,4 +17,4 @@ global using Blazored.LocalStorage;
 global using Microsoft.AspNetCore.Components.Authorization;
 global using System.Net.Http.Headers;
 global using System.Security.Claims;
-global using CoinConstraint.Client.Infrastructure.Util;
+global using CoinConstraint.Shared.Extensions;

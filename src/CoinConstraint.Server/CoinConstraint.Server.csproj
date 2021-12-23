@@ -4,6 +4,7 @@
 		<TargetFramework>net6.0</TargetFramework>
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
+		<UserSecretsId>a391db17-e428-4cbb-947e-9840cd137d77</UserSecretsId>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -29,6 +30,7 @@
 	<ItemGroup>
 		<ProjectReference Include="..\CoinConstraint.Client\CoinConstraint.Client.csproj" />
 		<ProjectReference Include="..\CoinConstraint.Server.Infrastructure\CoinConstraint.Server.Infrastructure.csproj" />
+		<ProjectReference Include="..\CoinConstraint.Shared\CoinConstraint.Shared.csproj" />
 	</ItemGroup>
 
 

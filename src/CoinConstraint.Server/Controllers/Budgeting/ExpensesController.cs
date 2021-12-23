@@ -1,7 +1,12 @@
-﻿namespace CoinConstraint.Server.Controllers.Budgeting;
+﻿using System.Security.Claims;
+
+namespace CoinConstraint.Server.Controllers.Budgeting;
+
 
 [Route("api/[controller]")]
 [ApiController]
+[Authorize]
+
 public class ExpensesController : ControllerBase
 {
     private readonly IExpenseRepository _expenseRepository;
@@ -31,6 +36,7 @@ public class ExpensesController : ControllerBase
     {
         try
         {
+            var userID = User.GetUserId();
             var expenses = _expenseRepository.GetExpensesByBudget(budgetID);
             return Ok(expenses);
         }

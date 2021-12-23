@@ -2,6 +2,7 @@
 
 namespace CoinConstraint.Server.Controllers.Budgeting;
 
+[Authorize]
 [Route("api/[controller]")]
 [ApiController]
 public class BudgetController : ControllerBase
@@ -33,6 +34,10 @@ public class BudgetController : ControllerBase
     {
         try
         {
+            var userIdFromClaim = User.GetUserId();
+
+            if(userID.ToString() != userIdFromClaim) return Unauthorized();
+
             var budgets = await _budgetRepository.GetBudgetsByUser(userID);
             return Ok(budgets);
         }

@@ -2,6 +2,8 @@
 
 [Route("api/[controller]")]
 [ApiController]
+[Authorize]
+
 public class ReminderController : ControllerBase
 {
     private readonly IReminderRepository _totalsRepository;

@@ -2,6 +2,8 @@
 
 [Route("api/[controller]")]
 [ApiController]
+[Authorize]
+
 public class TotalsController : ControllerBase
 {
     private readonly ITotalRepository _totalsRepository;
