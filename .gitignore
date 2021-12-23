@@ -390,3 +390,4 @@ FodyWeavers.xsd
 #Misc
 **/appsettings.json
 **/launchsettings.json
+**/profile.arm.json
