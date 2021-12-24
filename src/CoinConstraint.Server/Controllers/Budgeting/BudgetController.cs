@@ -14,29 +14,12 @@ public class BudgetController : ControllerBase
         _budgetRepository = budgetRepository;
     }
 
-    [HttpGet]
-    public async Task<ActionResult<List<Budget>>> GetBudgetsAsync()
-    {
-        try
-        {
-            var budgets = await _budgetRepository.GetAllAsync();
-            return Ok(budgets);
-        }
-        catch (System.Exception e)
-        {
-            Console.WriteLine($"There was an error retrieving budgets: {e.Message}");
-            throw;
-        }
-    }
-
     [HttpGet("{userID}")]
     public async Task<ActionResult<List<Budget>>> GetBudgetsByUser(Guid userID)
     {
         try
         {
-            var userIdFromClaim = User.GetUserId();
-
-            if(userID.ToString() != userIdFromClaim) return Unauthorized();
+            if (UserUnauthorized(userID)) return Unauthorized();
 
             var budgets = await _budgetRepository.GetBudgetsByUser(userID);
             return Ok(budgets);
@@ -53,8 +36,11 @@ public class BudgetController : ControllerBase
     {
         try
         {
+            if (UserUnauthorized(budget.UUID)) return Unauthorized();
+
             await _budgetRepository.AddAsync(budget);
             await _budgetRepository.SaveChangesAsync();
+
             return Ok(budget.ID);
         }
         catch (Exception e)
@@ -65,12 +51,16 @@ public class BudgetController : ControllerBase
     }
 
     [HttpPut]
-    public async Task UpdateBudget(Budget budget)
+    public async Task<ActionResult> UpdateBudget(Budget budget)
     {
         try
         {
+            if (UserUnauthorized(budget.UUID)) return Unauthorized();
+
             _budgetRepository.Update(budget);
             await _budgetRepository.SaveChangesAsync();
+
+            return Ok();
         }
         catch (Exception e)
         {
@@ -80,12 +70,16 @@ public class BudgetController : ControllerBase
     }
 
     [HttpDelete]
-    public async Task DeleteBudget(Budget budget)
+    public async Task<ActionResult> DeleteBudget(Budget budget)
     {
         try
         {
+            if (UserUnauthorized(budget.UUID)) return Unauthorized();
+
             _budgetRepository.Remove(budget);
             await _budgetRepository.SaveChangesAsync();
+
+            return Ok();
         }
         catch (Exception e)
         {
@@ -95,17 +89,34 @@ public class BudgetController : ControllerBase
     }
 
     [HttpDelete("DeleteMultiple")]
-    public async Task DeleteBudgets(List<Budget> budgets)
+    public async Task<ActionResult> DeleteBudgets(List<Budget> budgets)
     {
         try
         {
+            foreach (var budget in budgets)
+            {
+                if (UserUnauthorized(budget.UUID)) return Unauthorized();
+            }
+
             _budgetRepository.RemoveRange(budgets);
             await _budgetRepository.SaveChangesAsync();
+
+            return Ok();
         }
         catch (Exception e)
         {
             Console.WriteLine($"Error deleting budgets: {e.Message}");
             throw;
         }
+    }
+
+    // TODO: Should probably move this to a service. 
+    private bool UserUnauthorized(Guid userID)
+    {
+        var userIdFromClaim = User.GetUserId();
+
+        if (userID.ToString() != userIdFromClaim) return true;
+
+        return false; 
     }
 }
