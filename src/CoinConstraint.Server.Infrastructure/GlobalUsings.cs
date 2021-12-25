@@ -11,4 +11,7 @@ global using System.Threading.Tasks;
 global using CoinConstraint.Domain.AggregateModels.UserAggregate.Entities;
 global using Microsoft.EntityFrameworkCore;
 global using System.Linq.Expressions;
-global using CoinConstraint.Domain.AggregateModels.UserAggregate.Entities;
+global using CoinConstraint.Application.Identity;
+global using CoinConstraint.Shared.Extensions;
+global using Microsoft.AspNetCore.Http;
+

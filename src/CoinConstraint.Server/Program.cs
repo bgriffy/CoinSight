@@ -1,3 +1,5 @@
+using CoinConstraint.Application.Identity;
+using CoinConstraint.Server.Infrastructure.Identity;
 using CoinConstraint.Server.Util;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -39,6 +41,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JwtSecurityKey"]))
         };
     });
+
+builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 
 builder.Services.AddRazorPages();
 builder.Services.AddRepositores();

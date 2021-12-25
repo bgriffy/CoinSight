@@ -27,6 +27,12 @@ public class ClientBudgetRepository : ClientsideRepository<Budget>, IClientsideB
         }
     }
 
+    public async Task<List<Budget>> GetCurrentUserBudgets()
+    {
+        var budgets = await _httpClient.GetFromJsonAsync<List<Budget>>($"{_endpoint}");
+        return budgets;
+    }
+
     public async Task<List<Budget>> GetBudgetsByUser(Guid userID)
     {
         var budgets = await _httpClient.GetFromJsonAsync<List<Budget>>($"{_endpoint}/{userID}");

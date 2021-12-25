@@ -5,6 +5,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Models\**" />
+    <Compile Remove="Wrappers\**" />
+    <EmbeddedResource Remove="Models\**" />
+    <EmbeddedResource Remove="Wrappers\**" />
+    <None Remove="Models\**" />
+    <None Remove="Wrappers\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.1">
@@ -17,11 +27,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CoinConstraint.Application\CoinConstraint.Application.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Models\" />
-    <Folder Include="Wrappers\" />
+    <ProjectReference Include="..\CoinConstraint.Shared\CoinConstraint.Shared.csproj" />
   </ItemGroup>
 
 </Project>

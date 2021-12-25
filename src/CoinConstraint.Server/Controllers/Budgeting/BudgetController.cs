@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using CoinConstraint.Application.Identity;
 
 namespace CoinConstraint.Server.Controllers.Budgeting;
 
@@ -8,19 +8,20 @@ namespace CoinConstraint.Server.Controllers.Budgeting;
 public class BudgetController : ControllerBase
 {
     private readonly IBudgetRepository _budgetRepository;
+    private readonly ICurrentUserService _currentUserService;
 
-    public BudgetController(IBudgetRepository budgetRepository, UserManager<IdentityUser> userManager)
+    public BudgetController(IBudgetRepository budgetRepository, ICurrentUserService currentUserService)
     {
         _budgetRepository = budgetRepository;
+        _currentUserService = currentUserService;
     }
 
-    [HttpGet("{userID}")]
-    public async Task<ActionResult<List<Budget>>> GetBudgetsByUser(Guid userID)
+    [HttpGet]
+    public async Task<ActionResult<List<Budget>>> GetCurrentUserBudgets()
     {
         try
         {
-            if (UserUnauthorized(userID)) return Unauthorized();
-
+            var userID = _currentUserService.GetCurrentUserID();
             var budgets = await _budgetRepository.GetBudgetsByUser(userID);
             return Ok(budgets);
         }
@@ -31,12 +32,14 @@ public class BudgetController : ControllerBase
         }
     }
 
+
     [HttpPost]
     public async Task<ActionResult<int>> SaveNewBudgetAsync(Budget budget)
     {
         try
         {
-            if (UserUnauthorized(budget.UUID)) return Unauthorized();
+            var budgetBelongsToCurrentUser = CurrentUserOwnsBudget(budget);
+            if (!budgetBelongsToCurrentUser) return Unauthorized();
 
             await _budgetRepository.AddAsync(budget);
             await _budgetRepository.SaveChangesAsync();
@@ -55,7 +58,8 @@ public class BudgetController : ControllerBase
     {
         try
         {
-            if (UserUnauthorized(budget.UUID)) return Unauthorized();
+            var budgetBelongsToCurrentUser = CurrentUserOwnsBudget(budget);
+            if (!budgetBelongsToCurrentUser) return Unauthorized();
 
             _budgetRepository.Update(budget);
             await _budgetRepository.SaveChangesAsync();
@@ -74,7 +78,8 @@ public class BudgetController : ControllerBase
     {
         try
         {
-            if (UserUnauthorized(budget.UUID)) return Unauthorized();
+            var budgetBelongsToCurrentUser = CurrentUserOwnsBudget(budget);
+            if (!budgetBelongsToCurrentUser) return Unauthorized();
 
             _budgetRepository.Remove(budget);
             await _budgetRepository.SaveChangesAsync();
@@ -95,7 +100,8 @@ public class BudgetController : ControllerBase
         {
             foreach (var budget in budgets)
             {
-                if (UserUnauthorized(budget.UUID)) return Unauthorized();
+                var budgetBelongsToCurrentUser = CurrentUserOwnsBudget(budget);
+                if (!budgetBelongsToCurrentUser) return Unauthorized();
             }
 
             _budgetRepository.RemoveRange(budgets);
@@ -110,13 +116,12 @@ public class BudgetController : ControllerBase
         }
     }
 
-    // TODO: Should probably move this to a service. 
-    private bool UserUnauthorized(Guid userID)
+    private bool CurrentUserOwnsBudget(Budget budget)
     {
-        var userIdFromClaim = User.GetUserId();
+        var currentUserID = _currentUserService.GetCurrentUserID();
 
-        if (userID.ToString() != userIdFromClaim) return true;
+        if (budget.UUID != currentUserID) return false;
 
-        return false; 
+        return true;
     }
 }

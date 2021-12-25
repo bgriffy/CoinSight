@@ -29,6 +29,7 @@ public class BudgetingService : IBudgetingService
             _currentUserID = String.IsNullOrEmpty(userID) ? Guid.Empty : new Guid(userID);
 
             await LoadBudgets();
+
             _selectedBudget = _budgets.FirstOrDefault();
             _expensesForDeletion = new List<Expense>();
             if (_selectedBudget != null)
@@ -47,7 +48,7 @@ public class BudgetingService : IBudgetingService
 
     private async Task LoadBudgets()
     {
-        _budgets = (List<Budget>)await _unitOfWork.Budgets.GetBudgetsByUser(_currentUserID);
+        _budgets = (List<Budget>)await _unitOfWork.Budgets.GetCurrentUserBudgets();
         _budgetsForDeletion = new List<Budget>();
     }
 
