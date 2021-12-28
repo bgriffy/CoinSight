@@ -21,7 +21,7 @@ public class BudgetController : ControllerBase
     {
         try
         {
-            var userID = _currentUserService.GetCurrentUserID();
+            var userID = await _currentUserService.GetCurrentUserID();
             var budgets = await _budgetRepository.GetBudgetsByUser(userID);
             return Ok(budgets);
         }
@@ -38,7 +38,7 @@ public class BudgetController : ControllerBase
     {
         try
         {
-            var budgetBelongsToCurrentUser = CurrentUserOwnsBudget(budget);
+            var budgetBelongsToCurrentUser = await CurrentUserOwnsBudget(budget);
             if (!budgetBelongsToCurrentUser) return Unauthorized();
 
             await _budgetRepository.AddAsync(budget);
@@ -58,7 +58,7 @@ public class BudgetController : ControllerBase
     {
         try
         {
-            var budgetBelongsToCurrentUser = CurrentUserOwnsBudget(budget);
+            var budgetBelongsToCurrentUser = await CurrentUserOwnsBudget(budget);
             if (!budgetBelongsToCurrentUser) return Unauthorized();
 
             _budgetRepository.Update(budget);
@@ -78,7 +78,7 @@ public class BudgetController : ControllerBase
     {
         try
         {
-            var budgetBelongsToCurrentUser = CurrentUserOwnsBudget(budget);
+            var budgetBelongsToCurrentUser = await CurrentUserOwnsBudget(budget);
             if (!budgetBelongsToCurrentUser) return Unauthorized();
 
             _budgetRepository.Remove(budget);
@@ -100,7 +100,7 @@ public class BudgetController : ControllerBase
         {
             foreach (var budget in budgets)
             {
-                var budgetBelongsToCurrentUser = CurrentUserOwnsBudget(budget);
+                var budgetBelongsToCurrentUser = await CurrentUserOwnsBudget(budget);
                 if (!budgetBelongsToCurrentUser) return Unauthorized();
             }
 
@@ -116,9 +116,9 @@ public class BudgetController : ControllerBase
         }
     }
 
-    private bool CurrentUserOwnsBudget(Budget budget)
+    private async Task<bool> CurrentUserOwnsBudget(Budget budget)
     {
-        var currentUserID = _currentUserService.GetCurrentUserID();
+        var currentUserID = await _currentUserService.GetCurrentUserID();
 
         if (budget.UUID != currentUserID) return false;
 

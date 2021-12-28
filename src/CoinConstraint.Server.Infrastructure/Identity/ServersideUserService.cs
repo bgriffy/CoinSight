@@ -1,11 +1,11 @@
 ﻿namespace CoinConstraint.Server.Infrastructure.Identity;
 
-public class CurrentUserService : ICurrentUserService
+public class ServersideUserService : ICurrentUserService
 {
     private Guid _userID;
     private List<KeyValuePair<string, string>> _claims;
 
-    public CurrentUserService(IHttpContextAccessor httpContextAccessor)
+    public ServersideUserService(IHttpContextAccessor httpContextAccessor)
     {
         var userID = httpContextAccessor.HttpContext?.User?.GetUserId();
 
@@ -21,13 +21,13 @@ public class CurrentUserService : ICurrentUserService
         _claims = httpContextAccessor.HttpContext?.User?.Claims.AsEnumerable().Select(item => new KeyValuePair<string, string>(item.Type, item.Value)).ToList();
     }
 
-    public Guid GetCurrentUserID()
+    public Task<Guid> GetCurrentUserID()
     {
-        return _userID;
+        return Task.FromResult(_userID);
     }
 
-    public List<KeyValuePair<string, string>> GetClaims()
+    public Task<List<KeyValuePair<string, string>>> GetClaims()
     {
-        return _claims;
+        return Task.FromResult(_claims);
     }
 }
