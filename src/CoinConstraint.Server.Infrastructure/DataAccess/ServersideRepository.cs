@@ -41,6 +41,11 @@ public class ServersideRepository<T> : IServersideRepository<T> where T : class
         return (IEnumerable<T>)await _dbset.FindAsync(predicate);
     }
 
+    public async Task<T> FirstOrDefault(Expression<Func<T, bool>> predicate)
+    {
+        return await _dbset.FirstOrDefaultAsync(predicate);
+    }
+
     public IEnumerable<T> GetAll()
     {
         return _dbset.ToList();

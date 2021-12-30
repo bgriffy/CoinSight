@@ -38,7 +38,7 @@ public class BudgetController : ControllerBase
     {
         try
         {
-            var budgetBelongsToCurrentUser = await CurrentUserOwnsBudget(budget);
+            var budgetBelongsToCurrentUser = await CurrentUserOwnsBudget(budget.ID);
             if (!budgetBelongsToCurrentUser) return Unauthorized();
 
             await _budgetRepository.AddAsync(budget);
@@ -58,7 +58,7 @@ public class BudgetController : ControllerBase
     {
         try
         {
-            var budgetBelongsToCurrentUser = await CurrentUserOwnsBudget(budget);
+            var budgetBelongsToCurrentUser = await CurrentUserOwnsBudget(budget.ID);
             if (!budgetBelongsToCurrentUser) return Unauthorized();
 
             _budgetRepository.Update(budget);
@@ -78,7 +78,7 @@ public class BudgetController : ControllerBase
     {
         try
         {
-            var budgetBelongsToCurrentUser = await CurrentUserOwnsBudget(budget);
+            var budgetBelongsToCurrentUser = await CurrentUserOwnsBudget(budget.ID);
             if (!budgetBelongsToCurrentUser) return Unauthorized();
 
             _budgetRepository.Remove(budget);
@@ -100,7 +100,7 @@ public class BudgetController : ControllerBase
         {
             foreach (var budget in budgets)
             {
-                var budgetBelongsToCurrentUser = await CurrentUserOwnsBudget(budget);
+                var budgetBelongsToCurrentUser = await CurrentUserOwnsBudget(budget.ID);
                 if (!budgetBelongsToCurrentUser) return Unauthorized();
             }
 
@@ -116,11 +116,22 @@ public class BudgetController : ControllerBase
         }
     }
 
-    private async Task<bool> CurrentUserOwnsBudget(Budget budget)
+    private async Task<bool> CurrentUserOwnsBudget(int? budgetID)
     {
-        var currentUserID = await _currentUserService.GetCurrentUserID();
+        try
+        {
+            var budget = await _budgetRepository.FirstOrDefault(b => b.ID == budgetID); 
+            if (budget == null) return false;
 
-        if (budget.UUID != currentUserID) return false;
+            var currentUserID = await _currentUserService.GetCurrentUserID();
+
+            if (budget.UUID != currentUserID) return false;
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e.Message);
+            throw;
+        }
 
         return true;
     }
