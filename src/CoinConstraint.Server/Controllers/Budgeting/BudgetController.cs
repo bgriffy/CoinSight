@@ -9,11 +9,15 @@ public class BudgetController : ControllerBase
 {
     private readonly IBudgetRepository _budgetRepository;
     private readonly ICurrentUserService _currentUserService;
+    private readonly IAuthorizationService _authorizationService;
 
-    public BudgetController(IBudgetRepository budgetRepository, ICurrentUserService currentUserService)
+    public BudgetController(IBudgetRepository budgetRepository, 
+                            ICurrentUserService currentUserService, 
+                            IAuthorizationService authorizationService)
     {
         _budgetRepository = budgetRepository;
         _currentUserService = currentUserService;
+        _authorizationService = authorizationService;
     }
 
     [HttpGet]
@@ -32,15 +36,13 @@ public class BudgetController : ControllerBase
         }
     }
 
-
     [HttpPost]
     public async Task<ActionResult<int>> SaveNewBudgetAsync(Budget budget)
     {
         try
         {
-            var budgetBelongsToCurrentUser = await CurrentUserOwnsBudget(budget.ID);
-            if (!budgetBelongsToCurrentUser) return Unauthorized();
-
+            if (await UserDoesNotOwnBudget(budget)) return Unauthorized();
+            
             await _budgetRepository.AddAsync(budget);
             await _budgetRepository.SaveChangesAsync();
 
@@ -58,8 +60,7 @@ public class BudgetController : ControllerBase
     {
         try
         {
-            var budgetBelongsToCurrentUser = await CurrentUserOwnsBudget(budget.ID);
-            if (!budgetBelongsToCurrentUser) return Unauthorized();
+            if (await UserDoesNotOwnBudget(budget)) return Unauthorized();
 
             _budgetRepository.Update(budget);
             await _budgetRepository.SaveChangesAsync();
@@ -78,8 +79,7 @@ public class BudgetController : ControllerBase
     {
         try
         {
-            var budgetBelongsToCurrentUser = await CurrentUserOwnsBudget(budget.ID);
-            if (!budgetBelongsToCurrentUser) return Unauthorized();
+            if (await UserDoesNotOwnBudget(budget)) return Unauthorized();
 
             _budgetRepository.Remove(budget);
             await _budgetRepository.SaveChangesAsync();
@@ -100,8 +100,7 @@ public class BudgetController : ControllerBase
         {
             foreach (var budget in budgets)
             {
-                var budgetBelongsToCurrentUser = await CurrentUserOwnsBudget(budget.ID);
-                if (!budgetBelongsToCurrentUser) return Unauthorized();
+                if (await UserDoesNotOwnBudget(budget)) return Unauthorized();
             }
 
             _budgetRepository.RemoveRange(budgets);
@@ -116,16 +115,17 @@ public class BudgetController : ControllerBase
         }
     }
 
-    private async Task<bool> CurrentUserOwnsBudget(int? budgetID)
+    private async Task<bool> UserDoesNotOwnBudget(Budget budgetResource)
     {
         try
         {
-            var budget = await _budgetRepository.FirstOrDefault(b => b.ID == budgetID); 
-            if (budget == null) return false;
+            //Grab budget from DB in case passed-in budget as been modified
+            var budget = await _budgetRepository.FirstOrDefault(b => b.ID == budgetResource.ID); 
+            if (budget == null && !budgetResource.IsNew) return true;
 
-            var currentUserID = await _currentUserService.GetCurrentUserID();
+            var authorizationResult = await _authorizationService.AuthorizeAsync(User, budget ?? budgetResource, "BudgetAuthorPolicy");
 
-            if (budget.UUID != currentUserID) return false;
+            if (!authorizationResult.Succeeded) return true;
         }
         catch (Exception e)
         {
@@ -133,6 +133,6 @@ public class BudgetController : ControllerBase
             throw;
         }
 
-        return true;
+        return false;
     }
 }

@@ -159,6 +159,7 @@ public class BudgetingService : IBudgetingService
 
     public async Task RemoveDeletedBudgets()
     {
+        if (_budgetsForDeletion.Count < 1) return;
         try
         {
             await _unitOfWork.Budgets.RemoveRangeAsync(_budgetsForDeletion);

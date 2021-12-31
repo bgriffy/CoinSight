@@ -42,6 +42,14 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("BudgetAuthorPolicy", policy =>
+        policy.Requirements.Add(new BudgetAuthorRequirement()));
+});
+
+builder.Services.AddTransient<IAuthorizationHandler, BudgetAuthorizationHandler>();
+
 builder.Services.AddScoped<ICurrentUserService, ServersideUserService>();
 
 builder.Services.AddRazorPages();
