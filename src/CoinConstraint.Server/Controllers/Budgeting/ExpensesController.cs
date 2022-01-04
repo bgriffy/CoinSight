@@ -1,4 +1,5 @@
-﻿using System.Security.Claims;
+﻿using CoinConstraint.Server.Infrastructure.Identity;
+using Microsoft.AspNetCore.Authorization.Infrastructure;
 
 namespace CoinConstraint.Server.Controllers.Budgeting;
 
@@ -10,25 +11,12 @@ namespace CoinConstraint.Server.Controllers.Budgeting;
 public class ExpensesController : ControllerBase
 {
     private readonly IExpenseRepository _expenseRepository;
+    private readonly IAuthorizationService _authorizationService;
 
-    public ExpensesController(IExpenseRepository expenseRepository)
+    public ExpensesController(IExpenseRepository expenseRepository, IAuthorizationService authorizationService)
     {
         _expenseRepository = expenseRepository;
-    }
-
-    [HttpGet]
-    public async Task<ActionResult<List<Expense>>> GetExpensesAsync()
-    {
-        try
-        {
-            var expenses = await _expenseRepository.GetAllAsync();
-            return Ok(expenses);
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine($"There was an error retrieving expenses: {e.Message}");
-            throw;
-        }
+        _authorizationService = authorizationService;
     }
 
     [HttpGet("{budgetID}")]
@@ -38,6 +26,15 @@ public class ExpensesController : ControllerBase
         {
             var userID = User.GetUserId();
             var expenses = _expenseRepository.GetExpensesByBudget(budgetID);
+
+            foreach (var expense in expenses)
+            {
+                if ((await ActionIsAuthorized(expense, Operations.Read)) == false)
+                {
+                    return Unauthorized();
+                }
+            }
+
             return Ok(expenses);
         }
         catch (Exception e)
@@ -48,12 +45,19 @@ public class ExpensesController : ControllerBase
     }
 
     [HttpPost]
-    public async Task SaveNewExpenseAsync(Expense expense)
+    public async Task<ActionResult> SaveNewExpenseAsync(Expense expense)
     {
         try
         {
+            if ((await ActionIsAuthorized(expense, Operations.Create)) == false)
+            {
+                return Unauthorized();
+            }
+
             await _expenseRepository.AddAsync(expense);
             await _expenseRepository.SaveChangesAsync();
+
+            return Ok();
         }
         catch (Exception e)
         {
@@ -63,12 +67,19 @@ public class ExpensesController : ControllerBase
     }
 
     [HttpPut]
-    public async Task UpdateExistingExpense(Expense expense)
+    public async Task<ActionResult> UpdateExistingExpense(Expense expense)
     {
         try
         {
+            if ((await ActionIsAuthorized(expense, Operations.Update)) == false)
+            {
+                return Unauthorized();
+            }
+
             _expenseRepository.Update(expense);
             await _expenseRepository.SaveChangesAsync();
+
+            return Ok();
         }
         catch (Exception e)
         {
@@ -78,12 +89,19 @@ public class ExpensesController : ControllerBase
     }
 
     [HttpDelete]
-    public async Task DeleteExpense(Expense expense)
+    public async Task<ActionResult> DeleteExpense(Expense expense)
     {
         try
         {
+            if ((await ActionIsAuthorized(expense, Operations.Delete)) == false)
+            {
+                return Unauthorized();
+            }
+
             _expenseRepository.Remove(expense);
             await _expenseRepository.SaveChangesAsync();
+
+            return Ok();
         }
         catch (Exception e)
         {
@@ -93,17 +111,35 @@ public class ExpensesController : ControllerBase
     }
 
     [HttpDelete("DeleteMultiple")]
-    public async Task DeleteExpenses(List<Expense> expenses)
+    public async Task<ActionResult> DeleteExpenses(List<Expense> expenses)
     {
         try
         {
+            foreach (var expense in expenses)
+            {
+                if ((await ActionIsAuthorized(expense, Operations.Delete)) == false)
+                {
+                    return Unauthorized();
+                }
+            }
+
             _expenseRepository.RemoveRange(expenses);
             await _expenseRepository.SaveChangesAsync();
+
+            return Ok();
         }
         catch (Exception e)
         {
             Console.WriteLine($"Error deleting expenses: {e.Message}");
             throw;
         }
+    }
+
+    private async Task<bool> ActionIsAuthorized(Expense expense, OperationAuthorizationRequirement requirement)
+    {
+        var authorizationResult = await _authorizationService.AuthorizeAsync(User, expense, requirement);
+        if (!authorizationResult.Succeeded) return false;
+
+        return true;
     }
 }

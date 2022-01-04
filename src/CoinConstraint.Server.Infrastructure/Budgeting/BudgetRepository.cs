@@ -9,6 +9,11 @@ public class BudgetRepository : ServersideRepository<Budget>, IBudgetRepository
         _context = context;
     }
 
+    public Budget GetBudgetByID(int? id)
+    {
+        return _context.Budgets.FirstOrDefault(b => b.ID == id);
+    }
+
     public async Task<List<Budget>> GetBudgetsByUser(Guid userID)
     {
         return await _context.Budgets.Where(e => e.UUID == userID).ToListAsync();

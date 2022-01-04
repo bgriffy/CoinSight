@@ -1,5 +1,6 @@
 ﻿using CoinConstraint.Application.Identity;
 using CoinConstraint.Server.Infrastructure.Identity;
+using Microsoft.AspNetCore.Authorization.Infrastructure;
 
 namespace CoinConstraint.Server.Controllers.Budgeting;
 
@@ -28,6 +29,15 @@ public class BudgetController : ControllerBase
         {
             var userID = await _currentUserService.GetCurrentUserID();
             var budgets = await _budgetRepository.GetBudgetsByUser(userID);
+
+            foreach (var budget in budgets)
+            {
+                if ((await ActionIsAuthorized(budget, Operations.Read)) == false)
+                {
+                    return Unauthorized();
+                }
+            }
+
             return Ok(budgets);
         }
         catch (System.Exception e)
@@ -42,9 +52,11 @@ public class BudgetController : ControllerBase
     {
         try
         {
-            var authorizationResult = await _authorizationService.AuthorizeAsync(User, budget, Operations.Create);
-            if (!authorizationResult.Succeeded) return Unauthorized();
-            
+            if ((await ActionIsAuthorized(budget, Operations.Create)) == false)
+            {
+                return Unauthorized();
+            }
+
             await _budgetRepository.AddAsync(budget);
             await _budgetRepository.SaveChangesAsync();
 
@@ -62,8 +74,10 @@ public class BudgetController : ControllerBase
     {
         try
         {
-            var authorizationResult = await _authorizationService.AuthorizeAsync(User, budget, Operations.Update);
-            if (!authorizationResult.Succeeded) return Unauthorized();
+            if ((await ActionIsAuthorized(budget, Operations.Update)) == false)
+            {
+                return Unauthorized();
+            }
 
             _budgetRepository.Update(budget);
             await _budgetRepository.SaveChangesAsync();
@@ -82,8 +96,10 @@ public class BudgetController : ControllerBase
     {
         try
         {
-            var authorizationResult = await _authorizationService.AuthorizeAsync(User, budget, Operations.Delete);
-            if (!authorizationResult.Succeeded) return Unauthorized();
+            if ((await ActionIsAuthorized(budget, Operations.Delete)) == false)
+            {
+                return Unauthorized();
+            }
 
             _budgetRepository.Remove(budget);
             await _budgetRepository.SaveChangesAsync();
@@ -104,8 +120,10 @@ public class BudgetController : ControllerBase
         {
             foreach (var budget in budgets)
             {
-                var authorizationResult = await _authorizationService.AuthorizeAsync(User, budget, Operations.Delete);
-                if (!authorizationResult.Succeeded) return Unauthorized();
+                if ((await ActionIsAuthorized(budget, Operations.Delete)) == false)
+                {
+                    return Unauthorized();
+                }
             }
 
             _budgetRepository.RemoveRange(budgets);
@@ -118,5 +136,13 @@ public class BudgetController : ControllerBase
             Console.WriteLine($"Error deleting budgets: {e.Message}");
             throw;
         }
+    }
+
+    private async Task<bool> ActionIsAuthorized(Budget budget, OperationAuthorizationRequirement requirement)
+    {
+        var authorizationResult = await _authorizationService.AuthorizeAsync(User, budget, requirement);
+        if (!authorizationResult.Succeeded) return false;
+
+        return true;
     }
 }
