@@ -13,4 +13,15 @@ public class BudgetRepository : ServersideRepository<Budget>, IBudgetRepository
     {
         return await _context.Budgets.Where(e => e.UUID == userID).ToListAsync();
     }
+
+    public bool BudgetExists(int? budgetID)
+    {
+        return _context.Budgets.Any(e => e.ID == budgetID);
+    }
+
+    public bool BudgetExists(int? budgetID, string uuid)
+    {
+        var guid = Guid.Parse(uuid);
+        return _context.Budgets.Any(e => e.UUID == guid && e.ID == budgetID);
+    }
 }

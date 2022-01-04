@@ -1,17 +1,32 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization.Infrastructure;
 
 namespace CoinConstraint.Server.Infrastructure.Identity;
 
-public class BudgetAuthorizationHandler : AuthorizationHandler<BudgetAuthorRequirement, Budget>
+public class BudgetAuthorizationHandler : AuthorizationHandler<OperationAuthorizationRequirement, Budget>
 {
+    private readonly IBudgetRepository _budgetRepository;
 
-    protected override Task HandleRequirementAsync(AuthorizationHandlerContext context,
-                                                   BudgetAuthorRequirement requirement,
-                                                   Budget resource)
+    public BudgetAuthorizationHandler(IBudgetRepository budgetRepository)
     {
-        var userID = Guid.Parse(context.User?.GetUserId());
+        _budgetRepository = budgetRepository;
+    }
 
-        if (userID == resource.UUID)
+    protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, OperationAuthorizationRequirement requirement, Budget resource)
+    {
+        var userID = context.User?.GetUserId();
+        var userOwnsBudget = (Guid.Parse(userID) == resource.UUID);
+
+        var creationIsAuthorized = (requirement == Operations.Create && userOwnsBudget);
+
+        if (creationIsAuthorized)
+        {
+            context.Succeed(requirement);
+        }
+
+        var updateIsAuthorized = ((requirement == Operations.Update || requirement == Operations.Delete) && userOwnsBudget);
+
+        if(updateIsAuthorized && _budgetRepository.BudgetExists(resource.ID, userID))
         {
             context.Succeed(requirement);
         }

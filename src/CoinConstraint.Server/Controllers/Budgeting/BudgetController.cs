@@ -1,4 +1,5 @@
 ﻿using CoinConstraint.Application.Identity;
+using CoinConstraint.Server.Infrastructure.Identity;
 
 namespace CoinConstraint.Server.Controllers.Budgeting;
 
@@ -41,7 +42,8 @@ public class BudgetController : ControllerBase
     {
         try
         {
-            if (await UserDoesNotOwnBudget(budget)) return Unauthorized();
+            var authorizationResult = await _authorizationService.AuthorizeAsync(User, budget, Operations.Create);
+            if (!authorizationResult.Succeeded) return Unauthorized();
             
             await _budgetRepository.AddAsync(budget);
             await _budgetRepository.SaveChangesAsync();
@@ -60,7 +62,8 @@ public class BudgetController : ControllerBase
     {
         try
         {
-            if (await UserDoesNotOwnBudget(budget)) return Unauthorized();
+            var authorizationResult = await _authorizationService.AuthorizeAsync(User, budget, Operations.Update);
+            if (!authorizationResult.Succeeded) return Unauthorized();
 
             _budgetRepository.Update(budget);
             await _budgetRepository.SaveChangesAsync();
@@ -79,7 +82,8 @@ public class BudgetController : ControllerBase
     {
         try
         {
-            if (await UserDoesNotOwnBudget(budget)) return Unauthorized();
+            var authorizationResult = await _authorizationService.AuthorizeAsync(User, budget, Operations.Delete);
+            if (!authorizationResult.Succeeded) return Unauthorized();
 
             _budgetRepository.Remove(budget);
             await _budgetRepository.SaveChangesAsync();
@@ -100,7 +104,8 @@ public class BudgetController : ControllerBase
         {
             foreach (var budget in budgets)
             {
-                if (await UserDoesNotOwnBudget(budget)) return Unauthorized();
+                var authorizationResult = await _authorizationService.AuthorizeAsync(User, budget, Operations.Delete);
+                if (!authorizationResult.Succeeded) return Unauthorized();
             }
 
             _budgetRepository.RemoveRange(budgets);
@@ -113,26 +118,5 @@ public class BudgetController : ControllerBase
             Console.WriteLine($"Error deleting budgets: {e.Message}");
             throw;
         }
-    }
-
-    private async Task<bool> UserDoesNotOwnBudget(Budget budgetResource)
-    {
-        try
-        {
-            //Grab budget from DB in case passed-in budget as been modified
-            var budget = await _budgetRepository.FirstOrDefault(b => b.ID == budgetResource.ID); 
-            if (budget == null && !budgetResource.IsNew) return true;
-
-            var authorizationResult = await _authorizationService.AuthorizeAsync(User, budget ?? budgetResource, "BudgetAuthorPolicy");
-
-            if (!authorizationResult.Succeeded) return true;
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e.Message);
-            throw;
-        }
-
-        return false;
     }
 }

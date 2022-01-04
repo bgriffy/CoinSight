@@ -3,6 +3,7 @@ using CoinConstraint.Server.Infrastructure.Identity;
 using CoinConstraint.Server.Swagger;
 using CoinConstraint.Server.Util;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization.Infrastructure;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -60,7 +61,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("BudgetAuthorPolicy", policy =>
-        policy.Requirements.Add(new BudgetAuthorRequirement()));
+        policy.Requirements.Add(new OperationAuthorizationRequirement()));
 });
 
 builder.Services.AddTransient<IAuthorizationHandler, BudgetAuthorizationHandler>();
