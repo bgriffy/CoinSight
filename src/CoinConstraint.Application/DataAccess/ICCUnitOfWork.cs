@@ -7,6 +7,5 @@ public interface ICCUnitOfWork
     IExpenseRepository Expenses { get; set; }
     IReminderRepository Reminders { get; set; }
     ITotalRepository Totals { get; set; }
-    IUserRepository Users { get; }
     INoteRepository Notes { get; }
 }

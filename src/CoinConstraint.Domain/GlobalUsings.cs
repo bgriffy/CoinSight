@@ -1,5 +1,4 @@
 ﻿global using CoinConstraint.Domain.AggregateModels.BudgetingAggregate.Entities;
-global using CoinConstraint.Domain.AggregateModels.UserAggregate.Entities;
 global using CoinConstraint.Domain.Interfaces;
 global using System;
 global using System.Collections.Generic;

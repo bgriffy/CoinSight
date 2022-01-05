@@ -20,7 +20,6 @@ public static class ClientsideServiceCollectionExtensions
         serviceCollection.AddScoped<IClientsideReminderRepository, ClientReminderRepository>();
         serviceCollection.AddScoped<IClientsideTotalRepository, ClientTotalRepository>();
         serviceCollection.AddScoped<IClientsideTotalRepository, ClientTotalRepository>();
-        serviceCollection.AddScoped<IClientsideUserRepository, ClientUserRepository>();
         serviceCollection.AddScoped<IClientsideNoteRepository, ClientNoteRepository>();
     }
 

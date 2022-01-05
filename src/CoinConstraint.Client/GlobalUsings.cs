@@ -2,7 +2,6 @@
 global using Blazorise.Bootstrap;
 global using Blazorise.Icons.FontAwesome;
 global using CoinConstraint.Client.Util;
-global using CoinConstraint.Domain.AggregateModels.BudgetAggregate.Repositories.Client;
 global using CoinConstraint.Domain.AggregateModels.BudgetAggregate.Repositories.Clientside;
 global using Microsoft.AspNetCore.Components;
 global using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
@@ -19,6 +18,5 @@ global using CoinConstraint.Client.Infrastructure.DataAccess;
 global using CoinConstraint.Client.Infrastructure.Services;
 global using CoinConstraint.Client.Infrastructure.Users;
 global using CoinConstraint.Domain.AggregateModels.BudgetingAggregate.RepositoryInterfaces.Clientside;
-global using CoinConstraint.Server.Infrastructure.Users;
 global using BlazorPro.BlazorSize;
 global using CoinConstraint.Client.Infrastructure.Extensions;

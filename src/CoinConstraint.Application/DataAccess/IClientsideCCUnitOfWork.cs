@@ -9,6 +9,5 @@ public interface IClientsideCCUnitOfWork
     IClientsideExpenseRepository Expenses { get; set; }
     IClientsideReminderRepository Reminders { get; set; }
     IClientsideTotalRepository Totals { get; set; }
-    IClientsideUserRepository Users { get; }
     IClientsideNoteRepository Notes { get; }
 }

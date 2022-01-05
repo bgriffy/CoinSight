@@ -20,8 +20,6 @@ public class Budget
 
     public Guid UUID { get; set; }
 
-    public User User { get; set; } = new User();
-
     public decimal BudgetedAmount { get; set; }
 
     public decimal ExpensedAmount
@@ -47,7 +45,6 @@ public class Budget
             Totals = Totals,
             Bills = this.Bills.ToList(),
             UUID = UUID,
-            User = User,
             BudgetedAmount = BudgetedAmount,
             IsNew = true
         };

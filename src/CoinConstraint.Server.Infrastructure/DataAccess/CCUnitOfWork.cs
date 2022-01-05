@@ -10,8 +10,7 @@ public class CCUnitOfWork : ICCUnitOfWork
                         IExpenseRepository expenseRepository,
                         IReminderRepository reminderRepository,
                         ITotalRepository totalRepository,
-                        INoteRepository noteRepository,
-                        IUserRepository userRepository)
+                        INoteRepository noteRepository)
     {
         _context = context;
         Bills = billRepository;
@@ -20,7 +19,6 @@ public class CCUnitOfWork : ICCUnitOfWork
         Reminders = reminderRepository;
         Totals = totalRepository;
         Notes = noteRepository;
-        Users = userRepository;
     }
 
     public IBillRepository Bills { get; set; }
@@ -34,7 +32,5 @@ public class CCUnitOfWork : ICCUnitOfWork
     public ITotalRepository Totals { get; set; }
 
     public INoteRepository Notes { get; }
-
-    public IUserRepository Users { get; }
 
 }

@@ -7,8 +7,7 @@ public class ClientsideCCUnitOfWork : IClientsideCCUnitOfWork
                                   IClientsideExpenseRepository expenseRepository,
                                   IClientsideReminderRepository reminderRepository,
                                   IClientsideTotalRepository totalRepository,
-                                  IClientsideNoteRepository noteRepository,
-                                  IClientsideUserRepository userRepository)
+                                  IClientsideNoteRepository noteRepository)
     {
         Bills = billRepository;
         Budgets = budgetRepository;
@@ -16,7 +15,6 @@ public class ClientsideCCUnitOfWork : IClientsideCCUnitOfWork
         Reminders = reminderRepository;
         Totals = totalRepository;
         Notes = noteRepository;
-        Users = userRepository;
     }
 
     public IClientsideBillRepository Bills { get; set; }
@@ -31,5 +29,4 @@ public class ClientsideCCUnitOfWork : IClientsideCCUnitOfWork
 
     public IClientsideNoteRepository Notes { get; }
 
-    public IClientsideUserRepository Users { get; }
 }

@@ -17,7 +17,5 @@ public class CoinConstraintContext : DbContext
 
     public DbSet<Total> Totals { get; set; }
 
-    public DbSet<User> Users { get; set; }
-
     public DbSet<Note> Notes { get; set; }
 }

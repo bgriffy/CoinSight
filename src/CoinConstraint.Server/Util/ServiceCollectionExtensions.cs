@@ -14,7 +14,6 @@ public static class ServiceCollectionExtensions
         serviceCollection.AddScoped<IExpenseRepository, ExpenseRepository>();
         serviceCollection.AddScoped<IReminderRepository, ReminderRepository>();
         serviceCollection.AddScoped<ITotalRepository, TotalRepository>();
-        serviceCollection.AddScoped<IUserRepository, UserRepository>();
         serviceCollection.AddScoped<INoteRepository, NoteRepository>();
     }
 }
