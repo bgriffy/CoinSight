@@ -6,26 +6,25 @@
 
 public class ReminderController : ControllerBase
 {
-    private readonly IReminderRepository _totalsRepository;
+    private readonly IReminderRepository _remindersRepository;
 
-    public ReminderController(IReminderRepository totalsRepository)
+    public ReminderController(IReminderRepository remindersRepository)
     {
-        _totalsRepository = totalsRepository;
+        _remindersRepository = remindersRepository;
     }
 
-    [HttpGet]
-    public async Task<ActionResult<List<Reminder>>> GetRemindersAsync()
-    {
-        try
-        {
-            var reminders = await _totalsRepository.GetAllAsync();
-            return Ok(reminders);
-        }
-        catch (System.Exception e)
-        {
-            Console.WriteLine($"There was an error retrieving reminders: {e.Message}");
-            throw;
-        }
-    }
-
+    //[HttpGet]
+    //public async Task<ActionResult<List<Reminder>>> GetRemindersAsync()
+    //{
+    //    try
+    //    {
+    //        var reminders = await _totalsRepository.GetAllAsync();
+    //        return Ok(reminders);
+    //    }
+    //    catch (System.Exception e)
+    //    {
+    //        Console.WriteLine($"There was an error retrieving reminders: {e.Message}");
+    //        throw;
+    //    }
+    //}
 }
