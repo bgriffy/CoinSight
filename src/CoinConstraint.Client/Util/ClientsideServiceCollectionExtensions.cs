@@ -14,12 +14,9 @@ public static class ClientsideServiceCollectionExtensions
 
     public static void AddRepositores(this IServiceCollection serviceCollection)
     {
-        serviceCollection.AddScoped<IClientsideBillRepository, ClientBillRepository>();
         serviceCollection.AddScoped<IClientsideExpenseRepository, ClientExpenseRepository>();
         serviceCollection.AddScoped<IClientsideBudgetRepository, ClientBudgetRepository>();
         serviceCollection.AddScoped<IClientsideReminderRepository, ClientReminderRepository>();
-        serviceCollection.AddScoped<IClientsideTotalRepository, ClientTotalRepository>();
-        serviceCollection.AddScoped<IClientsideTotalRepository, ClientTotalRepository>();
         serviceCollection.AddScoped<IClientsideNoteRepository, ClientNoteRepository>();
     }
 
