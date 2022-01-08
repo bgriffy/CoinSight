@@ -9,15 +9,15 @@ namespace CoinConstraint.Server.Controllers.Budgeting;
 [ApiController]
 public class BudgetController : ControllerBase
 {
-    private readonly IBudgetRepository _budgetRepository;
+    private readonly ICCUnitOfWork _unitOfWork;
     private readonly ICurrentUserService _currentUserService;
     private readonly IAuthorizationService _authorizationService;
 
-    public BudgetController(IBudgetRepository budgetRepository, 
+    public BudgetController(ICCUnitOfWork unitOfWork, 
                             ICurrentUserService currentUserService, 
                             IAuthorizationService authorizationService)
     {
-        _budgetRepository = budgetRepository;
+        _unitOfWork = unitOfWork;
         _currentUserService = currentUserService;
         _authorizationService = authorizationService;
     }
@@ -28,7 +28,7 @@ public class BudgetController : ControllerBase
         try
         {
             var userID = await _currentUserService.GetCurrentUserID();
-            var budgets = await _budgetRepository.GetBudgetsByUser(userID);
+            var budgets = await _unitOfWork.Budgets.GetBudgetsByUser(userID);
 
             foreach (var budget in budgets)
             {
@@ -57,8 +57,8 @@ public class BudgetController : ControllerBase
                 return Unauthorized();
             }
 
-            await _budgetRepository.AddAsync(budget);
-            await _budgetRepository.SaveChangesAsync();
+            await _unitOfWork.Budgets.AddAsync(budget);
+            await _unitOfWork.Budgets.SaveChangesAsync();
 
             return Ok(budget.ID);
         }
@@ -79,8 +79,8 @@ public class BudgetController : ControllerBase
                 return Unauthorized();
             }
 
-            _budgetRepository.Update(budget);
-            await _budgetRepository.SaveChangesAsync();
+            _unitOfWork.Budgets.Update(budget);
+            await _unitOfWork.Budgets.SaveChangesAsync();
 
             return Ok();
         }
@@ -101,8 +101,19 @@ public class BudgetController : ControllerBase
                 return Unauthorized();
             }
 
-            _budgetRepository.Remove(budget);
-            await _budgetRepository.SaveChangesAsync();
+            if((budget.Expenses?.Count?? 0) > 0)
+            {
+                _unitOfWork.Expenses.RemoveRange(budget.Expenses);
+            }
+
+            if ((budget.Notes?.Count ?? 0) > 0)
+            {
+                _unitOfWork.Notes.RemoveRange(budget.Notes);
+            }
+
+            _unitOfWork.Budgets.Remove(budget);
+
+            await _unitOfWork.Budgets.SaveChangesAsync();
 
             return Ok();
         }
@@ -124,10 +135,20 @@ public class BudgetController : ControllerBase
                 {
                     return Unauthorized();
                 }
+
+                if ((budget.Expenses?.Count ?? 0) > 0)
+                {
+                    _unitOfWork.Expenses.RemoveRange(budget.Expenses);
+                }
+
+                if ((budget.Notes?.Count ?? 0) > 0)
+                {
+                    _unitOfWork.Notes.RemoveRange(budget.Notes);
+                }
             }
 
-            _budgetRepository.RemoveRange(budgets);
-            await _budgetRepository.SaveChangesAsync();
+            _unitOfWork.Budgets.RemoveRange(budgets);
+            await _unitOfWork.Budgets.SaveChangesAsync();
 
             return Ok();
         }
