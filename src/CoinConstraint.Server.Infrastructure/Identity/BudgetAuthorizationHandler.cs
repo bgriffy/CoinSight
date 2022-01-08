@@ -16,18 +16,25 @@ public class BudgetAuthorizationHandler : AuthorizationHandler<OperationAuthoriz
     {
         Budget budget;
 
-        if(context.Resource is Budget) 
-        { 
-            budget = (Budget)context.Resource;
-        }
-        else if(context.Resource is Expense)
+        switch (context.Resource)
         {
-            var expense = (Expense)context.Resource;
-            budget = _budgetRepository.GetBudgetByID(expense.BudgetID);
-        }
-        else
-        {
-            return Task.CompletedTask;
+            case Budget:
+                budget = (Budget)context.Resource;
+                break;
+            case Expense:
+                var expense = (Expense)context.Resource;
+                budget = _budgetRepository.GetBudgetByID(expense.BudgetID);
+                break;
+            case Note:
+                var note = (Note)context.Resource;
+                budget = _budgetRepository.GetBudgetByID(note.BudgetID);
+                break;
+            case Reminder:
+                var reminder = (Reminder)context.Resource;
+                budget = _budgetRepository.GetBudgetByID(reminder.BudgetID);
+                break; 
+            default:
+                return Task.CompletedTask;
         }
 
         var userID = context.User?.GetUserId();
