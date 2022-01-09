@@ -32,6 +32,7 @@ namespace CoinConstraint.Client.Pages
 
         public async Task LoadData()
         {
+            _pageIsLoaded = false;
             await LoadBudgets();
             await LoadExpenses();
             await _loadSpinner.HideLoadSpinner();
@@ -187,19 +188,23 @@ namespace CoinConstraint.Client.Pages
 
         private async Task SaveBudgets()
         {
-            await _loadSpinner.ShowLoadSpinner("Saving budgets...");
+            _pageIsLoaded = false;
+            await _loadSpinner.ShowLoadSpinner();
             await Task.Delay(1000);
             await BudgetingService.SaveChanges();
             await _loadSpinner.HideLoadSpinner();
+            _pageIsLoaded = true;
         }
 
         private async Task SaveChanges()
         {
-            await _loadSpinner.ShowLoadSpinner("Saving changes...");
+            _pageIsLoaded = false;
+            await _loadSpinner.ShowLoadSpinner();
             SyncData();
             await Task.Delay(1000);
             await BudgetingService.SaveChanges(removeDeletedExpenses: true);
             await _loadSpinner.HideLoadSpinner();
+            _pageIsLoaded = true;
         }
     }
 }
