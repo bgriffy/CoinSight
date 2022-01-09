@@ -13,4 +13,9 @@ public class ExpenseRepository : ServersideRepository<Expense>, IExpenseReposito
     {
         return _context.Expenses.Where(e => e.BudgetID == budgetID).ToList();
     }
+
+    public bool ExpenseExists(int? expenseID, int? budgetID)
+    {
+        return _context.Expenses.Any(e => e.ID == expenseID && e.BudgetID == budgetID);
+    }
 }

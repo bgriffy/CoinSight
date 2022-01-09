@@ -13,4 +13,9 @@ public class NoteRepository : ServersideRepository<Note>, INoteRepository
     {
         return _context.Notes.Where(e => e.BudgetID == budgetID).ToList();
     }
+
+    public bool NoteExists(int? noteID, int? budgetID)
+    {
+        return _context.Notes.Any(n => n.NoteID == noteID && n.BudgetID == budgetID);
+    }
 }

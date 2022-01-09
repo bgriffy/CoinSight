@@ -2,6 +2,7 @@
 
 public interface IExpenseRepository : IServersideRepository<Expense>
 {
+    bool ExpenseExists(int? expenseID, int? budgetID);
     List<Expense> GetExpensesByBudget(int budgetID);
     Task SaveChangesAsync();
 }

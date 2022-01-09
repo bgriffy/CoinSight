@@ -3,4 +3,5 @@
 public interface INoteRepository : IServersideRepository<Note>
 {
     List<Note> GetNotesByBudget(int budgetID);
+    bool NoteExists(int? noteID, int? budgetID);
 }
