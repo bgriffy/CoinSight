@@ -5,22 +5,42 @@ using CoinConstraint.Server.Util;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization.Infrastructure;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Azure.KeyVault;
+using Microsoft.Azure.Services.AppAuthentication;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Configuration.AzureKeyVault;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
+using Azure.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
+if (!builder.Environment.IsDevelopment())
+{
+    //Configure Azure key vault
+    var keyVaultName = builder.Configuration["KeyVault:VaultName"];
+
+    if (!String.IsNullOrEmpty(keyVaultName))
+    {
+        var keyVaultEndpoint = $"https://{keyVaultName}.vault.azure.net/";
+        var azureServiceTokenProvider = new AzureServiceTokenProvider();
+        var keyVaultAuthCallback = new KeyVaultClient.AuthenticationCallback(azureServiceTokenProvider.KeyVaultTokenCallback);
+        var keyVaultClient = new KeyVaultClient(keyVaultAuthCallback);
+        var vaultPrefixManager = new DefaultKeyVaultSecretManager();
+        builder.Configuration.AddAzureKeyVault(keyVaultEndpoint, keyVaultClient, vaultPrefixManager);
+    }
+}
+
 // Add services to the container.
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
+var connectionString = builder.Configuration["ConnectionString"];
 builder.Services.AddDbContext<CoinConstraintContext>(options =>
               options.UseSqlServer(connectionString));
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+                options.UseSqlServer(connectionString));
 
 builder.Services.AddControllersWithViews();
 
@@ -54,7 +74,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateIssuerSigningKey = true,
             ValidIssuer = builder.Configuration["JwtIssuer"],
             ValidAudience = builder.Configuration["JwtAudience"],
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JwtSecurityKey"]))
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["CoinConstraintJWTSecretKey"]))
         };
     });
 

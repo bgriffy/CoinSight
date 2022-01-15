@@ -13,7 +13,7 @@ namespace CoinConstraint.Client.Pages
 
         protected override void OnInitialized()
         {
-            _isLoading = false; 
+            _isLoading = false;
         }
 
         private async Task HandleLogin()
