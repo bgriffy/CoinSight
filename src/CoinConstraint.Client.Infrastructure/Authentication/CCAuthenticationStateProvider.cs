@@ -25,8 +25,19 @@ public class CCAuthenticationStateProvider : AuthenticationStateProvider
         _httpClient.DefaultRequestHeaders.Authorization =
             new AuthenticationHeaderValue("bearer", savedToken);
 
-        return new AuthenticationState(new ClaimsPrincipal(
-            new ClaimsIdentity(ParseClaimsFromJwt(savedToken), "jwt")));
+        var claimsFromAccessToken = ParseClaimsFromJwt(savedToken);
+
+        var claimsPrinciple = new ClaimsPrincipal(new ClaimsIdentity(claimsFromAccessToken, "jwt"));
+
+        var accessTokenExpiryTime = claimsPrinciple.GetExpirationDate();
+
+        if (accessTokenExpiryTime <= DateTime.Now)
+        {
+            MarkUserAsLoggedOut();
+            return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity()));
+        }
+
+        return new AuthenticationState(claimsPrinciple);
     }
 
     public void MarkUserAsAuthenticated(string email)

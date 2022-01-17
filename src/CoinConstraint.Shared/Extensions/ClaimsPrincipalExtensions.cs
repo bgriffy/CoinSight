@@ -19,4 +19,6 @@ public static class ClaimsPrincipalExtensions
     public static string GetUserId(this ClaimsPrincipal claimsPrincipal)
         => claimsPrincipal.FindFirstValue(ClaimTypes.NameIdentifier);
 
+    public static DateTime GetExpirationDate(this ClaimsPrincipal claimsPrincipal)
+        => DateTime.UnixEpoch.AddSeconds(Convert.ToInt32(claimsPrincipal.FindFirstValue("exp")));
 }
