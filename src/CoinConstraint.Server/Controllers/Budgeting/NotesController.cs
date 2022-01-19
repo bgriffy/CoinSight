@@ -55,6 +55,53 @@ public class NotesController : ControllerBase
         }
     }
 
+    [HttpDelete]
+    public async Task<ActionResult> DeleteNote(Note note)
+    {
+        try
+        {
+            if ((await ActionIsAuthorized(note, Operations.Delete)) == false)
+            {
+                return Unauthorized();
+            }
+
+            _noteRepository.Remove(note);
+            await _noteRepository.SaveChangesAsync();
+
+            return Ok();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine($"Error deleting note: {e.Message}");
+            throw;
+        }
+    }
+
+    [HttpDelete("DeleteMultiple")]
+    public async Task<ActionResult> DeleteExpenses(List<Note> notes)
+    {
+        try
+        {
+            foreach (var note in notes)
+            {
+                if ((await ActionIsAuthorized(note, Operations.Delete)) == false)
+                {
+                    return Unauthorized();
+                }
+            }
+
+            _noteRepository.RemoveRange(notes);
+            await _noteRepository.SaveChangesAsync();
+
+            return Ok();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine($"Error deleting notes: {e.Message}");
+            throw;
+        }
+    }
+
     private async Task<bool> ActionIsAuthorized(Note note, OperationAuthorizationRequirement requirement)
     {
         var authorizationResult = await _authorizationService.AuthorizeAsync(User, note, requirement);
