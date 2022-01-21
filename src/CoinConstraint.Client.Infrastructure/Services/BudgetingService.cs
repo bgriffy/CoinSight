@@ -9,6 +9,7 @@ public class BudgetingService : IBudgetingService
     private List<Budget> _budgets;
     private List<Budget> _budgetsForDeletion;
     private List<Expense> _expensesForDeletion;
+    private List<Note> _notesforDeletion;
     private Guid _currentUserID; 
     
 
@@ -32,6 +33,8 @@ public class BudgetingService : IBudgetingService
 
             _selectedBudget = _budgets.FirstOrDefault();
             _expensesForDeletion = new List<Expense>();
+            _notesforDeletion = new List<Note>();
+
             if (_selectedBudget != null)
             {
                 await SetExpenses(_selectedBudget);
@@ -84,6 +87,11 @@ public class BudgetingService : IBudgetingService
         _expensesForDeletion.Add(expense);
     }
 
+    public void MarkNoteForDeletion(Note note)
+    {
+        _notesforDeletion.Add(note);
+    }
+
     public void AddNewBudget(Budget budget)
     {
         _budgets.Add(budget);
@@ -94,7 +102,7 @@ public class BudgetingService : IBudgetingService
         _budgetsForDeletion.Add(budget);
     }
 
-    public async Task SaveChanges(bool removeDeletedExpenses = false)
+    public async Task SaveChanges(bool saveBudgetsOnly = true)
     {
         try
         {
@@ -114,9 +122,10 @@ public class BudgetingService : IBudgetingService
 
             await RemoveDeletedBudgets();
             
-            if(removeDeletedExpenses)
+            if(!saveBudgetsOnly)
             {
                 await RemoveDeletedExpenses();
+                await RemoveDeletedNotes();
             }
         }
         catch (Exception e)
@@ -185,4 +194,19 @@ public class BudgetingService : IBudgetingService
             throw;
         }
     }
+
+    private async Task RemoveDeletedNotes()
+    {
+        try
+        {
+            await _unitOfWork.Notes.RemoveRangeAsync(_notesforDeletion);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine($"There was an error removing notes from the budgeting service: {e.Message}");
+            throw;
+        }
+    }
+
+
 }

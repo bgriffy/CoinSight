@@ -87,6 +87,12 @@ namespace CoinConstraint.Client.Pages
             _noteModal.Show();
         }
 
+        private void DeleteSelectedNote()
+        {
+            BudgetingService.MarkNoteForDeletion(_selectedNote);
+            _selectedBudget.Notes.Remove(_selectedNote);
+        }
+
         private async Task OpenPaymentURLAsync(Expense expense)
         {
             await JSRuntime.InvokeAsync<object>("open", expense.PaymentURL, "_blank");
@@ -202,7 +208,7 @@ namespace CoinConstraint.Client.Pages
             await _loadSpinner.ShowLoadSpinner();
             SyncData();
             await Task.Delay(1000);
-            await BudgetingService.SaveChanges(removeDeletedExpenses: true);
+            await BudgetingService.SaveChanges(saveBudgetsOnly: false);
             await _loadSpinner.HideLoadSpinner();
             _pageIsLoaded = true;
         }
