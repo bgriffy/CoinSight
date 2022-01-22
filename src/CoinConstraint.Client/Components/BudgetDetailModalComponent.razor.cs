@@ -1,4 +1,5 @@
 ﻿using CoinConstraint.Domain.AggregateModels.BudgetingAggregate.Entities;
+using Microsoft.AspNetCore.Components.Web;
 
 namespace CoinConstraint.Client.Components;
 
@@ -12,6 +13,14 @@ public partial class BudgetDetailModalComponent
 
     [Parameter]
     public EventCallback BudgetModified { get; set; }
+
+    public async Task HandleKeydownEvent(KeyboardEventArgs e)
+    {
+        if (e.Code == "Enter" || e.Code == "NumpadEnter")
+        {
+            await Save();
+        }
+    }
 
     public void ShowNewBudget(Budget newBudget = null)
     {

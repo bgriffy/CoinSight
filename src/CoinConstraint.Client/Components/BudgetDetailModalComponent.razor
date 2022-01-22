@@ -8,25 +8,24 @@
         <ModalBody>
             <Field>
                 <Label>Name</Label>
-                <TextEdit @bind-Text="_budget.Title"></TextEdit>
+                <TextEdit KeyDown=@(async(e) => await HandleKeydownEvent(e)) @bind-Text="_budget.Title"></TextEdit>
             </Field>
 
             <Field>
                 <Label>Start Date</Label>
-                <DateEdit TValue="DateTime" @bind-Date="_budget.StartDate"></DateEdit>
+                <DateEdit KeyDown=@(async(e) => await HandleKeydownEvent(e)) TValue="DateTime" @bind-Date="_budget.StartDate"></DateEdit>
             </Field>
 
             <Field>
                 <Label>End Date</Label>
-                <DateEdit TValue="DateTime" @bind-Date="_budget.EndDate"></DateEdit>
+                <DateEdit KeyDown=@(async(e) => await HandleKeydownEvent(e)) TValue="DateTime" @bind-Date="_budget.EndDate"></DateEdit>
             </Field>
         </ModalBody>
 
         <ModalFooter>
-            <Button Size="Size.Small" Padding="Padding.Is2.OnX.Is1.OnY" Margin="Margin.Is1.FromRight" Color="Color.Primary" Clicked="@(async() => await Save())"><Icon Name="IconName.Save" Margin="Margin.Is0.FromLeft.Is2.FromRight"/>Save</Button>
+            <Button Size="Size.Small" Padding="Padding.Is2.OnX.Is1.OnY" Margin="Margin.Is1.FromRight" Color="Color.Primary" Clicked="@(async() => await Save())"><Icon Name="IconName.Save" Margin="Margin.Is0.FromLeft.Is2.FromRight" />Save</Button>
             <Button Size="Size.Small" Padding="Padding.Is2.OnX.Is1.OnY" Margin="Margin.Is1.FromRight" Color="Color.Secondary" Clicked="@(() => _budgetModal.Hide())">Cancel</Button>
         </ModalFooter>
 
-
-        </ModalContent>
+    </ModalContent>
 </Modal>

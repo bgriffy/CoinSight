@@ -12,13 +12,13 @@
                     <Column ColumnSize="ColumnSize.IsHalf">
                         <Field>
                             <Label>Name</Label>
-                            <TextEdit @bind-Text="_expense.Title"></TextEdit>
+                            <TextEdit KeyDown=@(async(e) => await HandleKeydownEvent(e)) @bind-Text="_expense.Title"></TextEdit>
                         </Field>
                     </Column>
                     <Column ColumnSize="ColumnSize.IsHalf">
                         <Field>
                             <Label>Description</Label>
-                            <TextEdit @bind-Text="_expense.Description"></TextEdit>
+                            <TextEdit KeyDown=@(async(e) => await HandleKeydownEvent(e)) @bind-Text="_expense.Description"></TextEdit>
                         </Field>
                     </Column>
                 </Row>
@@ -27,13 +27,13 @@
                     <Column ColumnSize="ColumnSize.IsHalf">
                         <Field>
                             <Label>Amount</Label>
-                            <NumericEdit TValue="Decimal" @bind-Value="_expense.Amount"></NumericEdit>
+                            <NumericEdit KeyDown=@(async(e) => await HandleKeydownEvent(e)) TValue="Decimal" @bind-Value="_expense.Amount"></NumericEdit>
                         </Field>
                     </Column>
                     <Column ColumnSize="ColumnSize.IsHalf">
                         <Field>
                             <Label>Due Date</Label>
-                            <DateEdit TValue="DateTime" @bind-Date="_expense.DueDate"></DateEdit>
+                            <DateEdit KeyDown=@(async(e) => await HandleKeydownEvent(e)) TValue="DateTime" @bind-Date="_expense.DueDate"></DateEdit>
                         </Field>
                     </Column>
                 </Row>
@@ -65,7 +65,7 @@
                     <Column>
                         <Field>
                             <Label>Payment URL</Label>
-                            <TextEdit @bind-Text="_expense.PaymentURL"></TextEdit>
+                            <TextEdit KeyDown=@(async(e) => await HandleKeydownEvent(e)) @bind-Text="_expense.PaymentURL"></TextEdit>
                         </Field>
                     </Column>
                 </Row>
@@ -74,7 +74,7 @@
                     <Column>
                         <Field>
                             <Label>Note</Label>
-                            <MemoEdit Rows="3" @bind-Text="_expense.Note"></MemoEdit>
+                            <MemoEdit KeyDown=@(async(e) => await HandleKeydownEvent(e)) Rows="3" @bind-Text="_expense.Note"></MemoEdit>
                         </Field>
                     </Column>
                 </Row>
