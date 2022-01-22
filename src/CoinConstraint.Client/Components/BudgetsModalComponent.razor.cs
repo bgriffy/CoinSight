@@ -51,7 +51,7 @@ public partial class BudgetsModalComponent
 
     public void EditBudget(Budget budget)
     {
-        _budgetDetailModal.Show(_selectedBudget);
+        _budgetDetailModal.Show(budget);
     }
 
     private async Task HandleNewBudget(Budget newBudget)
