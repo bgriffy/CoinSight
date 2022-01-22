@@ -30,23 +30,33 @@ namespace CoinConstraint.Client.Pages
 
         public List<Budget> BudgetsForDropdown { get => _budgets.Where(b=> b.ID != 0).ToList(); }
 
-        public async Task LoadData()
+        public async Task LoadData(Budget selectedBudget = null)
         {
             _pageIsLoaded = false;
-            await LoadBudgets();
+
+            if(selectedBudget == null)
+            {
+                await LoadBudgets();
+            }
+            else
+            {
+                await LoadBudgets(selectedBudget);
+            }
+
             await LoadExpenses();
             await _loadSpinner.HideLoadSpinner();
             _pageIsLoaded = true;
             StateHasChanged();
         }
 
-        public async Task LoadBudgets()
+        public async Task LoadBudgets(Budget selectedBudget = null)
         {
             await _loadSpinner.ShowLoadSpinner("Loading budgets...");
             _budgets = BudgetingService.GetAllBudgets();
+
             if(_budgets.Count > 0)
             {
-                _selectedBudget = _budgets.First();
+                _selectedBudget = (selectedBudget != null && _budgets.Any(b=> b.ID == selectedBudget.ID) ? selectedBudget : _budgets.First());
             }
 
             if (_selectedBudget != null)
@@ -136,7 +146,7 @@ namespace CoinConstraint.Client.Pages
         private async Task HandleNewBudget(Budget newBudget)
         {
             BudgetingService.AddNewBudget(newBudget);
-            await LoadData();
+            await LoadData(newBudget);
         }
 
         private async Task HandleBudgetClone(Budget budget)
@@ -198,8 +208,7 @@ namespace CoinConstraint.Client.Pages
             await _loadSpinner.ShowLoadSpinner();
             await Task.Delay(1000);
             await BudgetingService.SaveChanges();
-            await _loadSpinner.HideLoadSpinner();
-            _pageIsLoaded = true;
+            await LoadData(_selectedBudget);
         }
 
         private async Task SaveChanges()
@@ -209,8 +218,7 @@ namespace CoinConstraint.Client.Pages
             SyncData();
             await Task.Delay(1000);
             await BudgetingService.SaveChanges(saveBudgetsOnly: false);
-            await _loadSpinner.HideLoadSpinner();
-            _pageIsLoaded = true;
+            await LoadData(_selectedBudget);
         }
     }
 }
