@@ -1,4 +1,5 @@
-﻿using CoinConstraint.Server.Infrastructure.Identity;
+﻿using CoinConstraint.Application.Identity;
+using CoinConstraint.Server.Infrastructure.Identity;
 using Microsoft.AspNetCore.Authorization.Infrastructure;
 
 namespace CoinConstraint.Server.Controllers.Budgeting;
@@ -11,9 +12,9 @@ namespace CoinConstraint.Server.Controllers.Budgeting;
 public class ExpensesController : ControllerBase
 {
     private readonly IExpenseRepository _expenseRepository;
-    private readonly IAuthorizationService _authorizationService;
+    private readonly ICCAuthorizationService _authorizationService;
 
-    public ExpensesController(IExpenseRepository expenseRepository, IAuthorizationService authorizationService)
+    public ExpensesController(IExpenseRepository expenseRepository, ICCAuthorizationService authorizationService)
     {
         _expenseRepository = expenseRepository;
         _authorizationService = authorizationService;
@@ -29,7 +30,8 @@ public class ExpensesController : ControllerBase
 
             foreach (var expense in expenses)
             {
-                if ((await ActionIsAuthorized(expense, Operations.Read)) == false)
+                var actionIsAuthorized = await _authorizationService.ActionIsAuthorized(User, expense, Operations.Read);
+                if (!actionIsAuthorized)
                 {
                     return Unauthorized();
                 }
@@ -49,7 +51,8 @@ public class ExpensesController : ControllerBase
     {
         try
         {
-            if ((await ActionIsAuthorized(expense, Operations.Create)) == false)
+            var actionIsAuthorized = await _authorizationService.ActionIsAuthorized(User, expense, Operations.Create);
+            if (!actionIsAuthorized)
             {
                 return Unauthorized();
             }
@@ -71,7 +74,8 @@ public class ExpensesController : ControllerBase
     {
         try
         {
-            if ((await ActionIsAuthorized(expense, Operations.Update)) == false)
+            var actionIsAuthorized = await _authorizationService.ActionIsAuthorized(User, expense, Operations.Update);
+            if (!actionIsAuthorized)
             {
                 return Unauthorized();
             }
@@ -93,7 +97,8 @@ public class ExpensesController : ControllerBase
     {
         try
         {
-            if ((await ActionIsAuthorized(expense, Operations.Delete)) == false)
+            var actionIsAuthorized = await _authorizationService.ActionIsAuthorized(User, expense, Operations.Delete);
+            if (!actionIsAuthorized)
             {
                 return Unauthorized();
             }
@@ -117,7 +122,8 @@ public class ExpensesController : ControllerBase
         {
             foreach (var expense in expenses)
             {
-                if ((await ActionIsAuthorized(expense, Operations.Delete)) == false)
+                var actionIsAuthorized = await _authorizationService.ActionIsAuthorized(User, expense, Operations.Delete);
+                if (!actionIsAuthorized)
                 {
                     return Unauthorized();
                 }
@@ -133,13 +139,5 @@ public class ExpensesController : ControllerBase
             Console.WriteLine($"Error deleting expenses: {e.Message}");
             throw;
         }
-    }
-
-    private async Task<bool> ActionIsAuthorized(Expense expense, OperationAuthorizationRequirement requirement)
-    {
-        var authorizationResult = await _authorizationService.AuthorizeAsync(User, expense, requirement);
-        if (!authorizationResult.Succeeded) return false;
-
-        return true;
     }
 }

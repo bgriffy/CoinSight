@@ -44,7 +44,7 @@ public static class ClientsideServiceCollectionExtensions
     {
         serviceCollection.AddAuthorizationCore();
         serviceCollection.AddScoped<AuthenticationStateProvider, CCAuthenticationStateProvider>();
-        serviceCollection.AddScoped<IAuthService, AuthService>();
+        serviceCollection.AddScoped<ICCAuthenticationService, CCAuthenticationService>();
     }
 
 }

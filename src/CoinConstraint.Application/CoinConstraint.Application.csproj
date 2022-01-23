@@ -5,11 +5,17 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\CoinConstraint.Domain\CoinConstraint.Domain.csproj" />
+    <Compile Remove="Models\**" />
+    <EmbeddedResource Remove="Models\**" />
+    <None Remove="Models\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Models\" />
+    <PackageReference Include="Microsoft.AspNetCore.Authorization" Version="6.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CoinConstraint.Domain\CoinConstraint.Domain.csproj" />
   </ItemGroup>
 
 </Project>

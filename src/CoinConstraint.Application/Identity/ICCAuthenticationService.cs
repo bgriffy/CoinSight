@@ -3,7 +3,7 @@ using CoinConstraint.Application.Responses;
 
 namespace CoinConstraint.Application.Identity;
 
-public interface IAuthService
+public interface ICCAuthenticationService
 {
     Task<LoginResponse> Login(LoginRequest loginModel);
     Task Logout();

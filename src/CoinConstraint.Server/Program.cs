@@ -85,7 +85,7 @@ builder.Services.AddAuthorization(options =>
 });
 
 builder.Services.AddTransient<IAuthorizationHandler, BudgetAuthorizationHandler>();
-
+builder.Services.AddTransient<ICCAuthorizationService, CCAuthorizationService>();
 builder.Services.AddScoped<ICurrentUserService, ServersideUserService>();
 
 builder.Services.AddRazorPages();

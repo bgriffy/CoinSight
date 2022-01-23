@@ -6,13 +6,13 @@ using System.Text.Json;
 
 namespace CoinConstraint.Client.Infrastructure.Services
 {
-    public class AuthService : IAuthService
+    public class CCAuthenticationService : ICCAuthenticationService
     {
         private readonly HttpClient _httpClient;
         private readonly AuthenticationStateProvider _authenticationStateProvider;
         private readonly ILocalStorageService _localStorage;
 
-        public AuthService(HttpClient httpClient,
+        public CCAuthenticationService(HttpClient httpClient,
                            AuthenticationStateProvider authenticationStateProvider,
                            ILocalStorageService localStorage)
         {

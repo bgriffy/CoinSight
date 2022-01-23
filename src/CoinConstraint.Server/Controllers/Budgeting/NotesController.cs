@@ -1,4 +1,5 @@
-﻿using CoinConstraint.Server.Infrastructure.Identity;
+﻿using CoinConstraint.Application.Identity;
+using CoinConstraint.Server.Infrastructure.Identity;
 using Microsoft.AspNetCore.Authorization.Infrastructure;
 
 namespace CoinConstraint.Server.Controllers.Budgeting;
@@ -8,28 +9,13 @@ namespace CoinConstraint.Server.Controllers.Budgeting;
 public class NotesController : ControllerBase
 {
     private readonly INoteRepository _noteRepository;
-    private readonly IAuthorizationService _authorizationService;
+    private readonly ICCAuthorizationService _authorizationService;
 
-    public NotesController(INoteRepository noteRepository, IAuthorizationService authorizationService)
+    public NotesController(INoteRepository noteRepository, ICCAuthorizationService authorizationService)
     {
         _noteRepository = noteRepository;
         _authorizationService = authorizationService;
     }
-
-    //[HttpGet]
-    //public async Task<ActionResult<List<Note>>> GetNotesAsync()
-    //{
-    //    try
-    //    {
-    //        var notes = await _noteRepository.GetAllAsync();
-    //        return Ok(notes);
-    //    }
-    //    catch (Exception e)
-    //    {
-    //        Console.WriteLine($"There was an error retrieving notes: {e.Message}");
-    //        throw;
-    //    }
-    //}
 
     [HttpGet("{budgetID}")]
     public async Task<ActionResult<List<Expense>>> GetNotesByBudget(int budgetID)
@@ -40,7 +26,8 @@ public class NotesController : ControllerBase
 
             foreach (var note in notes)
             {
-                if ((await ActionIsAuthorized(note, Operations.Read)) == false)
+                var actionIsAuthorized = await _authorizationService.ActionIsAuthorized(User, note, Operations.Read);
+                if (!actionIsAuthorized)
                 {
                     return Unauthorized();
                 }
@@ -60,7 +47,8 @@ public class NotesController : ControllerBase
     {
         try
         {
-            if ((await ActionIsAuthorized(note, Operations.Delete)) == false)
+            var actionIsAuthorized = await _authorizationService.ActionIsAuthorized(User, note, Operations.Delete);
+            if (!actionIsAuthorized)
             {
                 return Unauthorized();
             }
@@ -78,13 +66,14 @@ public class NotesController : ControllerBase
     }
 
     [HttpDelete("DeleteMultiple")]
-    public async Task<ActionResult> DeleteExpenses(List<Note> notes)
+    public async Task<ActionResult> DeleteNotes(List<Note> notes)
     {
         try
         {
             foreach (var note in notes)
             {
-                if ((await ActionIsAuthorized(note, Operations.Delete)) == false)
+                var actionIsAuthorized = await _authorizationService.ActionIsAuthorized(User, note, Operations.Delete);
+                if (!actionIsAuthorized)
                 {
                     return Unauthorized();
                 }
@@ -101,13 +90,4 @@ public class NotesController : ControllerBase
             throw;
         }
     }
-
-    private async Task<bool> ActionIsAuthorized(Note note, OperationAuthorizationRequirement requirement)
-    {
-        var authorizationResult = await _authorizationService.AuthorizeAsync(User, note, requirement);
-        if (!authorizationResult.Succeeded) return false;
-
-        return true;
-    }
-
 }
