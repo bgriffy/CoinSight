@@ -1,4 +1,5 @@
-﻿using CoinConstraint.Client.Components;
+﻿using Blazor.ModalDialog;
+using CoinConstraint.Client.Components;
 using CoinConstraint.Domain.AggregateModels.BudgetingAggregate.Entities;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.JSInterop;
@@ -33,6 +34,7 @@ namespace CoinConstraint.Client.Pages
         public async Task LoadData(Budget selectedBudget = null)
         {
             _pageIsLoaded = false;
+            _isDirty = false;
 
             if(selectedBudget == null)
             {
@@ -82,9 +84,21 @@ namespace CoinConstraint.Client.Pages
             }
         }
 
-        private void OpenBudgetManagementModal()
+        private async Task OpenBudgetManagementModal()
         {
+            if (_isDirty)
+            {
+                MessageBoxDialogResult result = await PromptForSave();
+                if (result == MessageBoxDialogResult.No) return;
+            }
             _budgetsModal.Show();
+        }
+
+        private async Task<MessageBoxDialogResult> PromptForSave()
+        {
+            var tmpMessage = "You have un-saved changes on this budget. Do you wish to continue without saving?";
+            MessageBoxDialogResult result = await ModalDialog.ShowMessageBoxAsync("Coin Constraint", tmpMessage, MessageBoxButtons.YesNo);
+            return result;
         }
 
         private void OpenExpenseDetailModal()
@@ -135,9 +149,15 @@ namespace CoinConstraint.Client.Pages
 
         public async Task HandleBudgetChange(int? budgetID)
         {
+            if (_isDirty)
+            {
+                MessageBoxDialogResult result = await PromptForSave();
+                if (result == MessageBoxDialogResult.No) return;
+            }
+
             _selectedBudget = _budgets.FirstOrDefault(b => b.ID == budgetID);
             await BudgetingService.SetSelectedBudget(_selectedBudget);
-            await LoadExpenses();
+            await LoadData(_selectedBudget);
             await _loadSpinner.HideLoadSpinner();
 
             StateHasChanged();
@@ -209,6 +229,7 @@ namespace CoinConstraint.Client.Pages
             await Task.Delay(1000);
             await BudgetingService.SaveChanges();
             await LoadData(_selectedBudget);
+            _isDirty = false;
         }
 
         private async Task SaveChanges()
@@ -219,6 +240,7 @@ namespace CoinConstraint.Client.Pages
             await Task.Delay(1000);
             await BudgetingService.SaveChanges(saveBudgetsOnly: false);
             await LoadData(_selectedBudget);
+            _isDirty = false;
         }
     }
 }

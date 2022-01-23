@@ -13,6 +13,7 @@
     <PackageReference Include="Blazorise.Icons.FontAwesome" Version="0.9.5.2" />
     <PackageReference Include="Blazorise.SpinKit" Version="0.9.5.2" />
     <PackageReference Include="BlazorPro.BlazorSize" Version="6.1.0" />
+    <PackageReference Include="LiquidTechnologies.Blazor.ModalDialog" Version="0.9.7" />
     <PackageReference Include="Microsoft.AspNetCore.Authorization" Version="6.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.Components" Version="6.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="6.0.1" />

@@ -1,4 +1,5 @@
-﻿using Blazored.LocalStorage;
+﻿using Blazor.ModalDialog;
+using Blazored.LocalStorage;
 using CoinConstraint.Application.Identity;
 using CoinConstraint.Client.Infrastructure.Authentication;
 using Microsoft.AspNetCore.Components.Authorization;
@@ -36,6 +37,7 @@ public static class ClientsideServiceCollectionExtensions
           .AddFontAwesomeIcons();
         serviceCollection.AddBlazoredLocalStorage();
         serviceCollection.AddMediaQueryService();
+        serviceCollection.AddModalDialog();
     }
 
     public static void AddAuthServices(this IServiceCollection serviceCollection)

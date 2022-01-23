@@ -1,4 +1,5 @@
-﻿using CoinConstraint.Domain.AggregateModels.BudgetingAggregate.Entities;
+﻿using Blazor.ModalDialog;
+using CoinConstraint.Domain.AggregateModels.BudgetingAggregate.Entities;
 using Microsoft.AspNetCore.Components.Web;
 
 namespace CoinConstraint.Client.Components;
@@ -7,12 +8,43 @@ public partial class BudgetDetailModalComponent
 {
     private Blazorise.Modal _budgetModal;
     private Budget _budget = new Budget();
+    private bool _isDirty = false; 
 
     [Parameter]
     public EventCallback<Budget> NewBudgetAdded { get; set; }
 
     [Parameter]
     public EventCallback BudgetModified { get; set; }
+
+    public string BudgetTitle 
+    { 
+        get => _budget.Title;
+        set 
+        { 
+            _budget.Title = value;
+            _isDirty = true;
+        } 
+    }
+
+    public DateTime BudgetStartDate 
+    { 
+        get => _budget.StartDate; 
+        set
+        {
+            _budget.StartDate = value;
+            _isDirty = true;
+        }
+    }
+
+    public DateTime BudgetEndDate
+    {
+        get => _budget.EndDate;
+        set
+        {
+            _budget.EndDate = value;
+            _isDirty = true;
+        }
+    }
 
     public async Task HandleKeydownEvent(KeyboardEventArgs e)
     {
@@ -37,15 +69,30 @@ public partial class BudgetDetailModalComponent
         _budgetModal.Show();
     }
 
-    public async void Show(Budget budget)
+    public void MarkAsDirty()
     {
-        _budget = budget;
-        _budgetModal.Show();
+        _isDirty = true; 
     }
 
-    public void Close()
+    public async Task Show(Budget budget)
     {
-        _budgetModal.Hide();
+        _budget = budget;
+        await _budgetModal.Show();
+    }
+
+    private async Task OnModalClosing(ModalClosingEventArgs e)
+    {
+        if (_isDirty)
+        {
+            var tmpMessage = "You have un-saved changes on this budget. Do you wish to continue without saving?";
+            MessageBoxDialogResult result = await ModalDialog.ShowMessageBoxAsync("Coin Constraint", tmpMessage, MessageBoxButtons.YesNo);
+            if (result == MessageBoxDialogResult.No) e.Cancel = true;
+        }
+    }
+
+    public async Task Close()
+    {
+        await _budgetModal.Hide();
     }
 
     public async Task Save()
@@ -59,7 +106,9 @@ public partial class BudgetDetailModalComponent
             _budget.IsUpdated = true;
             await BudgetModified.InvokeAsync();
         }
-        Close();
+
+        _isDirty = false;
+        await Close();
     }
 
 }

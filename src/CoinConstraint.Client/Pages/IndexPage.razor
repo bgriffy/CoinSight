@@ -194,7 +194,7 @@
                     </DataGridColumns>
 
                     <ButtonRowTemplate>
-                        <Button Size="_isSmallScreen ? Size.ExtraSmall : Size.Small" Padding="Padding.Is2.OnX.Is1.OnY" Margin="Margin.Is2.FromRight.Is2.FromLeft.OnMobile.Is0.FromLeft.OnTablet" Color="Color.Secondary" Clicked=OpenExpenseDetailModal>
+                        <Button Size="_isSmallScreen ? Size.ExtraSmall : Size.Small" Padding="Padding.Is2.OnX.Is1.OnY" Margin="Margin.Is2.FromRight.Is2.FromLeft.OnMobile.Is0.FromLeft.OnTablet.Is4.FromTop" Color="Color.Secondary" Clicked=OpenExpenseDetailModal>
                             <Icon Margin=Margin.Is2.FromRight IconSize="IconSize.Small" Name="@("fas fa-plus-square")"></Icon>
                             @if (_isSmallScreen)
                             {
@@ -207,10 +207,10 @@
                         </Button>
                         @if (_isSmallScreen)
                         {
-                            <Button Size="Size.ExtraSmall" Color="Color.Secondary"  Padding="Padding.Is3.OnX.Is1.OnY" Margin="Margin.Is1.FromRight.Is0.FromLeft"  Clicked="@(() => OpenExpenseDetailModal(context.EditCommand.Item))">
+                            <Button Size="Size.ExtraSmall" Color="Color.Secondary"  Padding="Padding.Is3.OnX.Is1.OnY" Margin="Margin.Is1.FromRight.Is0.FromLeft.Is4.FromTop" Clicked="@(() => OpenExpenseDetailModal(context.EditCommand.Item))">
                                 <Icon Margin=Margin.Is2.FromRight IconSize="IconSize.Small" Name="@("fas fa-pen")"></Icon>Edit
                             </Button>
-                            <Button Size="Size.ExtraSmall" Color="Color.Secondary"  Padding="Padding.Is2.OnX.Is1.OnY" Margin=Margin.Is0.OnX Clicked="context.DeleteCommand.Clicked">
+                            <Button Size="Size.ExtraSmall" Color="Color.Secondary"  Padding="Padding.Is2.OnX.Is1.OnY" Margin=Margin.Is0.OnX.Is1.FromTop.Is4.FromTop Clicked="context.DeleteCommand.Clicked">
                                 <Icon Margin=Margin.Is2.FromRight IconSize="IconSize.Small" Name="@("fas fa-trash-alt")"></Icon>Delete
                             </Button>    
                         }

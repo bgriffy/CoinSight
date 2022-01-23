@@ -200,3 +200,11 @@ a, .btn-link {
 .custom-checkbox .custom-control-input:disabled:checked ~ .custom-control-label::before {
     background: gray !important;
 }
+
+.liquid-modal-dialog-container {
+    z-index: 2000 !important;
+}
+
+.liquid-modal-dialog-wrapper {
+    z-index: 20001 !important;
+}

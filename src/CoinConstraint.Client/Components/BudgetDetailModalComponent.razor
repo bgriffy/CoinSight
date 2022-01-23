@@ -1,4 +1,4 @@
-﻿<Modal @ref="_budgetModal">
+﻿<Modal Closing=OnModalClosing @ref="_budgetModal">
     <ModalContent Centered="true">
         <ModalHeader>
             <ModalTitle>Budget</ModalTitle>
@@ -8,17 +8,17 @@
         <ModalBody>
             <Field>
                 <Label>Name</Label>
-                <TextEdit KeyDown=@(async(e) => await HandleKeydownEvent(e)) @bind-Text="_budget.Title"></TextEdit>
+                <TextEdit KeyDown=@(async(e) => await HandleKeydownEvent(e)) @bind-Text="this.BudgetTitle"></TextEdit>
             </Field>
 
             <Field>
                 <Label>Start Date</Label>
-                <DateEdit KeyDown=@(async(e) => await HandleKeydownEvent(e)) TValue="DateTime" @bind-Date="_budget.StartDate"></DateEdit>
+                <DateEdit KeyDown=@(async(e) => await HandleKeydownEvent(e)) TValue="DateTime" @bind-Date="this.BudgetStartDate"></DateEdit>
             </Field>
 
             <Field>
                 <Label>End Date</Label>
-                <DateEdit KeyDown=@(async(e) => await HandleKeydownEvent(e)) TValue="DateTime" @bind-Date="_budget.EndDate"></DateEdit>
+                <DateEdit KeyDown=@(async(e) => await HandleKeydownEvent(e)) TValue="DateTime" @bind-Date="this.BudgetEndDate"></DateEdit>
             </Field>
         </ModalBody>
 

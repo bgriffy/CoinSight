@@ -1,5 +1,5 @@
 ﻿
-<Modal @ref="_expenseModal">
+<Modal Closing=OnModalClosing @ref="_expenseModal">
     <ModalContent Centered="true">
         <ModalHeader>
             <ModalTitle>Expense</ModalTitle>
@@ -12,13 +12,13 @@
                     <Column ColumnSize="ColumnSize.IsHalf">
                         <Field>
                             <Label>Name</Label>
-                            <TextEdit KeyDown=@(async(e) => await HandleKeydownEvent(e)) @bind-Text="_expense.Title"></TextEdit>
+                            <TextEdit KeyDown=@(async(e) => await HandleKeydownEvent(e)) @bind-Text="this.ExpenseTitle"></TextEdit>
                         </Field>
                     </Column>
                     <Column ColumnSize="ColumnSize.IsHalf">
                         <Field>
                             <Label>Description</Label>
-                            <TextEdit KeyDown=@(async(e) => await HandleKeydownEvent(e)) @bind-Text="_expense.Description"></TextEdit>
+                            <TextEdit KeyDown=@(async(e) => await HandleKeydownEvent(e)) @bind-Text="this.ExpenseDescription"></TextEdit>
                         </Field>
                     </Column>
                 </Row>
@@ -27,13 +27,13 @@
                     <Column ColumnSize="ColumnSize.IsHalf">
                         <Field>
                             <Label>Amount</Label>
-                            <NumericEdit KeyDown=@(async(e) => await HandleKeydownEvent(e)) TValue="Decimal" @bind-Value="_expense.Amount"></NumericEdit>
+                            <NumericEdit KeyDown=@(async(e) => await HandleKeydownEvent(e)) TValue="Decimal" @bind-Value="this.ExpenseAmount"></NumericEdit>
                         </Field>
                     </Column>
                     <Column ColumnSize="ColumnSize.IsHalf">
                         <Field>
                             <Label>Due Date</Label>
-                            <DateEdit KeyDown=@(async(e) => await HandleKeydownEvent(e)) TValue="DateTime" @bind-Date="_expense.DueDate"></DateEdit>
+                            <DateEdit KeyDown=@(async(e) => await HandleKeydownEvent(e)) TValue="DateTime" @bind-Date="this.ExpenseDueDate"></DateEdit>
                         </Field>
                     </Column>
                 </Row>
@@ -42,21 +42,21 @@
                     <Div>
                         <Field Horizontal="true">
                             <Label Margin="Margin.Is2.FromRight">Pay Now</Label>
-                            <Check @bind-Checked="_expense.Pay"></Check>
+                            <Check @bind-Checked="this.ExpensePay"></Check>
                         </Field>
                     </Div>
 
                     <Div>
                         <Field Horizontal="true">
                             <Label Margin="Margin.Is2.FromRight">Paid</Label>
-                            <Check @onclick:preventDefault="true" @onchange:stopPropagation="true" Checked="_expense.Paid"></Check>
+                            <Check @onclick:preventDefault="true" @onchange:stopPropagation="true" Checked="this.ExpensePaid"></Check>
                         </Field>
                     </Div>
 
                     <Div>
                         <Field Horizontal="true" Padding=Padding.Is0>
                             <Label Margin="Margin.Is0.FromRight.OnMobile.Is2.FromRight">Auto-Pay</Label>
-                            <Check @bind-Checked="_expense.Automatic"></Check>
+                            <Check @bind-Checked="this.ExpenseAutoPay"></Check>
                         </Field>
                     </Div>
                 </Row>
