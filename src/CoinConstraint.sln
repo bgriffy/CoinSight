@@ -23,7 +23,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Web", "Web", "{6B46FA96-F84
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{28C43127-06CC-4695-AF97-B74C836693E7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoinConstraint.Shared", "CoinConstraint.Shared\CoinConstraint.Shared.csproj", "{B5BAB521-A40A-4B27-A423-3EF9A0FDF3A2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CoinConstraint.Shared", "CoinConstraint.Shared\CoinConstraint.Shared.csproj", "{B5BAB521-A40A-4B27-A423-3EF9A0FDF3A2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

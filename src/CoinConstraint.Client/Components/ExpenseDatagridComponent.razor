@@ -1,0 +1,166 @@
+﻿<MediaQuery Media="@Breakpoints.SmallDown" @bind-Matches="_isSmallScreen" />
+<MediaQuery Media="@Breakpoints.OnlyMedium" @bind-Matches="_isMediumScreen" />
+<MediaQuery Media="@Breakpoints.LargeUp" @bind-Matches="_isLargeScreen" />
+
+<Card>
+    <CardHeader>
+        Expenses
+    </CardHeader>
+
+    <CardBody Padding=Padding.Is0.OnMobile.Is4.OnTablet>
+        <div>
+            <DataGrid TItem="Expense"
+                      @bind-SelectedRow="@this.SelectedExpense"
+                      Class="expense-grid"
+                      Data="@this.SelectedBudget.Expenses"
+                      CommandMode="_isSmallScreen ? DataGridCommandMode.ButtonRow : DataGridCommandMode.Default"
+                      Filterable="false"
+                      Editable="true"
+                      EditMode="DataGridEditMode.Popup"
+                      FilterMethod="DataGridFilterMethod.StartsWith"
+                      RowRemoved="@HandleDeletedExpense"
+                      ShowPageSizes="false"
+                      ShowPager="true"
+                      Virtualize="true"
+                      VirtualizeOptions="@(new() { DataGridHeight = "400px"})">
+
+                <DataGridColumns>
+
+                    <DataGridColumn Width="150px" TextAlignment="TextAlignment.Left" TItem="Expense" Editable="true" Field="@nameof(Expense.Title)" Caption="Title" Sortable="false">
+                        <CaptionTemplate>
+                            <Div TextAlignment="TextAlignment.Left">
+                                Title
+                            </Div>
+                        </CaptionTemplate>
+                        <DisplayTemplate>
+                            @if (_isSmallScreen)
+                            {
+                                <span>@(context.Title.Truncate(6))</span>
+                            }
+                            else
+                            {
+                                <span>@(context.Title.Truncate(20))</span>
+                            }
+                        </DisplayTemplate>
+                    </DataGridColumn>
+
+                    <DataGridColumn Displayable="(!_isSmallScreen)" Width=250px TItem="Expense" Editable="true" Field="@nameof(Expense.Description)" Caption="Description" Sortable="false">
+                        <DisplayTemplate>
+                            <span class="responsive-expense-column">@(context.Description.Truncate(50))</span>
+                        </DisplayTemplate>
+                    </DataGridColumn>
+
+                    <DataGridColumn TextAlignment="TextAlignment.Center" TItem="Expense" Width=150px Editable="true" Field="@nameof(Expense.Amount)" Caption="Amount" Sortable="false">
+                        <CaptionTemplate>
+                            <Div TextAlignment="TextAlignment.Center">
+                                Amount
+                            </Div>
+                        </CaptionTemplate>
+                        <DisplayTemplate>
+                            @String.Format("{0:C}", ( context as Expense )?.Amount)
+                        </DisplayTemplate>
+                    </DataGridColumn>
+
+                    <DataGridColumn TextAlignment="TextAlignment.Center" Width=150px TItem="Expense" Editable="true" Field="@nameof(Expense.DueDate)" Caption="Due Date" Sortable="false">
+                        <CaptionTemplate>
+                            <Div TextAlignment="TextAlignment.Center">
+                                Due Date
+                            </Div>
+                        </CaptionTemplate>
+                        <DisplayTemplate>
+                            @($"{( context as Expense )?.DueDate.Date.ToString("MM/dd/yyyy")}")
+                        </DisplayTemplate>
+                    </DataGridColumn>
+
+                    <DataGridColumn Displayable="(!_isSmallScreen)" Width=100px TItem="Expense" TextAlignment="TextAlignment.Center" Editable="true" Field="@nameof(Expense.Pay)" Caption="Pay Now" Sortable="false">
+                        <CaptionTemplate>
+                            <Div TextAlignment="TextAlignment.Center">Pay Now</Div>
+                        </CaptionTemplate>
+                        <DisplayTemplate>
+                            <Check TValue="bool" Checked="context.Pay" Disabled="true" ReadOnly="true" />
+                        </DisplayTemplate>
+                    </DataGridColumn>
+
+                    <DataGridColumn Displayable="(!_isSmallScreen)" Width=100px TextAlignment="TextAlignment.Center" TItem="Expense" Editable="true" Field="@nameof(Expense.Paid)" Caption="Paid" Sortable="false">
+                        <CaptionTemplate>
+                            <Div TextAlignment="TextAlignment.Center">Paid</Div>
+                        </CaptionTemplate>
+                        <DisplayTemplate>
+                            <Check TValue="bool" Checked="context.Paid" Disabled="true" ReadOnly="true" />
+                        </DisplayTemplate>
+                    </DataGridColumn>
+
+                    <DataGridColumn Displayable="(!_isSmallScreen)" Width=100px TextAlignment="TextAlignment.Center" TItem="Expense" Editable="true" Field="@nameof(Expense.Automatic)" Caption="Auto-Pay" Sortable="false">
+                        <CaptionTemplate>
+                            <Div TextAlignment="TextAlignment.Center">Auto-Pay</Div>
+                        </CaptionTemplate>
+                        <DisplayTemplate>
+                            <Check TValue="bool" Checked="context.Automatic" Disabled="true" ReadOnly="true" />
+                        </DisplayTemplate>
+                    </DataGridColumn>
+
+                    <DataGridColumn Displayable="(!_isSmallScreen)" TItem="Expense" Editable="true" Field="@nameof(Expense.Note)" Width=250px Caption="Note" Sortable="false">
+                        <DisplayTemplate>
+                            @(context.Note.Truncate(50))
+                        </DisplayTemplate>
+                    </DataGridColumn>
+
+                    <DataGridColumn TItem="Expense" Editable="true" Field="@nameof(Expense.PaymentURL)" Width=100px ShowCaption=false Sortable="false">
+                        <DisplayTemplate>
+                            <div>
+                                <Button Size="Size.ExtraSmall" Class="expense-grid-responsive-button" Color="Color.Secondary" Padding="Padding.Is3.OnX.Is1.OnY" Margin="Margin.Is0.OnX" Clicked="@(async () => await OpenPaymentURLAsync(context))">
+                                    @if (_isSmallScreen)
+                                    {
+                                        <span>Pay</span>
+                                    }
+                                    else
+                                    {
+                                        <span><Icon Margin=Margin.Is2.FromRight IconSize="IconSize.Small" Name="@("fas fa-dollar-sign")"></Icon>Pay</span>
+                                    }
+                                </Button>
+                            </div>
+                        </DisplayTemplate>
+                    </DataGridColumn>
+
+                    <DataGridCommandColumn TItem="Expense" Displayable="(!_isSmallScreen)">
+                        <EditCommandTemplate>
+                            <Button Size="Size.ExtraSmall" Color="Color.Secondary" Padding="Padding.Is3.OnX.Is1.OnY" Margin="Margin.Is4.FromRight.Is0.FromLeft" Clicked="@(async() => await OpenExpenseDetailModal(context.Item))">
+                                <Icon Margin=Margin.Is2.FromRight IconSize="IconSize.Small" Name="@("fas fa-pen")"></Icon>@context.LocalizationString
+                            </Button>
+                        </EditCommandTemplate>
+                        <DeleteCommandTemplate>
+                            <Button Size="Size.ExtraSmall" Color="Color.Secondary" Padding="Padding.Is2.OnX.Is1.OnY" Clicked="context.Clicked">
+                                <Icon Margin=Margin.Is2.FromRight IconSize="IconSize.Small" Name="@("fas fa-trash-alt")"></Icon>@context.LocalizationString
+                            </Button>
+                        </DeleteCommandTemplate>
+                        <NewCommandTemplate></NewCommandTemplate>
+                    </DataGridCommandColumn>
+
+                </DataGridColumns>
+
+                <ButtonRowTemplate>
+                    <Button Size="_isSmallScreen ? Size.ExtraSmall : Size.Small" Padding="Padding.Is2.OnX.Is1.OnY" Margin="Margin.Is2.FromRight.Is2.FromLeft.OnMobile.Is0.FromLeft.OnTablet.Is4.FromTop" Color="Color.Secondary" Clicked="@(async () => await OpenNewExpenseDetailModal())">
+                        <Icon Margin=Margin.Is2.FromRight IconSize="IconSize.Small" Name="@("fas fa-plus-square")"></Icon>
+                        @if (_isSmallScreen)
+                        {
+                            <span>Add</span>
+                        }
+                        else
+                        {
+                            <span>Add Expense</span>
+                        }
+                    </Button>
+                    @if (_isSmallScreen)
+                    {
+                        <Button Size="Size.ExtraSmall" Color="Color.Secondary" Padding="Padding.Is3.OnX.Is1.OnY" Margin="Margin.Is1.FromRight.Is0.FromLeft.Is4.FromTop" Clicked="@(() => OpenExpenseDetailModal(context.EditCommand.Item))">
+                            <Icon Margin=Margin.Is2.FromRight IconSize="IconSize.Small" Name="@("fas fa-pen")"></Icon>Edit
+                        </Button>
+                        <Button Size="Size.ExtraSmall" Color="Color.Secondary" Padding="Padding.Is2.OnX.Is1.OnY" Margin=Margin.Is0.OnX.Is1.FromTop.Is4.FromTop Clicked="context.DeleteCommand.Clicked">
+                            <Icon Margin=Margin.Is2.FromRight IconSize="IconSize.Small" Name="@("fas fa-trash-alt")"></Icon>Delete
+                        </Button>
+                    }
+                </ButtonRowTemplate>
+            </DataGrid>
+        </div>
+    </CardBody>
+</Card>
