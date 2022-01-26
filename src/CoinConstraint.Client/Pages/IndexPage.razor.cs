@@ -111,6 +111,12 @@ namespace CoinConstraint.Client.Pages
             _noteModal.Show();
         }
 
+        private void DeleteNote(Note note)
+        {
+            BudgetingService.MarkNoteForDeletion(note);
+            _selectedBudget.Notes.Remove(note);
+        }
+
         private void DeleteSelectedNote()
         {
             BudgetingService.MarkNoteForDeletion(_selectedNote);
