@@ -1,0 +1,24 @@
+﻿<SelectList TItem=Budget
+        TValue="int?"
+        Data=@this.Budgets
+        TextField=@((budget) => budget.Title)
+        ValueField=@((budget) => budget.ID)
+        SelectedValue=@this.SelectedBudget.ID
+        SelectedValueChanged=@(async(budgetID) => await HandleBudgetChange(budgetID))>
+</SelectList>
+
+@code {
+    [Parameter]
+    public List<Budget> Budgets { get; set; }
+
+    [Parameter]
+    public Budget SelectedBudget { get; set; }
+
+    [Parameter]
+    public EventCallback<int?> SelectedBudgetChanged { get; set; }
+
+    public async Task HandleBudgetChange(int? budgetID)
+    {
+        await SelectedBudgetChanged.InvokeAsync(budgetID);
+    }
+}

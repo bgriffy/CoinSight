@@ -32,14 +32,10 @@
     <Field Horizontal="true" Margin="Margin.Is1.FromLeft">
         <Label Margin="Margin.Is4.FromRight.Is2.FromTop">Budgets</Label>
         <FieldBody>
-            <SelectList TItem=Budget
-                    TValue="int?"
-                    Data=@this.BudgetsForDropdown
-                    TextField=@((budget) => budget.Title)
-                    ValueField=@((budget) => budget.ID)
-                    SelectedValue=@_selectedBudget.ID
-                    SelectedValueChanged=@(async(budgetID) => await HandleBudgetChange(budgetID))>
-            </SelectList>
+            <BudgetDropdownComponent Budgets=@this.BudgetsForDropdown
+                                     SelectedBudget=_selectedBudget
+                                     SelectedBudgetChanged=@(async(budgetID) => await HandleBudgetChange(budgetID))>
+            </BudgetDropdownComponent>
         </FieldBody>
         <Button Margin="Margin.Is2.OnY.OnMobile.Is0.FromTop.OnTablet.Is2.Is4.FromLeft"
             Color="Color.Primary"
@@ -71,29 +67,6 @@
                                NoteDeletionRequested="@((note) => DeleteNote(note))"
                                Notes=_selectedBudget.Notes>
             </NoteDatagridComponent>
-        </Column>
-
-        <Column ColumnSize=ColumnSize.Is4.OnTablet.Is3.OnWidescreen>
-            <div>
-                <Card Margin="Margin.Is4.OnY">
-                    <CardHeader>Totals</CardHeader>
-                    <Row>
-                        <Field Margin="Margin.Is4.FromLeft.Is2.FromTop" ColumnSize="ColumnSize.Is4.OnMobile.Is2.OnWidescreen">
-                            <Label Class="index-page-total-label" Margin="Margin.Is4.FromRight.Is2.FromTop">Budget Amount</Label>
-                            <FieldBody>
-                                <TextEdit MaskType="MaskType.Numeric" Size="Size.Small" Text="@_budgetAmountText" TextChanged=HandleBudgetAmountChange></TextEdit>
-                            </FieldBody>
-                        </Field>
-
-                        <Field Margin="Margin.Is1.FromLeft.Is2.FromTop" ColumnSize="ColumnSize.Is4.OnMobile.Is2.OnWidescreen">
-                            <Label Class="index-page-total-label" Margin="Margin.Is4.FromRight.Is2.FromTop">Expensed Amount</Label>
-                            <FieldBody>
-                                <TextEdit Size="Size.Small" MaskType="MaskType.Numeric" Disabled="true" Text="@_selectedBudget.ExpensedAmount.ToString()"></TextEdit>
-                            </FieldBody>
-                        </Field>
-                    </Row>
-                </Card>
-            </div>
         </Column>
 
         <Column ColumnSize=ColumnSize.Is4.OnTablet.Is3.OnWidescreen>
