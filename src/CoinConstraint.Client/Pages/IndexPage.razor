@@ -9,33 +9,33 @@
 <MediaQuery Media="@Breakpoints.OnlyMedium" @bind-Matches="_isMediumScreen" />
 <MediaQuery Media="@Breakpoints.LargeUp" @bind-Matches="_isLargeScreen" />
 
-<LoadSpinnerComponent @ref="_loadSpinner"></LoadSpinnerComponent>
+<LoadSpinner @ref="_loadSpinner"></LoadSpinner>
 
-<ExpenseDetailComponent @ref="_expenseModal"
+<ExpenseDetailModal @ref="_expenseModal"
                         ExpenseAdded=HandleNewExpense
                         ExpenseUpdated=HandleUpdatedExpenses>
-</ExpenseDetailComponent>
+</ExpenseDetailModal>
 
-<BudgetsModalComponent @ref="_budgetsModal"
+<BudgetsModal @ref="_budgetsModal"
                        Budgets="_budgets"
                        BudgetAdded=HandleNewBudget
                        BudgetCloneRequested=HandleBudgetClone
                        BudgetModified=HandleUpdatedBudgets
                        BudgetDeleted=HandleDeletedBudget
                        BudgetsSaveRequested="@(async() => await SaveBudgets())">
-</BudgetsModalComponent>
+</BudgetsModal>
 
-<NoteModalComponent @ref="_noteModal" NoteAdded=HandleNewNote />
+<NoteModal @ref="_noteModal" NoteAdded=HandleNewNote />
 
 @if (_pageIsLoaded)
 {
     <Field Horizontal="true" Margin="Margin.Is1.FromLeft">
         <Label Margin="Margin.Is4.FromRight.Is2.FromTop">Budgets</Label>
         <FieldBody>
-            <BudgetDropdownComponent Budgets=@this.BudgetsForDropdown
+            <BudgetDropdown Budgets=@this.BudgetsForDropdown
                                      SelectedBudget=_selectedBudget
                                      SelectedBudgetChanged=@(async(budgetID) => await HandleBudgetChange(budgetID))>
-            </BudgetDropdownComponent>
+            </BudgetDropdown>
         </FieldBody>
         <Button Margin="Margin.Is2.OnY.OnMobile.Is0.FromTop.OnTablet.Is2.Is4.FromLeft"
             Color="Color.Primary"
@@ -53,27 +53,27 @@
         </Button>
     </Field>
 
-    <ExpenseDatagridComponent ExpenseDeleted=HandleDeletedExpense
-                          ExpenseDetailRequested="@((expense) => OpenExpenseDetailModal(expense))"
-                          NewExpenseDetailRequested=OpenExpenseDetailModal
+    <ExpenseDatagrid ExpenseDeleted=HandleDeletedExpense
+                          ExpenseDetailModalRequested="@((expense) => OpenExpenseDetailModalModal(expense))"
+                          NewExpenseDetailModalRequested=OpenExpenseDetailModalModal
                           ExpensePaymentRequested="@(async(expense) => await OpenPaymentURLAsync(expense))"
                           SelectedBudget=_selectedBudget
                           SelectedExpense=_selectedExpense>
-    </ExpenseDatagridComponent>
+    </ExpenseDatagrid>
 
     <Row>
         <Column ColumnSize=ColumnSize.Is4.OnTablet.Is3.OnWidescreen>
-            <NoteDatagridComponent NewNoteModalRequested=OpenNoteModalForNewNote
+            <NoteDatagrid NewNoteModalRequested=OpenNoteModalForNewNote
                                NoteDeletionRequested="@((note) => DeleteNote(note))"
                                Notes=_selectedBudget.Notes>
-            </NoteDatagridComponent>
+            </NoteDatagrid>
         </Column>
 
         <Column ColumnSize=ColumnSize.Is4.OnTablet.Is3.OnWidescreen>
-            <BudgetTotalsSectionComponent BudgetAmount="@_selectedBudget.BudgetedAmount" 
+            <BudgetTotalsSection BudgetAmount="@_selectedBudget.BudgetedAmount" 
                                           ExpensedAmount="@_selectedBudget.ExpensedAmount" 
                                           BudgetAmountChanged="@(() => _isDirty = true)">
-            </BudgetTotalsSectionComponent>
+            </BudgetTotalsSection>
         </Column>
     </Row>
 

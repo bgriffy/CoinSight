@@ -12,10 +12,10 @@ namespace CoinConstraint.Client.Pages
         private Budget _selectedBudget = new Budget();
         private Expense _selectedExpense;
         private Note _selectedNote;
-        private LoadSpinnerComponent _loadSpinner;
-        private ExpenseDetailComponent _expenseModal;
-        private BudgetsModalComponent _budgetsModal;
-        private NoteModalComponent _noteModal;
+        private LoadSpinner _loadSpinner;
+        private ExpenseDetailModal _expenseModal;
+        private BudgetsModal _budgetsModal;
+        private NoteModal _noteModal;
         private string _budgetAmountText;
         private bool _isDirty;
         private bool _isSmallScreen; 
@@ -101,7 +101,7 @@ namespace CoinConstraint.Client.Pages
             return result;
         }
 
-        private void OpenExpenseDetailModal()
+        private void OpenExpenseDetailModalModal()
         {
             _expenseModal.ShowNewExpense();
         }
@@ -128,7 +128,7 @@ namespace CoinConstraint.Client.Pages
             await JSRuntime.InvokeAsync<object>("open", expense.PaymentURL, "_blank");
         }
 
-        private void OpenExpenseDetailModal(Expense expense)
+        private void OpenExpenseDetailModalModal(Expense expense)
         {
             _expenseModal.ShowExpense(expense);
         }

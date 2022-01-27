@@ -8,7 +8,7 @@ namespace CoinConstraint.Client.Pages
         private LoginRequest loginRequest = new LoginRequest();
         private bool ShowErrors;
         private string Error = "";
-        private LoadSpinnerComponent _loadSpinner;
+        private LoadSpinner _loadSpinner;
         private bool _isLoading;
 
         protected override void OnInitialized()

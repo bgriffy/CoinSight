@@ -2,10 +2,10 @@
 
 namespace CoinConstraint.Client.Components;
 
-public partial class BudgetsModalComponent
+public partial class BudgetsModal
 {
     private Blazorise.Modal _budgetsModal;
-    private BudgetDetailModalComponent _budgetDetailModal;
+    private BudgetDetailModal _budgetDetailModal;
     private Budget _selectedBudget;
     private bool _isDirty = false;
     private bool _isSmallScreen;

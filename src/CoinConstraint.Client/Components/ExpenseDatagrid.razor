@@ -124,7 +124,7 @@
 
                     <DataGridCommandColumn TItem="Expense" Displayable="(!_isSmallScreen)">
                         <EditCommandTemplate>
-                            <Button Size="Size.ExtraSmall" Color="Color.Secondary" Padding="Padding.Is3.OnX.Is1.OnY" Margin="Margin.Is4.FromRight.Is0.FromLeft" Clicked="@(async() => await OpenExpenseDetailModal(context.Item))">
+                            <Button Size="Size.ExtraSmall" Color="Color.Secondary" Padding="Padding.Is3.OnX.Is1.OnY" Margin="Margin.Is4.FromRight.Is0.FromLeft" Clicked="@(async() => await OpenExpenseDetailModalModal(context.Item))">
                                 <Icon Margin=Margin.Is2.FromRight IconSize="IconSize.Small" Name="@("fas fa-pen")"></Icon>@context.LocalizationString
                             </Button>
                         </EditCommandTemplate>
@@ -139,7 +139,7 @@
                 </DataGridColumns>
 
                 <ButtonRowTemplate>
-                    <Button Size="_isSmallScreen ? Size.ExtraSmall : Size.Small" Padding="Padding.Is2.OnX.Is1.OnY" Margin="Margin.Is2.FromRight.Is2.FromLeft.OnMobile.Is0.FromLeft.OnTablet.Is4.FromTop" Color="Color.Secondary" Clicked="@(async () => await OpenNewExpenseDetailModal())">
+                    <Button Size="_isSmallScreen ? Size.ExtraSmall : Size.Small" Padding="Padding.Is2.OnX.Is1.OnY" Margin="Margin.Is2.FromRight.Is2.FromLeft.OnMobile.Is0.FromLeft.OnTablet.Is4.FromTop" Color="Color.Secondary" Clicked="@(async () => await OpenNewExpenseDetailModalModal())">
                         <Icon Margin=Margin.Is2.FromRight IconSize="IconSize.Small" Name="@("fas fa-plus-square")"></Icon>
                         @if (_isSmallScreen)
                         {
@@ -152,7 +152,7 @@
                     </Button>
                     @if (_isSmallScreen)
                     {
-                        <Button Size="Size.ExtraSmall" Color="Color.Secondary" Padding="Padding.Is3.OnX.Is1.OnY" Margin="Margin.Is1.FromRight.Is0.FromLeft.Is4.FromTop" Clicked="@(() => OpenExpenseDetailModal(context.EditCommand.Item))">
+                        <Button Size="Size.ExtraSmall" Color="Color.Secondary" Padding="Padding.Is3.OnX.Is1.OnY" Margin="Margin.Is1.FromRight.Is0.FromLeft.Is4.FromTop" Clicked="@(() => OpenExpenseDetailModalModal(context.EditCommand.Item))">
                             <Icon Margin=Margin.Is2.FromRight IconSize="IconSize.Small" Name="@("fas fa-pen")"></Icon>Edit
                         </Button>
                         <Button Size="Size.ExtraSmall" Color="Color.Secondary" Padding="Padding.Is2.OnX.Is1.OnY" Margin=Margin.Is0.OnX.Is1.FromTop.Is4.FromTop Clicked="context.DeleteCommand.Clicked">

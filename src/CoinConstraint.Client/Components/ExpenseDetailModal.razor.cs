@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Components.Web;
 
 namespace CoinConstraint.Client.Components;
 
-public partial class ExpenseDetailComponent
+public partial class ExpenseDetailModal
 {
     private Blazorise.Modal _expenseModal;
     private Expense _expense;

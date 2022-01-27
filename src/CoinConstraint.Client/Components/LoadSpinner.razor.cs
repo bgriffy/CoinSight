@@ -1,6 +1,6 @@
 ﻿namespace CoinConstraint.Client.Components;
 
-public partial class LoadSpinnerComponent
+public partial class LoadSpinner
 {
     [Parameter]
     public string LoadMessage { get; set; }

@@ -2,7 +2,7 @@
 
 namespace CoinConstraint.Client.Components;
 
-public partial class ExpenseDatagridComponent
+public partial class ExpenseDatagrid
 {
     private bool _isSmallScreen;
     private bool _isMediumScreen;
@@ -21,10 +21,10 @@ public partial class ExpenseDatagridComponent
     public EventCallback<Expense> ExpensePaymentRequested { get; set; }
 
     [Parameter]
-    public EventCallback<Expense> ExpenseDetailRequested { get; set; }
+    public EventCallback<Expense> ExpenseDetailModalRequested { get; set; }
 
     [Parameter]
-    public EventCallback NewExpenseDetailRequested { get; set; }
+    public EventCallback NewExpenseDetailModalRequested { get; set; }
 
     private async Task HandleDeletedExpense(Expense expense)
     {
@@ -36,13 +36,13 @@ public partial class ExpenseDatagridComponent
         await ExpensePaymentRequested.InvokeAsync(expense);
     }
 
-    private async Task OpenExpenseDetailModal(Expense expense)
+    private async Task OpenExpenseDetailModalModal(Expense expense)
     {
-        await ExpenseDetailRequested.InvokeAsync(expense);
+        await ExpenseDetailModalRequested.InvokeAsync(expense);
     }
 
-    private async Task OpenNewExpenseDetailModal()
+    private async Task OpenNewExpenseDetailModalModal()
     {
-        await NewExpenseDetailRequested.InvokeAsync();
+        await NewExpenseDetailModalRequested.InvokeAsync();
     }
 }

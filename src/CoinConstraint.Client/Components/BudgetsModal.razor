@@ -7,10 +7,10 @@
 
         <ModalBody>
 
-            <BudgetDetailModalComponent @ref="_budgetDetailModal"
+            <BudgetDetailModal @ref="_budgetDetailModal"
                             NewBudgetAdded=HandleNewBudget
                             BudgetModified=HandleModifiedBudget>
-            </BudgetDetailModalComponent>
+            </BudgetDetailModal>
 
             <MediaQuery Media="@Breakpoints.SmallDown" @bind-Matches="_isSmallScreen" />
             <MediaQuery Media="@Breakpoints.OnlyMedium" @bind-Matches="_isMediumScreen" />

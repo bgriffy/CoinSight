@@ -2,7 +2,7 @@
 
 namespace CoinConstraint.Client.Components;
 
-public partial class NoteDatagridComponent
+public partial class NoteDatagrid
 {
     [Parameter]
     public Note SelectedNote { get; set; }
