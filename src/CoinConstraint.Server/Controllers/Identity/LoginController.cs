@@ -40,6 +40,7 @@ namespace AddIdentityWasm.Server.Controllers
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["CoinConstraintJWTSecretKey"]));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
             var expiry = DateTime.Now.AddDays(Convert.ToInt32(_configuration["JwtExpiryInDays"]));
+            //var expiry = DateTime.Now.AddMinutes(2);
 
             var token = new JwtSecurityToken(
                 _configuration["JwtIssuer"],

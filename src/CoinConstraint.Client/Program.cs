@@ -1,3 +1,5 @@
+using CoinConstraint.Client.Infrastructure.Authentication;
+
 namespace CoinConstraint.Client;
 
 public class Program
@@ -9,6 +11,15 @@ public class Program
         builder.RootComponents.Add<App>("#app");
 
         builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
+
+        builder.Services.AddTransient<CCAuthenticationHeaderHandler>();
+
+        builder.Services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>().CreateClient("CoinConstraint.API"));
+
+        builder.Services.AddHttpClient("CoinConstraint.API", client =>
+        {
+            client.BaseAddress = new Uri(builder.HostEnvironment.BaseAddress);
+        }).AddHttpMessageHandler<CCAuthenticationHeaderHandler>();
 
         builder.Services.AddThirdPartyServices();
         builder.Services.AddRepositores();
