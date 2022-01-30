@@ -35,12 +35,6 @@ public class BudgetingService : IBudgetingService
             _expensesForDeletion = new List<Expense>();
             _notesforDeletion = new List<Note>();
 
-            if (_selectedBudget != null)
-            {
-                await SetExpenses(_selectedBudget);
-                await SetNotes(_selectedBudget);
-            }
-
         }
         catch (Exception e)
         {
@@ -58,28 +52,11 @@ public class BudgetingService : IBudgetingService
     public async Task SetSelectedBudget(Budget selectedBudget)
     {
         _selectedBudget = selectedBudget;
-        await LoadBudgetData(_selectedBudget);
-    }
-
-    public async Task LoadBudgetData(Budget budget)
-    {
-        await SetExpenses(budget);
-        await SetNotes(budget);
     }
 
     public List<Budget> GetAllBudgets()
     {
         return _budgets;
-    }
-
-    public async Task SetExpenses(Budget budget)
-    {
-        budget.Expenses = await _unitOfWork.Expenses.GetExpensesByBudget(budget.ID);
-    }
-
-    private async Task SetNotes(Budget budget)
-    {
-        budget.Notes = await _unitOfWork.Notes.GetNotesByBudgetID(budget.ID);
     }
 
     public void MarkExpenseForDeletion(Expense expense)

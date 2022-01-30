@@ -7,7 +7,6 @@ public interface IBudgetingService
     void AddNewBudget(Budget budget);
     List<Budget> GetAllBudgets();
     Task Init();
-    Task LoadBudgetData(Budget budget);
     void MarkBudgetForDeletion(Budget budget);
     void MarkExpenseForDeletion(Expense expense);
     void MarkNoteForDeletion(Note note);

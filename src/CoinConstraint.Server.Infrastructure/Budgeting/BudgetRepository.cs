@@ -11,12 +11,20 @@ public class BudgetRepository : ServersideRepository<Budget>, IBudgetRepository
 
     public Budget GetBudgetByID(int? id)
     {
-        return _context.Budgets.FirstOrDefault(b => b.ID == id);
+        return _context.Budgets.Include(b => b.Expenses)
+            .Include(b => b.Notes)
+            .Include(b => b.BudgetSchedules)
+            .FirstOrDefault(b => b.ID == id);
     }
 
     public async Task<List<Budget>> GetBudgetsByUser(Guid userID)
     {
-        return await _context.Budgets.Where(e => e.UUID == userID).ToListAsync();
+        var budgets = await _context.Budgets.Where(e => e.UUID == userID)
+            .Include(b => b.Expenses)
+            .Include(b => b.Notes)
+            .Include(b => b.BudgetSchedules)
+            .ToListAsync();
+        return budgets; 
     }
 
     public bool BudgetExists(int? budgetID)

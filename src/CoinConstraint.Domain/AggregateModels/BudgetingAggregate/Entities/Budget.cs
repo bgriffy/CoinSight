@@ -22,6 +22,8 @@ public class Budget
 
     public decimal BudgetedAmount { get; set; }
 
+    public List<BudgetSchedule> BudgetSchedules { get; set; } = new List<BudgetSchedule>();
+
     public decimal ExpensedAmount
     {
         get => Expenses.Sum(e => e.Amount);

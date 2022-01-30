@@ -4,6 +4,7 @@ using CoinConstraint.Server.Infrastructure.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CoinConstraint.Server.Infrastructure.Migrations
 {
     [DbContext(typeof(CoinConstraintContext))]
-    partial class CoinConstraintContextModelSnapshot : ModelSnapshot
+    [Migration("20220130161115_AddBudgetScheduleEntity2")]
+    partial class AddBudgetScheduleEntity2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -233,11 +235,13 @@ namespace CoinConstraint.Server.Infrastructure.Migrations
 
             modelBuilder.Entity("CoinConstraint.Domain.AggregateModels.BudgetingAggregate.Entities.BudgetSchedule", b =>
                 {
-                    b.HasOne("CoinConstraint.Domain.AggregateModels.BudgetingAggregate.Entities.Budget", null)
+                    b.HasOne("CoinConstraint.Domain.AggregateModels.BudgetingAggregate.Entities.Budget", "Budget")
                         .WithMany("BudgetSchedules")
                         .HasForeignKey("BudgetID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Budget");
                 });
 
             modelBuilder.Entity("CoinConstraint.Domain.AggregateModels.BudgetingAggregate.Entities.Expense", b =>
