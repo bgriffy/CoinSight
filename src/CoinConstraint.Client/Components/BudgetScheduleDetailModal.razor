@@ -1,0 +1,67 @@
+﻿<Modal>
+    <ModalContent>
+        <ModalHeader>
+            <ModalTitle>Budget Schedule</ModalTitle>
+            <CloseButton></CloseButton>
+            <ModalBody Class="expense-modal-body">
+                
+                <Row>
+                    <Column ColumnSize="ColumnSize.IsHalf">
+                        <Field>
+                            <Label>Start Date</Label>
+                            <DateEdit KeyDown=@(async(e) => await HandleKeydownEvent(e)) TValue="DateTime" @bind-Date="_schedule.StartDate"></DateEdit>
+                        </Field>
+                    </Column>
+                    <Column ColumnSize="ColumnSize.IsHalf">
+                        <Field>
+                            <Label>End Date</Label>
+                            <DateEdit KeyDown=@(async(e) => await HandleKeydownEvent(e)) TValue="DateTime" @bind-Date="_schedule.EndDate"></DateEdit>
+                        </Field>
+                    </Column>
+                </Row>
+            </ModalBody>
+        </ModalHeader>
+    </ModalContent>
+</Modal>
+
+
+@code {
+    private Blazorise.Modal _scheduleModal;
+    private BudgetSchedule _schedule;
+    private bool _isDirty = false; 
+
+    [Parameter]
+    public EventCallback<BudgetSchedule> BudgetScheduleAdded { get; set; }
+
+    [Parameter]
+    public EventCallback BudgetScheduleUpdated { get; set; }
+
+    [Parameter]
+    public BudgetSchedule BudgetSchedule { get; set; }
+
+    public async Task HandleKeydownEvent(KeyboardEventArgs e)
+    {
+        if (e.Code == "Enter" || e.Code == "NumpadEnter")
+        {
+            await Save();
+        }
+    }
+
+    private async Task Save()
+    {
+        if (_schedule.IsNew)
+        {
+            await BudgetScheduleAdded.InvokeAsync(_schedule);
+        }
+        else
+        {
+            _schedule.IsUpdated = true;
+            await BudgetScheduleUpdated.InvokeAsync();
+        }
+
+        _isDirty = false;
+        
+        await _scheduleModal.Hide();
+    }
+
+}

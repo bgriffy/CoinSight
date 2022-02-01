@@ -18,5 +18,9 @@ namespace CoinConstraint.Domain.AggregateModels.BudgetingAggregate.Entities
         public DateTime NextScheduledDate { get; set; }
 
         public DateTime LastScheduledDate { get; set; }
+
+        public bool IsNew { get; set; }
+
+        public bool IsUpdated { get; set; } 
     }
 }
