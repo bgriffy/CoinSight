@@ -1,10 +1,13 @@
-﻿<Modal>
+﻿@using CoinConstraint.Domain.Enums
+<Modal @ref=_scheduleModal>
     <ModalContent>
         <ModalHeader>
             <ModalTitle>Budget Schedule</ModalTitle>
             <CloseButton></CloseButton>
-            <ModalBody Class="expense-modal-body">
-                
+        </ModalHeader>
+        <ModalBody Class="expense-modal-body">
+            @if (_schedule != null)
+            {
                 <Row>
                     <Column ColumnSize="ColumnSize.IsHalf">
                         <Field>
@@ -19,8 +22,24 @@
                         </Field>
                     </Column>
                 </Row>
-            </ModalBody>
-        </ModalHeader>
+
+                <Row>
+                    <Column ColumnSize="ColumnSize.Is12">
+                        <Field>
+                            <Label>Frequency</Label>
+                            <EditForm Model="_schedule"> 
+                                <InputSelect @bind-Value="_schedule.ScheduleFrequency" class="form-control"> 
+                                    @foreach (Enum item in Enum.GetValues(typeof(ScheduleFrequency)))
+                                    { 
+                                        <option value="@item">@item.ToString()</option> 
+                                    } 
+                                </InputSelect> 
+                            </EditForm>
+                        </Field>
+                    </Column>
+                </Row>
+            }
+        </ModalBody>
     </ModalContent>
 </Modal>
 
@@ -28,7 +47,7 @@
 @code {
     private Blazorise.Modal _scheduleModal;
     private BudgetSchedule _schedule;
-    private bool _isDirty = false; 
+    private bool _isDirty = false;
 
     [Parameter]
     public EventCallback<BudgetSchedule> BudgetScheduleAdded { get; set; }
@@ -36,15 +55,23 @@
     [Parameter]
     public EventCallback BudgetScheduleUpdated { get; set; }
 
-    [Parameter]
-    public BudgetSchedule BudgetSchedule { get; set; }
-
     public async Task HandleKeydownEvent(KeyboardEventArgs e)
     {
         if (e.Code == "Enter" || e.Code == "NumpadEnter")
         {
             await Save();
         }
+    }
+
+    public async Task Show(BudgetSchedule budgetSchedule = null)
+    {
+        if (budgetSchedule == null)
+        {
+            budgetSchedule = new BudgetSchedule();
+        }
+        await Task.Run( () => _schedule = budgetSchedule);
+        StateHasChanged();
+        await _scheduleModal.Show();
     }
 
     private async Task Save()
@@ -60,8 +87,7 @@
         }
 
         _isDirty = false;
-        
+
         await _scheduleModal.Hide();
     }
-
 }

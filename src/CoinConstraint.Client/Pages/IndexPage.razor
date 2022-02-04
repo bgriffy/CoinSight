@@ -24,6 +24,10 @@
                        BudgetsSaveRequested="@(async() => await SaveBudgets())">
 </BudgetsModal>
 
+<BudgetScheduleDetailModal @ref=_budgetsScheduleModal>
+
+</BudgetScheduleDetailModal>
+
 <NoteModal @ref="_noteModal" NoteAdded=HandleNewNote />
 
 @if (_pageIsLoaded)
@@ -51,6 +55,16 @@
             }
         </Button>
     </Field>
+
+    <div class="d-flex flex-row" style="gap: 20px">
+        <div>
+            <button @onclick="async ()=> await OpenBudgetScheduleModal()" class="btn btn-sm btn-secondary mx-0 my-3">Add Budget Schedule</button>
+        </div>
+
+        <div>
+            <button @onclick="async ()=> await OpenBudgetScheduleModal()" class="btn btn-sm btn-secondary mx-0 my-3">View Budget Schedules</button>
+        </div>
+    </div>
 
     <ExpenseDatagrid ExpenseDeleted=HandleDeletedExpense
                           ExpenseDetailModalRequested="@((expense) => OpenExpenseDetailModalModal(expense))"

@@ -16,6 +16,7 @@ namespace CoinConstraint.Client.Pages
         private ExpenseDetailModal _expenseModal;
         private BudgetsModal _budgetsModal;
         private NoteModal _noteModal;
+        private BudgetScheduleDetailModal _budgetsScheduleModal;
         private string _budgetAmountText;
         private bool _isDirty;
         private bool _isSmallScreen; 
@@ -92,6 +93,11 @@ namespace CoinConstraint.Client.Pages
                 if (result == MessageBoxDialogResult.No) return;
             }
             _budgetsModal.Show();
+        }
+
+        public async Task OpenBudgetScheduleModal()
+        {
+            await _budgetsScheduleModal.Show();
         }
 
         private async Task<MessageBoxDialogResult> PromptForSave()

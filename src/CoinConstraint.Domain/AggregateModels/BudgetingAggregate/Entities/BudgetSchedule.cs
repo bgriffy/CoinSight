@@ -19,8 +19,10 @@ namespace CoinConstraint.Domain.AggregateModels.BudgetingAggregate.Entities
 
         public DateTime LastScheduledDate { get; set; }
 
+        [NotMapped]
         public bool IsNew { get; set; }
 
+        [NotMapped]
         public bool IsUpdated { get; set; } 
     }
 }
