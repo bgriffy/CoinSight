@@ -9,26 +9,11 @@
             @if (_schedule != null)
             {
                 <Row>
-                    <Column ColumnSize="ColumnSize.IsHalf">
-                        <Field>
-                            <Label>Start Date</Label>
-                            <DateEdit KeyDown=@(async(e) => await HandleKeydownEvent(e)) TValue="DateTime" @bind-Date="_schedule.StartDate"></DateEdit>
-                        </Field>
-                    </Column>
-                    <Column ColumnSize="ColumnSize.IsHalf">
-                        <Field>
-                            <Label>End Date</Label>
-                            <DateEdit KeyDown=@(async(e) => await HandleKeydownEvent(e)) TValue="DateTime" @bind-Date="_schedule.EndDate"></DateEdit>
-                        </Field>
-                    </Column>
-                </Row>
-
-                <Row>
                     <Column ColumnSize="ColumnSize.Is12">
                         <Field>
                             <Label>Frequency</Label>
                             <EditForm Model="_schedule"> 
-                                <InputSelect @bind-Value="_schedule.ScheduleFrequency" class="form-control"> 
+                                <InputSelect @oninput="async() => await _startDateEditref.Focus()" @bind-Value="_schedule.ScheduleFrequency" class="form-control"> 
                                     @foreach (Enum item in Enum.GetValues(typeof(ScheduleFrequency)))
                                     { 
                                         <option value="@item">@item.ToString()</option> 
@@ -38,8 +23,26 @@
                         </Field>
                     </Column>
                 </Row>
+                <Row>
+                    <Column ColumnSize="ColumnSize.IsHalf">
+                        <Field>
+                            <Label>Start Date</Label>
+                            <DateEdit @ref=_startDateEditref @oninput="async() => await _endDateEditref.Focus()" Placeholder="Starts" KeyDown=@(async(e) => await HandleKeydownEvent(e)) TValue="DateTime?" @bind-Date="_schedule.StartDate"></DateEdit>
+                        </Field>
+                    </Column>
+                    <Column ColumnSize="ColumnSize.IsHalf">
+                        <Field>
+                            <Label>End Date</Label>
+                            <DateEdit @ref=_endDateEditref Placeholder="Ends" KeyDown=@(async(e) => await HandleKeydownEvent(e)) TValue="DateTime?" @bind-Date="_schedule.EndDate"></DateEdit>
+                        </Field>
+                    </Column>
+                </Row>
             }
         </ModalBody>
+        <ModalFooter>
+            <Button Size="Size.Small" Color="Color.Primary" Padding="Padding.Is2.OnX.Is1.OnY" Margin="Margin.Is1.FromRight" Clicked="@(async() => await Save())"><Icon Margin="Margin.Is2.FromRight" Name="IconName.Save" />Save</Button>
+            <Button Size="Size.Small" Padding="Padding.Is2.OnX.Is1.OnY" Margin="Margin.Is1.FromRight" Color="Color.Secondary" Clicked="@(async() => await _scheduleModal.Hide())">Cancel</Button>
+        </ModalFooter>
     </ModalContent>
 </Modal>
 
@@ -48,6 +51,8 @@
     private Blazorise.Modal _scheduleModal;
     private BudgetSchedule _schedule;
     private bool _isDirty = false;
+    private DateEdit<DateTime?> _startDateEditref;
+    private DateEdit<DateTime?> _endDateEditref;
 
     [Parameter]
     public EventCallback<BudgetSchedule> BudgetScheduleAdded { get; set; }

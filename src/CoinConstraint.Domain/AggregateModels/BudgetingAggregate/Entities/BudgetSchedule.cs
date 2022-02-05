@@ -9,9 +9,9 @@ namespace CoinConstraint.Domain.AggregateModels.BudgetingAggregate.Entities
 
         public int BudgetID { get; set; }
 
-        public DateTime StartDate { get; set; }
+        public DateTime? StartDate { get; set; }
 
-        public DateTime EndDate { get; set; }
+        public DateTime? EndDate { get; set; }
 
         public ScheduleFrequency ScheduleFrequency { get; set; }
 
