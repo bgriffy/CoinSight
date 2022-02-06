@@ -10,6 +10,7 @@ public class BudgetingService : IBudgetingService
     private List<Budget> _budgetsForDeletion;
     private List<Expense> _expensesForDeletion;
     private List<Note> _notesforDeletion;
+    private List<BudgetSchedule> _budgetSchedulesForDeletion;
     private Guid _currentUserID; 
     
 
@@ -17,7 +18,6 @@ public class BudgetingService : IBudgetingService
     {
         _unitOfWork = unitOfWork;
         _authStateProvider = authStateProvider;
-        
     }
 
     public async Task Init()
@@ -34,6 +34,7 @@ public class BudgetingService : IBudgetingService
             _selectedBudget = _budgets.FirstOrDefault();
             _expensesForDeletion = new List<Expense>();
             _notesforDeletion = new List<Note>();
+            _budgetSchedulesForDeletion = new List<BudgetSchedule>();
 
         }
         catch (Exception e)
@@ -67,6 +68,11 @@ public class BudgetingService : IBudgetingService
     public void MarkNoteForDeletion(Note note)
     {
         _notesforDeletion.Add(note);
+    }
+
+    public void MarkScheduleForDeletion(BudgetSchedule schedule)
+    {
+        _budgetSchedulesForDeletion.Add(schedule);
     }
 
     public void AddNewBudget(Budget budget)
@@ -103,6 +109,7 @@ public class BudgetingService : IBudgetingService
             {
                 await RemoveDeletedExpenses();
                 await RemoveDeletedNotes();
+                await RemoveDeletedBudgetSchedules();
             }
         }
         catch (Exception e)
@@ -185,5 +192,16 @@ public class BudgetingService : IBudgetingService
         }
     }
 
-
+    private async Task RemoveDeletedBudgetSchedules()
+    {
+        try
+        {
+            await _unitOfWork.BudgetSchedules.RemoveRangeAsync(_budgetSchedulesForDeletion);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine($"There was an error removing notes from the budgeting service: {e.Message}");
+            throw;
+        }
+    }
 }

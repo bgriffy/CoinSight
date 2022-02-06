@@ -190,6 +190,15 @@ namespace CoinConstraint.Client.Pages
             StateHasChanged();
         }
 
+        private void HandleNewBudgetSchedule(BudgetSchedule budgetSchedule)
+        {
+            budgetSchedule.BudgetID = (int)_selectedBudget.ID;
+            _selectedBudget.BudgetSchedules.Add(budgetSchedule);
+            _selectedBudget.IsUpdated = true;
+            _isDirty = true;
+            StateHasChanged();
+        }
+
         private void HandleNewNote(Note note)
         {
             note.BudgetID = _selectedBudget.ID;

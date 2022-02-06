@@ -1,4 +1,6 @@
-﻿namespace CoinConstraint.Application.DataAccess;
+﻿using CoinConstraint.Domain.AggregateModels.BudgetingAggregate.Repository_Interfaces.Serverside;
+
+namespace CoinConstraint.Application.DataAccess;
 
 public interface ICCUnitOfWork
 {
@@ -6,4 +8,5 @@ public interface ICCUnitOfWork
     IExpenseRepository Expenses { get; set; }
     IReminderRepository Reminders { get; set; }
     INoteRepository Notes { get; }
+    IBudgetScheduleRepository BudgetSchedules { get; }
 }

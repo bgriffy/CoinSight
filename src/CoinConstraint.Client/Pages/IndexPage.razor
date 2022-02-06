@@ -24,8 +24,8 @@
                        BudgetsSaveRequested="@(async() => await SaveBudgets())">
 </BudgetsModal>
 
-<BudgetScheduleDetailModal @ref=_budgetsScheduleModal>
-
+<BudgetScheduleDetailModal @ref=_budgetsScheduleModal
+    BudgetScheduleAdded=HandleNewBudgetSchedule>
 </BudgetScheduleDetailModal>
 
 <NoteModal @ref="_noteModal" NoteAdded=HandleNewNote />

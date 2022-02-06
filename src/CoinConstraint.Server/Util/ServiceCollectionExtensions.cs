@@ -1,4 +1,6 @@
-﻿namespace CoinConstraint.Server.Util;
+﻿using CoinConstraint.Domain.AggregateModels.BudgetingAggregate.Repository_Interfaces.Serverside;
+
+namespace CoinConstraint.Server.Util;
 
 public static class ServiceCollectionExtensions
 {
@@ -13,5 +15,6 @@ public static class ServiceCollectionExtensions
         serviceCollection.AddScoped<IExpenseRepository, ExpenseRepository>();
         serviceCollection.AddScoped<IReminderRepository, ReminderRepository>();
         serviceCollection.AddScoped<INoteRepository, NoteRepository>();
+        serviceCollection.AddScoped<IBudgetScheduleRepository, BudgetScheduleRepository>();
     }
 }

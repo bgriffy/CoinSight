@@ -72,7 +72,7 @@
     {
         if (budgetSchedule == null)
         {
-            budgetSchedule = new BudgetSchedule();
+            budgetSchedule = new BudgetSchedule() { IsNew = true};
         }
         await Task.Run( () => _schedule = budgetSchedule);
         StateHasChanged();

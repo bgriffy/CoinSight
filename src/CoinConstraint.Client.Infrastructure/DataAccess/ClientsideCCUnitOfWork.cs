@@ -1,16 +1,20 @@
-﻿namespace CoinConstraint.Client.Infrastructure.DataAccess;
+﻿using CoinConstraint.Domain.AggregateModels.BudgetingAggregate.Repository_Interfaces.Clientside;
+
+namespace CoinConstraint.Client.Infrastructure.DataAccess;
 
 public class ClientsideCCUnitOfWork : IClientsideCCUnitOfWork
 {
     public ClientsideCCUnitOfWork(IClientsideBudgetRepository budgetRepository,
                                   IClientsideExpenseRepository expenseRepository,
                                   IClientsideReminderRepository reminderRepository,
-                                  IClientsideNoteRepository noteRepository)
+                                  IClientsideNoteRepository noteRepository, 
+                                  IClientsideBudgetScheduleRepository budgetScheduleRepository)
     {
         Budgets = budgetRepository;
         Expenses = expenseRepository;
         Reminders = reminderRepository;
         Notes = noteRepository;
+        BudgetSchedules = budgetScheduleRepository;
     }
 
 
@@ -21,5 +25,7 @@ public class ClientsideCCUnitOfWork : IClientsideCCUnitOfWork
     public IClientsideReminderRepository Reminders { get; set; }
 
     public IClientsideNoteRepository Notes { get; }
+
+    public IClientsideBudgetScheduleRepository BudgetSchedules { get; }
 
 }

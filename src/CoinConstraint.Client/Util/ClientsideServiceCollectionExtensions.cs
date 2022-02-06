@@ -2,6 +2,7 @@
 using Blazored.LocalStorage;
 using CoinConstraint.Application.Identity;
 using CoinConstraint.Client.Infrastructure.Authentication;
+using CoinConstraint.Domain.AggregateModels.BudgetingAggregate.Repository_Interfaces.Clientside;
 using Microsoft.AspNetCore.Components.Authorization;
 
 namespace CoinConstraint.Client.Util;
@@ -19,6 +20,7 @@ public static class ClientsideServiceCollectionExtensions
         serviceCollection.AddScoped<IClientsideBudgetRepository, ClientBudgetRepository>();
         serviceCollection.AddScoped<IClientsideReminderRepository, ClientReminderRepository>();
         serviceCollection.AddScoped<IClientsideNoteRepository, ClientNoteRepository>();
+        serviceCollection.AddScoped<IClientsideBudgetScheduleRepository, ClientBudgetScheduleRepository>();
     }
 
     public static void AddApplicationServices(this IServiceCollection serviceCollection)

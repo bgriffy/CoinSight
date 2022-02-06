@@ -20,4 +20,16 @@ public class CoinConstraintContext : DbContext
     public DbSet<Note> Notes { get; set; }
 
     public DbSet<BudgetSchedule> BudgetSchedules { get; set; }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<BudgetSchedule>(entity =>
+        {
+            entity.HasOne("CoinConstraint.Domain.AggregateModels.BudgetingAggregate.Entities.Budget", null)
+                .WithMany("BudgetSchedules")
+                .HasForeignKey("BudgetID")
+                .OnDelete(DeleteBehavior.Cascade)
+                .IsRequired();
+        });
+    }
 }

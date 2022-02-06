@@ -10,6 +10,7 @@ public interface IBudgetingService
     void MarkBudgetForDeletion(Budget budget);
     void MarkExpenseForDeletion(Expense expense);
     void MarkNoteForDeletion(Note note);
+    void MarkScheduleForDeletion(BudgetSchedule schedule);
     Task SaveChanges(bool saveBudgetsOnly = true);
     Task SetSelectedBudget(Budget selectedBudget);
 }
