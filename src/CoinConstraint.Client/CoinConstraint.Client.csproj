@@ -31,7 +31,6 @@
     <ProjectReference Include="..\CoinConstraint.Client.Infrastructure\CoinConstraint.Client.Infrastructure.csproj" />
     <ProjectReference Include="..\CoinConstraint.Server.Infrastructure\CoinConstraint.Server.Infrastructure.csproj" />
   </ItemGroup>
-
   <ItemGroup>
     <ServiceWorker Include="wwwroot\service-worker.js" PublishedContent="wwwroot\service-worker.published.js" />
   </ItemGroup>

@@ -13,7 +13,7 @@
 
 <ExpenseDetailModal @ref="_expenseModal"
                         ExpenseAdded=HandleNewExpense
-                        ExpenseUpdated=HandleUpdatedExpenses>
+                        ExpenseUpdated=MarkSelectedBudgetAsDirty>
 </ExpenseDetailModal>
 
 <BudgetsModal @ref="_budgetsModal"
@@ -23,6 +23,10 @@
                        BudgetDeleted=HandleDeletedBudget
                        BudgetsSaveRequested="@(async() => await SaveBudgets())">
 </BudgetsModal>
+
+<SchedulingModal @ref="_schedulingModal" 
+    SchedulesSaveRequested="@(async() => await SaveChanges())">
+</SchedulingModal>
 
 <BudgetScheduleDetailModal @ref=_budgetsScheduleModal
     BudgetScheduleAdded=HandleNewBudgetSchedule>
@@ -62,7 +66,7 @@
         </div>
 
         <div>
-            <button @onclick="async ()=> await OpenBudgetScheduleModal()" class="btn btn-sm btn-secondary mx-0 my-3">View Budget Schedules</button>
+            <button @onclick="async ()=> await OpenScheduleModal()" class="btn btn-sm btn-secondary mx-0 my-3">View Budget Schedules</button>
         </div>
     </div>
 

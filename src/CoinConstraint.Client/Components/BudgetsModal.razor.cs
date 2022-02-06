@@ -85,9 +85,9 @@ public partial class BudgetsModal
         EditBudget(newBudget);
     }
 
-    public void Show()
+    public async Task Show()
     {
-        _budgetsModal.Show();
+        await _budgetsModal.Show();
     }
 
     public void Close()

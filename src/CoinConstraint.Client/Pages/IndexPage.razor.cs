@@ -15,6 +15,7 @@ namespace CoinConstraint.Client.Pages
         private LoadSpinner _loadSpinner;
         private ExpenseDetailModal _expenseModal;
         private BudgetsModal _budgetsModal;
+        private SchedulingModal _schedulingModal;
         private NoteModal _noteModal;
         private BudgetScheduleDetailModal _budgetsScheduleModal;
         private string _budgetAmountText;
@@ -92,12 +93,17 @@ namespace CoinConstraint.Client.Pages
                 MessageBoxDialogResult result = await PromptForSave();
                 if (result == MessageBoxDialogResult.No) return;
             }
-            _budgetsModal.Show();
+            await _budgetsModal.Show();
         }
 
         public async Task OpenBudgetScheduleModal()
         {
             await _budgetsScheduleModal.Show();
+        }
+
+        public async Task OpenScheduleModal()
+        {
+             await _schedulingModal.Show();
         }
 
         private async Task<MessageBoxDialogResult> PromptForSave()
@@ -139,12 +145,11 @@ namespace CoinConstraint.Client.Pages
             _expenseModal.ShowExpense(expense);
         }
         
-        private void HandleUpdatedExpenses()
+        private void MarkSelectedBudgetAsDirty()
         {
             _isDirty = true;
             _selectedBudget.IsUpdated = true;
             Refresh();
-
         }
 
         private void HandleUpdatedBudgets()
