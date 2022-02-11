@@ -221,6 +221,13 @@ namespace CoinConstraint.Client.Pages
             _isDirty = true;
         }
 
+        private void HandleDeletedSchedule(BudgetSchedule schedule)
+        {
+            BudgetingService.MarkScheduleForDeletion(schedule);
+            _selectedBudget.IsUpdated = true;
+            _isDirty = true;
+        }
+
         private void HandleDeletedBudget(Budget budget)
         {
             BudgetingService.MarkBudgetForDeletion(budget);

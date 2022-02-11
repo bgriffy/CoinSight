@@ -83,10 +83,12 @@
     {
         if (_schedule.IsNew)
         {
+            _schedule.IsNew = false;
             await BudgetScheduleAdded.InvokeAsync(_schedule);
         }
         else
         {
+            _schedule.IsNew = false;
             _schedule.IsUpdated = true;
             await BudgetScheduleUpdated.InvokeAsync();
         }

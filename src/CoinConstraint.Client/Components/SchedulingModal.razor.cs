@@ -26,14 +26,17 @@ public partial class SchedulingModal
     [Parameter]
     public EventCallback<BudgetSchedule> ScheduleAdded { get; set; }
 
-    private async Task HandleNewSchedule(BudgetSchedule newSchedule)
+    private void HandleNewSchedule(BudgetSchedule newSchedule)
     {
-        await ScheduleAdded.InvokeAsync(newSchedule);
+        newSchedule.BudgetID = (int)this.Budget.ID;
+        this.Budget.BudgetSchedules.Add(newSchedule);
+        this.Budget.IsUpdated = true;
     }
 
     private async Task HandleModifiedSchedule()
     {
         await ScheduleModified.InvokeAsync();
+        StateHasChanged();
     }
 
     private async Task HandleDeletedSchedule(BudgetSchedule schedule)
@@ -58,6 +61,7 @@ public partial class SchedulingModal
 
     private async Task Save()
     {
+        await _schedulingModal.Hide();
         await SchedulesSaveRequested.InvokeAsync();
     }
 }

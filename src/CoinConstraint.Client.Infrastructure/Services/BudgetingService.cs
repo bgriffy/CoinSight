@@ -131,6 +131,12 @@ public class BudgetingService : IBudgetingService
             budget.IsUpdated = false;
             budget.IsNew = false; 
         }
+
+        foreach (var schedule in budget.BudgetSchedules)
+        {
+            schedule.IsUpdated = false;
+            schedule.IsNew = false;
+        }
     }
 
     private async Task SaveNewBudget(Budget budget)
