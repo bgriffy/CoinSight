@@ -260,6 +260,12 @@ namespace CoinConstraint.Client.Pages
             _isDirty = false;
         }
 
+        private async Task HandleSchedulingSave()
+        {
+            _selectedBudget.IsUpdated = true; 
+            await SaveChanges();
+        }
+
         private async Task SaveChanges()
         {
             _pageIsLoaded = false;

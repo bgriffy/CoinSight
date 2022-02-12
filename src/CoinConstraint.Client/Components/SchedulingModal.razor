@@ -38,12 +38,17 @@
                         <DataGridColumns>
                             @if (!_isSmallScreen)
                             {
-                                <DataGridColumn DisplayOrder=1 TItem="BudgetSchedule" Editable="true" Field="@nameof(_selectedSchedule.StartDate)" Caption="Start Date" Sortable="false">
+                                <DataGridColumn DisplayOrder=1 TItem="BudgetSchedule" Editable="false" Field="@nameof(_selectedSchedule.ScheduleFrequency)" Caption="Frequency" Sortable="false">
+                                    <DisplayTemplate>
+                                        @($"{( context as BudgetSchedule).ScheduleFrequency}")
+                                    </DisplayTemplate>
+                                </DataGridColumn>
+                                <DataGridColumn DisplayOrder=1 TItem="BudgetSchedule" Editable="false" Field="@nameof(_selectedSchedule.StartDate)" Caption="Start Date" Sortable="false">
                                     <DisplayTemplate>
                                         @($"{( context as BudgetSchedule )?.StartDate?.Date.ToString("MM/dd/yyyy") ?? "none"}")
                                     </DisplayTemplate>
                                 </DataGridColumn>
-                                <DataGridColumn DisplayOrder=2 TItem="BudgetSchedule" Editable="true" Field="@nameof(_selectedSchedule.EndDate)" Caption="End Date" Sortable="false">
+                                <DataGridColumn DisplayOrder=2 TItem="BudgetSchedule" Editable="false" Field="@nameof(_selectedSchedule.EndDate)" Caption="End Date" Sortable="false">
                                     <DisplayTemplate>
                                         @($"{( context as BudgetSchedule )?.EndDate?.Date.ToString("MM/dd/yyyy") ?? "none"}")
                                     </DisplayTemplate>
@@ -51,9 +56,14 @@
                             }
                             else
                             {
-                                <DataGridColumn DisplayOrder=1 Width=125px TItem="Budget" Editable="false" Caption="Date Range" Sortable="false">
+                                <DataGridColumn DisplayOrder=1 TItem="BudgetSchedule" Editable="false" Field="@nameof(_selectedSchedule.ScheduleFrequency)" Caption="Frequency" Sortable="false">
                                     <DisplayTemplate>
-                                        @($"{( context as Budget )?.StartDate.Date.ToString("MM/dd/yyyy")}") - @($"{( context as Budget )?.EndDate.Date.ToString("MM/dd/yyyy")}")
+                                        @($"{( context as BudgetSchedule).ScheduleFrequency}")
+                                    </DisplayTemplate>
+                                </DataGridColumn>
+                                <DataGridColumn DisplayOrder=1 TItem="BudgetSchedule" Editable="false" Field="@nameof(_selectedSchedule.StartDate)" Caption="Start Date" Sortable="false">
+                                    <DisplayTemplate>
+                                        @($"{( context as BudgetSchedule )?.StartDate?.Date.ToString("MM/dd/yyyy") ?? "none"}")
                                     </DisplayTemplate>
                                 </DataGridColumn>
                             }

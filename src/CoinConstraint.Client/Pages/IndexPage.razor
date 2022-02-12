@@ -26,7 +26,7 @@
 
 <SchedulingModal @ref="_schedulingModal" 
     ScheduleDeleted=HandleDeletedSchedule
-    SchedulesSaveRequested="@(async() => await SaveChanges())"
+    SchedulesSaveRequested="@(async() => await HandleSchedulingSave())"
     Budget=_selectedBudget>
 </SchedulingModal>
 
