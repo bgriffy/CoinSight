@@ -118,9 +118,14 @@ namespace CoinConstraint.Client.Pages
             _expenseModal.ShowNewExpense();
         }
 
-        private void OpenNoteModalForNewNote()
+        private async Task OpenNoteModalForNewNote()
         {
-            _noteModal.Show();
+            await _noteModal.Show();
+        }
+
+        private async Task OpenNoteModalForExistingNote(Note note)
+        {
+            await _noteModal.Show(note);
         }
 
         private void DeleteNote(Note note)

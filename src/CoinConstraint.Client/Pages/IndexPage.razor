@@ -34,7 +34,7 @@
     BudgetScheduleAdded=HandleNewBudgetSchedule>
 </BudgetScheduleDetailModal>
 
-<NoteModal @ref="_noteModal" NoteAdded=HandleNewNote />
+<NoteModal @ref="_noteModal" NoteAdded=HandleNewNote NoteUpdated=MarkSelectedBudgetAsDirty/>
 
 @if (_pageIsLoaded)
 {
@@ -73,25 +73,26 @@
     </div>
 
     <ExpenseDatagrid ExpenseDeleted=HandleDeletedExpense
-                          ExpenseDetailModalRequested="@((expense) => OpenExpenseDetailModalModal(expense))"
-                          NewExpenseDetailModalRequested=OpenExpenseDetailModalModal
-                          ExpensePaymentRequested="@(async(expense) => await OpenPaymentURLAsync(expense))"
-                          SelectedBudget=_selectedBudget
-                          SelectedExpense=_selectedExpense>
+                     ExpenseDetailModalRequested="@((expense) => OpenExpenseDetailModalModal(expense))"
+                     NewExpenseDetailModalRequested=OpenExpenseDetailModalModal
+                     ExpensePaymentRequested="@(async(expense) => await OpenPaymentURLAsync(expense))"
+                     SelectedBudget=_selectedBudget
+                     SelectedExpense=_selectedExpense>
     </ExpenseDatagrid>
 
     <Row>
         <Column ColumnSize=ColumnSize.Is4.OnTablet.Is3.OnWidescreen>
-            <NoteDatagrid NewNoteModalRequested=OpenNoteModalForNewNote
-                               NoteDeletionRequested="@((note) => DeleteNote(note))"
-                               Notes=_selectedBudget.Notes>
+            <NoteDatagrid NewNoteModalRequested="@(async() => await OpenNoteModalForNewNote())"
+                          ExistingNoteModalRequested="@(async(note) => await OpenNoteModalForExistingNote(note))"
+                          NoteDeletionRequested="@((note) => DeleteNote(note))"
+                          Notes=_selectedBudget.Notes>
             </NoteDatagrid>
         </Column>
 
         <Column ColumnSize=ColumnSize.Is4.OnTablet.Is3.OnWidescreen>
             <BudgetTotalsSection BudgetAmount="@_selectedBudget.BudgetedAmount" 
-                                          ExpensedAmount="@_selectedBudget.ExpensedAmount" 
-                                          BudgetAmountChanged="@(() => _isDirty = true)">
+                                 ExpensedAmount="@_selectedBudget.ExpensedAmount" 
+                                 BudgetAmountChanged="@(() => _isDirty = true)">
             </BudgetTotalsSection>
         </Column>
     </Row>

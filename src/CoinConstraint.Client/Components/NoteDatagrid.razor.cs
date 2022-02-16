@@ -14,11 +14,19 @@ public partial class NoteDatagrid
     public EventCallback NewNoteModalRequested { get; set; }
 
     [Parameter]
+    public EventCallback<Note> ExistingNoteModalRequested { get; set; }
+
+    [Parameter]
     public EventCallback<Note> NoteDeletionRequested { get; set; }
 
     public async Task RequestNewNoteModal()
     {
         await NewNoteModalRequested.InvokeAsync();
+    }
+
+    public async Task RequestExistingNoteModal()
+    {
+        await ExistingNoteModalRequested.InvokeAsync(this.SelectedNote);
     }
 
     public async Task RequestNoteDeletion()

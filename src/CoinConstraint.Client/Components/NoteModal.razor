@@ -24,20 +24,38 @@
     [Parameter]
     public EventCallback<Note> NoteAdded { get; set; }
 
+    [Parameter]
+    public EventCallback NoteUpdated { get; set; }
+
     public string NoteText { get; set; } = "";
 
-    public void Show()
+    public async Task Show()
     {
         _note = new Note();
         _note.IsNew = true;
         this.NoteText = _note.NoteText;
-        _noteModal.Show();
+        await _noteModal.Show();
+    }
+
+    public async Task Show(Note note)
+    {
+        _note = note;
+        _note.IsNew = false;
+        this.NoteText = _note.NoteText;
+        await _noteModal.Show();
     }
 
     private async Task Save()
     {
         _note.NoteText = this.NoteText;
-        await NoteAdded.InvokeAsync(_note);
+        if (_note.IsNew)
+        {
+            await NoteAdded.InvokeAsync(_note);
+        }
+        else
+        {
+            await NoteUpdated.InvokeAsync();
+        }
         await _noteModal.Hide();
     }
 }
