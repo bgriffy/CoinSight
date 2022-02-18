@@ -1,6 +1,6 @@
 ﻿using CoinConstraint.Domain.AggregateModels.BudgetingAggregate.Entities;
 
-namespace CoinConstraint.Client.Components;
+namespace CoinConstraint.Client.Components.Expenses;
 
 public partial class ExpenseDatagrid
 {

@@ -1,5 +1,9 @@
 ﻿using Blazor.ModalDialog;
 using CoinConstraint.Client.Components;
+using CoinConstraint.Client.Components.Budgets;
+using CoinConstraint.Client.Components.Expenses;
+using CoinConstraint.Client.Components.Notes;
+using CoinConstraint.Client.Components.Scheduling;
 using CoinConstraint.Domain.AggregateModels.BudgetingAggregate.Entities;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.JSInterop;
@@ -17,7 +21,7 @@ namespace CoinConstraint.Client.Pages
         private BudgetsModal _budgetsModal;
         private SchedulingModal _schedulingModal;
         private NoteModal _noteModal;
-        private BudgetScheduleDetailModal _budgetsScheduleModal;
+        private ScheduleDetailModal _budgetsScheduleModal;
         private string _budgetAmountText;
         private bool _isDirty;
         private bool _isSmallScreen; 

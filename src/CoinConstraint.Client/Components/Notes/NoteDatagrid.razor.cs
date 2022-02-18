@@ -1,6 +1,6 @@
 ﻿using CoinConstraint.Domain.AggregateModels.BudgetingAggregate.Entities;
 
-namespace CoinConstraint.Client.Components;
+namespace CoinConstraint.Client.Components.Notes;
 
 public partial class NoteDatagrid
 {
@@ -26,11 +26,11 @@ public partial class NoteDatagrid
 
     public async Task RequestExistingNoteModal()
     {
-        await ExistingNoteModalRequested.InvokeAsync(this.SelectedNote);
+        await ExistingNoteModalRequested.InvokeAsync(SelectedNote);
     }
 
     public async Task RequestNoteDeletion()
     {
-        await NoteDeletionRequested.InvokeAsync(this.SelectedNote);
+        await NoteDeletionRequested.InvokeAsync(SelectedNote);
     }
 }

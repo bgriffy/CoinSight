@@ -1,4 +1,6 @@
-﻿<Modal @ref="_schedulingModal">
+﻿@using CoinConstraint.Client.Components.Scheduling;
+
+<Modal @ref="_schedulingModal">
     <ModalContent Size="ModalSize.Large" Centered="true">
         <ModalHeader>
             <ModalTitle>Schedules</ModalTitle>
@@ -7,10 +9,10 @@
 
         <ModalBody>
 
-            <BudgetScheduleDetailModal @ref="_scheduleDetailModal"
+            <ScheduleDetailModal @ref="_scheduleDetailModal"
                                        BudgetScheduleAdded="HandleNewSchedule"
                                        BudgetScheduleUpdated="@(async() => await HandleModifiedSchedule())">
-            </BudgetScheduleDetailModal>
+            </ScheduleDetailModal>
 
             <MediaQuery Media="@Breakpoints.SmallDown" @bind-Matches="_isSmallScreen" />
             <MediaQuery Media="@Breakpoints.OnlyMedium" @bind-Matches="_isMediumScreen" />

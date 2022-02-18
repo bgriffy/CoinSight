@@ -1,5 +1,9 @@
 ﻿@page "/"
+@using CoinConstraint.Client.Components.Budgets
+@using CoinConstraint.Client.Components.Expenses
+@using CoinConstraint.Client.Components.Notes
 @using CoinConstraint.Client.Infrastructure.Extensions
+@using CoinConstraint.Client.Components.Scheduling
 @inject IBudgetingService BudgetingService
 @inject NavigationManager NavigationManager
 @inject IJSRuntime JSRuntime
@@ -30,9 +34,9 @@
     Budget=_selectedBudget>
 </SchedulingModal>
 
-<BudgetScheduleDetailModal @ref=_budgetsScheduleModal
+<ScheduleDetailModal @ref=_budgetsScheduleModal
     BudgetScheduleAdded=HandleNewBudgetSchedule>
-</BudgetScheduleDetailModal>
+</ScheduleDetailModal>
 
 <NoteModal @ref="_noteModal" NoteAdded=HandleNewNote NoteUpdated=MarkSelectedBudgetAsDirty/>
 

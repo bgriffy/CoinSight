@@ -2,13 +2,13 @@
 using CoinConstraint.Domain.AggregateModels.BudgetingAggregate.Entities;
 using Microsoft.AspNetCore.Components.Web;
 
-namespace CoinConstraint.Client.Components;
+namespace CoinConstraint.Client.Components.Budgets;
 
 public partial class BudgetDetailModal
 {
     private Blazorise.Modal _budgetModal;
     private Budget _budget = new Budget();
-    private bool _isDirty = false; 
+    private bool _isDirty = false;
 
     [Parameter]
     public EventCallback<Budget> NewBudgetAdded { get; set; }
@@ -16,19 +16,19 @@ public partial class BudgetDetailModal
     [Parameter]
     public EventCallback BudgetModified { get; set; }
 
-    public string BudgetTitle 
-    { 
+    public string BudgetTitle
+    {
         get => _budget.Title;
-        set 
-        { 
+        set
+        {
             _budget.Title = value;
             _isDirty = true;
-        } 
+        }
     }
 
-    public DateTime BudgetStartDate 
-    { 
-        get => _budget.StartDate; 
+    public DateTime BudgetStartDate
+    {
+        get => _budget.StartDate;
         set
         {
             _budget.StartDate = value;
@@ -56,7 +56,7 @@ public partial class BudgetDetailModal
 
     public void ShowNewBudget(Budget newBudget = null)
     {
-        if(newBudget == null)
+        if (newBudget == null)
         {
             _budget = new Budget();
             _budget.IsNew = true;
@@ -65,13 +65,13 @@ public partial class BudgetDetailModal
         {
             _budget = newBudget;
         }
-        
+
         _budgetModal.Show();
     }
 
     public void MarkAsDirty()
     {
-        _isDirty = true; 
+        _isDirty = true;
     }
 
     public async Task Show(Budget budget)

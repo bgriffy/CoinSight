@@ -1,6 +1,6 @@
 ﻿using CoinConstraint.Domain.AggregateModels.BudgetingAggregate.Entities;
 
-namespace CoinConstraint.Client.Components;
+namespace CoinConstraint.Client.Components.Scheduling;
 
 public partial class SchedulingModal
 {
@@ -8,7 +8,7 @@ public partial class SchedulingModal
     private bool _isSmallScreen;
     private bool _isMediumScreen;
     private Blazorise.Modal _schedulingModal;
-    private BudgetScheduleDetailModal _scheduleDetailModal;
+    private ScheduleDetailModal _scheduleDetailModal;
     private BudgetSchedule _selectedSchedule;
 
     [Parameter]
@@ -28,9 +28,9 @@ public partial class SchedulingModal
 
     private void HandleNewSchedule(BudgetSchedule newSchedule)
     {
-        newSchedule.BudgetID = (int)this.Budget.ID;
-        this.Budget.BudgetSchedules.Add(newSchedule);
-        this.Budget.IsUpdated = true;
+        newSchedule.BudgetID = (int)Budget.ID;
+        Budget.BudgetSchedules.Add(newSchedule);
+        Budget.IsUpdated = true;
     }
 
     private async Task HandleModifiedSchedule()

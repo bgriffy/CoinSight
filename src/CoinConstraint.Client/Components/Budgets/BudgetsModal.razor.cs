@@ -1,6 +1,6 @@
 ﻿using CoinConstraint.Domain.AggregateModels.BudgetingAggregate.Entities;
 
-namespace CoinConstraint.Client.Components;
+namespace CoinConstraint.Client.Components.Budgets;
 
 public partial class BudgetsModal
 {
@@ -38,7 +38,7 @@ public partial class BudgetsModal
 
     public void AddNewBudget(Budget newBudget = null)
     {
-        if(newBudget != null)
+        if (newBudget != null)
         {
             _budgetDetailModal.ShowNewBudget(newBudget);
         }

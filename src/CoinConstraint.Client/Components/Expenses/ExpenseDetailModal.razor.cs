@@ -2,13 +2,13 @@
 using CoinConstraint.Domain.AggregateModels.BudgetingAggregate.Entities;
 using Microsoft.AspNetCore.Components.Web;
 
-namespace CoinConstraint.Client.Components;
+namespace CoinConstraint.Client.Components.Expenses;
 
 public partial class ExpenseDetailModal
 {
     private Blazorise.Modal _expenseModal;
     private Expense _expense;
-    private bool _isDirty = false; 
+    private bool _isDirty = false;
 
     [Parameter]
     public EventCallback<Expense> ExpenseAdded { get; set; }
@@ -17,14 +17,14 @@ public partial class ExpenseDetailModal
     public EventCallback ExpenseUpdated { get; set; }
 
 
-    public string ExpenseTitle 
-    { 
+    public string ExpenseTitle
+    {
         get => _expense.Title;
         set
         {
             _expense.Title = value;
             _isDirty = true;
-        } 
+        }
     }
 
     public string ExpenseDescription
@@ -42,7 +42,7 @@ public partial class ExpenseDetailModal
         get => _expense.Amount;
         set
         {
-            _expense.Amount= value;
+            _expense.Amount = value;
             _isDirty = true;
         }
     }
