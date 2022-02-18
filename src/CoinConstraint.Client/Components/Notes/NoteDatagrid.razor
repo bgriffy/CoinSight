@@ -15,6 +15,7 @@
                         EditMode="DataGridEditMode.Inline"
                         PageSize="this.Notes.Count"
                         RowRemoved="StateHasChanged"
+                        RowDoubleClicked="@(async(e) => await RequestExistingNoteModal(e.Item))"
                         ShowPageSizes="false"
                         ShowCaptions="false"
                         ShowPager="false">
@@ -31,7 +32,7 @@
             <Button Margin=Margin.Is3.FromTop.Is2.FromBottom.Is3.FromRight Size=Size.ExtraSmall Clicked="async() => await RequestNewNoteModal()" Color=Color.Success>
                 <Icon Margin=Margin.Is2.FromRight IconSize="IconSize.Small" Name="@("fas fa-plus-square")"></Icon>Add Note
             </Button>
-            <Button Size="Size.ExtraSmall" Color="Color.Secondary" Margin=Margin.Is3.FromTop.Is2.FromBottom.Is3.FromRight Clicked="@(async() => await RequestExistingNoteModal())" Padding="Padding.Is2.OnX.Is1.OnY" >
+            <Button Size="Size.ExtraSmall" Color="Color.Secondary" Margin=Margin.Is3.FromTop.Is2.FromBottom.Is3.FromRight Clicked="@(async() => await RequestExistingNoteModal(this.SelectedNote))" Padding="Padding.Is2.OnX.Is1.OnY" >
                 <Icon Margin=Margin.Is2.FromRight IconSize="IconSize.Small" Name="@("fas fa-pen")"></Icon>Edit/View Note
             </Button>
             <Button Size="Size.ExtraSmall" Color="Color.Secondary" Margin=Margin.Is3.FromTop.Is2.FromBottom Clicked="async() => await RequestNoteDeletion()" Padding="Padding.Is2.OnX.Is1.OnY" >

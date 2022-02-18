@@ -28,6 +28,7 @@
                           FilterMethod="DataGridFilterMethod.StartsWith"
                           PageSize="10"
                           RowRemoved="@HandleDeletedBudget"
+                          RowDoubleClicked="@((e) => EditBudget(e.Item))"
                           ShowPageSizes="false"
                           ShowPager="true"
                           Virtualize="true"

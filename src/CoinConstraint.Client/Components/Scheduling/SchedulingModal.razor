@@ -26,6 +26,7 @@
                           Data="@this.Budget.BudgetSchedules"
                           Class="schedules-grid"
                           CommandMode="_isSmallScreen ? DataGridCommandMode.ButtonRow : DataGridCommandMode.Default"
+                          RowDoubleClicked="@(async(e) => await EditSchedule(e.Item))"
                           Filterable="false"
                           Editable="true"
                           EditMode="DataGridEditMode.Popup"

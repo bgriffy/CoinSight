@@ -24,9 +24,9 @@ public partial class NoteDatagrid
         await NewNoteModalRequested.InvokeAsync();
     }
 
-    public async Task RequestExistingNoteModal()
+    public async Task RequestExistingNoteModal(Note note)
     {
-        await ExistingNoteModalRequested.InvokeAsync(SelectedNote);
+        await ExistingNoteModalRequested.InvokeAsync(note);
     }
 
     public async Task RequestNoteDeletion()

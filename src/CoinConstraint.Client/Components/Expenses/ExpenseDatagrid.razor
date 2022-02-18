@@ -19,6 +19,7 @@
                       EditMode="DataGridEditMode.Popup"
                       FilterMethod="DataGridFilterMethod.StartsWith"
                       RowRemoved="@HandleDeletedExpense"
+                      RowDoubleClicked="@(async(e) => await OpenExpenseDetailModalModal(e.Item))"
                       ShowPageSizes="false"
                       ShowPager="true"
                       Virtualize="true"
