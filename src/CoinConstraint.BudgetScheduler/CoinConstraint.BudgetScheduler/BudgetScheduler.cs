@@ -13,34 +13,38 @@ public class BudgetScheduler
 {
     [FunctionName("ScheduleBudgets")]
     
-    //public static async Task Run([TimerTrigger("0 */5 * * * *")] 
-    //TimerInfo myTimer, ILogger log,
-    //[Sql("dbo.ToDo", ConnectionStringSetting = Environment.GetEnvironmentVariable("coinconstraint_connection"))] out BudgetSchedule[] newSchedules)
-
-    public static void Run(
-    [TimerTrigger("0 */5 * * * *")]
-    TimerInfo myTimer, ILogger log,
-    [Sql("SELECT * FROM CoinConstraint.dbo.BudgetSchedules",
-    ConnectionStringSetting = "SqlConnectionString")]
-    out List<BudgetSchedule> output)
+    public async static Task Run([TimerTrigger("0 */5 * * * *")] TimerInfo myTimer, ILogger log)
     {
-        log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
+        await Task.Delay(5000);
+
+        log.LogInformation($"C# Timer trigger function  executed at: {DateTime.Now}");
 
         // Get the connection string from app settings and use it to create a connection.
-        var connectionString = Environment.GetEnvironmentVariable("coinconstraint_connection");
+        //var connectionString = Environment.GetEnvironmentVariable("coinconstraint_connection");
+
         var conn = new SqlConnection(connectionString);
         conn.Open();
 
         var sql = "SELECT * FROM CoinConstraint.dbo.BudgetSchedules";
         var cmd = new SqlCommand(sql, conn);
-        var rows = cmd.ExecuteReader();
+        SqlDataReader rows = cmd.ExecuteReader();
 
-        foreach (var row in rows)
+        var budgetSchedules = new List<BudgetSchedule>();   
+
+        while (rows.Read())
         {
+            var budgetSchedule = new BudgetSchedule()
+            {
+                ID = (int)rows["id"], 
+                BudgetID = (int)rows["BudgetID"], 
+                EndDate = (DateTime)rows["EndDate"], 
+                StartDate = (DateTime)rows["StartDate"], 
+                LastScheduledDate = (DateTime)rows["LastScheduledDate"], 
+                NextScheduledDate = (DateTime)rows["NextScheduledDate"]
+            };
 
+            budgetSchedules.Add(budgetSchedule);    
         }
-
-        output = new List<BudgetSchedule>();    
 
         Console.WriteLine(rows);
 
