@@ -7,16 +7,27 @@ using System.Threading.Tasks;
 using CoinConstraint.Domain.AggregateModels.BudgetingAggregate.Entities;
 using System.Collections.Generic;
 using CoinConstraint.Domain.Enums;
+using CoinConstraint.Server.Infrastructure.DataAccess;
+using System.Linq;
 
 namespace CoinConstraint.BudgetScheduler;
 
 public class BudgetScheduler
 {
+    private readonly CoinConstraintContext _context;
+
+    public BudgetScheduler(CoinConstraintContext context)
+    {
+        _context = context;
+    }
+
     [FunctionName("ScheduleBudgets")]
     
-    public async static Task Run([TimerTrigger("0 */5 * * * *")] TimerInfo myTimer, ILogger log)
+    public async Task Run([TimerTrigger("0 */5 * * * *", RunOnStartup = true)] TimerInfo myTimer, ILogger log)
     {
         await Task.Delay(5000);
+
+        var theSchedukes = _context.BudgetSchedules.ToList();
 
         log.LogInformation($"C# Timer trigger function  executed at: {DateTime.Now}");
 
