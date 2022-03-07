@@ -1,14 +1,11 @@
-using System;
-using System.Data.SqlClient;
-using Microsoft.Azure.WebJobs;
-using Microsoft.Azure.WebJobs.Host;
-using Microsoft.Extensions.Logging;
-using System.Threading.Tasks;
 using CoinConstraint.Domain.AggregateModels.BudgetingAggregate.Entities;
-using System.Collections.Generic;
 using CoinConstraint.Domain.Enums;
 using CoinConstraint.Server.Infrastructure.DataAccess;
+using Microsoft.Azure.WebJobs;
+using Microsoft.Extensions.Logging;
+using System;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace CoinConstraint.BudgetScheduler;
 
@@ -22,69 +19,79 @@ public class BudgetScheduler
     }
 
     [FunctionName("ScheduleBudgets")]
-    
+
     public async Task Run([TimerTrigger("0 */5 * * * *", RunOnStartup = true)] TimerInfo myTimer, ILogger log)
     {
-        await Task.Delay(5000);
+        await Task.Delay(1000);
 
-        var theSchedukes = _context.BudgetSchedules.ToList();
-
-        log.LogInformation($"C# Timer trigger function  executed at: {DateTime.Now}");
-
-        // Get the connection string from app settings and use it to create a connection.
-        var connectionString = Environment.GetEnvironmentVariable("coinconstraint_connection");
-        var conn = new SqlConnection(connectionString);
-        conn.Open();
-
-        var budgetSchedules = GetSchedules(conn);
-
-        foreach (var budgetSchedule in budgetSchedules)
+        try
         {
-            var budget = GetBudgetFromSchedule(budgetSchedule, conn);
+            var budgetSchedules = _context.BudgetSchedules.Where(s => s.NextScheduledDate <= DateTime.Now).ToList();
+
+            log.LogInformation($"C# Timer trigger function  executed at: {DateTime.Now}");
+            budgetSchedules.ForEach(async s => await ScheduleBudget(s));
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine($"There was an error scheduling budgets. Error message: {e.Message}");
+            throw;
         }
     }
 
-    private static List<BudgetSchedule> GetSchedules(SqlConnection conn)
+    private async Task ScheduleBudget(BudgetSchedule schedule)
     {
-        var sql = "SELECT * FROM CoinConstraint.dbo.BudgetSchedules";
-        var cmd = new SqlCommand(sql, conn);
-        SqlDataReader rows = cmd.ExecuteReader();
-
-        var budgetSchedules = new List<BudgetSchedule>();
-         
-        while (rows.Read())
+        if ((schedule.EndDate ?? DateTime.Now) <= DateTime.Now)
         {
-            var budgetSchedule = new BudgetSchedule()
-            {
-                ID = (int)rows["id"],
-                BudgetID = (int)rows["BudgetID"],
-                EndDate = (DateTime)rows["EndDate"],
-                StartDate = (DateTime)rows["StartDate"],
-                LastScheduledDate = (DateTime)rows["LastScheduledDate"],
-                NextScheduledDate = (DateTime)rows["NextScheduledDate"],
-                ScheduleFrequency = (ScheduleFrequency)(int)rows["ScheduleFrequency"]
-            };
-
-            budgetSchedules.Add(budgetSchedule);
+            return;
         }
 
-        return budgetSchedules;
+        SetScheduleDates(schedule);
+
+        var newBudget = GetNewBudgetFromSchedule(schedule);
+
+        _context.Budgets.Add(newBudget);
+
+        await SaveChanges();
     }
 
-    private static Budget GetBudgetFromSchedule(BudgetSchedule schedule, SqlConnection conn)
+    private Budget GetNewBudgetFromSchedule(BudgetSchedule schedule)
     {
-        var budget = new Budget();
-        var sql = "SELECT TOP 1 * FROM CoinConstraint.dbo.Budgets WHERE BudgetID = @BudgetID";
-        var cmd = new SqlCommand(sql, conn);
-        cmd.Parameters["@BudgetID"].Value = schedule.BudgetID;
-        SqlDataReader reader = cmd.ExecuteReader();
+        var budget = _context.Budgets.FirstOrDefault(b => b.ID == schedule.BudgetID);
+        var newBudget = budget.Clone();
 
-        while (reader.Read())
+        newBudget.StartDate = DateTime.Now;
+
+        var budgetLengthInDays = ((DateTime)budget.EndDate - (DateTime)budget.StartDate).Days;
+        newBudget.EndDate = ((DateTime)newBudget.StartDate).AddDays(budgetLengthInDays);
+
+        return newBudget;
+    }
+
+    private void SetScheduleDates(BudgetSchedule schedule)
+    {
+        schedule.LastScheduledDate = schedule.NextScheduledDate;
+
+        switch (schedule.ScheduleFrequency)
         {
-            budget.ID= (int?)reader["id"];
+            case ScheduleFrequency.Daily:
+                schedule.NextScheduledDate = DateTime.Now.AddDays(1);
+                break;
+            case ScheduleFrequency.Weekly:
+                schedule.NextScheduledDate = DateTime.Now.AddDays(7);
+                break;
+            case ScheduleFrequency.Monthly:
+                schedule.NextScheduledDate = DateTime.Now.AddMonths(1);
+                break;
+            case ScheduleFrequency.Yearly:
+                schedule.NextScheduledDate = DateTime.Now.AddYears(1);
+                break;
+            default:
+                return;
         }
+    }
 
-        return budget;
-
+    private async Task SaveChanges()
+    {
+        await _context.SaveChangesAsync();
     }
 }
