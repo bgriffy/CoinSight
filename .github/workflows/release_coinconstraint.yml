@@ -24,17 +24,19 @@ jobs:
 
       - name: Build with dotnet
         run: dotnet build src/CoinConstraint.sln --configuration Release
-
-      - name: dotnet publish
-        run: dotnet publish src/CoinConstraint.sln -c Release -o ${{env.DOTNET_ROOT}}/myapp
         
+      # Need to login before restarting app service
       - name: Azure Login
         uses: azure/login@v1
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }} #
           
+      # Restarting app fixes issue with temp storage limits
       - name: Stop Azure App Service with Azure CLI
-        run: az webapp stop --name ${{ secrets.AZURE_APP_SERVICE_NAME }} --resource-group ${{ secrets.AZURE_RESOURCE_GROUP_NAME }}
+        run: az webapp restart --name ${{ secrets.AZURE_APP_SERVICE_NAME }} --resource-group ${{ secrets.AZURE_RESOURCE_GROUP_NAME }}
+
+      - name: dotnet publish
+        run: dotnet publish src/CoinConstraint.sln -c Release -o ${{env.DOTNET_ROOT}}/myapp
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v2
@@ -68,11 +70,3 @@ jobs:
         uses: GeekyEggo/delete-artifact@v1.0.0
         with:
           name: .net-app
-      
-      - name: Azure Login
-        uses: azure/login@v1
-        with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }} #
-      
-      - name: Start Azure App Service with Azure CLI
-        run: az webapp start --name ${{ secrets.AZURE_APP_SERVICE_NAME }} --resource-group ${{ secrets.AZURE_RESOURCE_GROUP_NAME }}
