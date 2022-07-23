@@ -22,6 +22,7 @@ public class BudgetRepository : ServersideRepository<Budget>, IBudgetRepository
         var budgets = await _context.Budgets.Where(e => e.UUID == userID)
             .Include(b => b.Expenses)
             .Include(b => b.Notes)
+            .Include(b => b.BudgetSchedules)
             .ToListAsync();
         return budgets; 
     }

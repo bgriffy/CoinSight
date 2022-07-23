@@ -20,15 +20,16 @@ var builder = WebApplication.CreateBuilder(args);
 if (!builder.Environment.IsDevelopment())
 {
     //Configure Azure key vault
-    var vaultUri = builder.Configuration["VaultUri"];
+    var keyVaultName = builder.Configuration["KeyVault:VaultName"];
 
-    if (!String.IsNullOrEmpty(vaultUri))
+    if (!String.IsNullOrEmpty(keyVaultName))
     {
+        var keyVaultEndpoint = $"https://{keyVaultName}.vault.azure.net/";
         var azureServiceTokenProvider = new AzureServiceTokenProvider();
         var keyVaultAuthCallback = new KeyVaultClient.AuthenticationCallback(azureServiceTokenProvider.KeyVaultTokenCallback);
         var keyVaultClient = new KeyVaultClient(keyVaultAuthCallback);
         var vaultPrefixManager = new DefaultKeyVaultSecretManager();
-        builder.Configuration.AddAzureKeyVault(vaultUri, keyVaultClient, vaultPrefixManager);
+        builder.Configuration.AddAzureKeyVault(keyVaultEndpoint, keyVaultClient, vaultPrefixManager);
     }
 }
 
