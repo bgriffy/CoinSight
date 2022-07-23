@@ -27,13 +27,7 @@ jobs:
 
       - name: dotnet publish
         run: dotnet publish src/CoinConstraint.sln -c Release -o ${{env.DOTNET_ROOT}}/myapp
-
-      - name: Upload artifact for deployment job
-        uses: actions/upload-artifact@v2
-        with:
-          name: .net-app
-          path: ${{env.DOTNET_ROOT}}/myapp
-      
+        
       - name: Azure Login
         uses: azure/login@v1
         with:
@@ -41,6 +35,12 @@ jobs:
           
       - name: Stop Azure App Service with Azure CLI
         run: az webapp stop --name ${{ secrets.AZURE_APP_SERVICE_NAME }} --resource-group ${{ secrets.AZURE_RESOURCE_GROUP_NAME }}
+
+      - name: Upload artifact for deployment job
+        uses: actions/upload-artifact@v2
+        with:
+          name: .net-app
+          path: ${{env.DOTNET_ROOT}}/myapp
         
   deploy:
     runs-on: windows-latest
