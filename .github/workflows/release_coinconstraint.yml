@@ -41,19 +41,7 @@ jobs:
           
       - name: Stop Azure App Service with Azure CLI
         run: az webapp stop --name ${{ secrets.AZURE_APP_SERVICE_NAME }} --resource-group ${{ secrets.AZURE_RESOURCE_GROUP_NAME }}
-
-  
-  stop_azure_app_service:
-    name: Stop Azure App Service
-    runs-on: windows-latest
-    steps:
-      - name: Azure Login
-        uses: azure/login@v1
-        with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }} #
-      - name: Stop Azure App Service with Azure CLI
-        run: az webapp stop --name ${{ secrets.AZURE_APP_SERVICE_NAME }} --resource-group ${{ secrets.AZURE_RESOURCE_GROUP_NAME }}
-
+        
   deploy:
     runs-on: windows-latest
     needs: build
