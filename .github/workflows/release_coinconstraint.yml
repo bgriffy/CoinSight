@@ -32,7 +32,7 @@ jobs:
           creds: ${{ secrets.AZURE_CREDENTIALS }} #
           
       # Restarting app fixes issue with temp storage limits
-      - name: Stop Azure App Service with Azure CLI
+      - name: Restart app service
         run: az webapp restart --name ${{ secrets.AZURE_APP_SERVICE_NAME }} --resource-group ${{ secrets.AZURE_RESOURCE_GROUP_NAME }}
 
       - name: dotnet publish
