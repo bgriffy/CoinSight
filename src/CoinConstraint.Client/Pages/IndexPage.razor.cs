@@ -27,7 +27,7 @@ namespace CoinConstraint.Client.Pages
         private bool _isSmallScreen; 
         private bool _isMediumScreen; 
         private bool _isLargeScreen;
-        private bool _pageIsLoaded; 
+        private bool _pageIsLoaded;
 
         protected override async Task OnInitializedAsync()
         {
