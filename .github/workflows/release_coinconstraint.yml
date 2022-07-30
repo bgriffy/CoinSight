@@ -44,6 +44,14 @@ jobs:
       
       - name: dotnet publish
         run: dotnet publish src/CoinConstraint.sln -c Release -o ${{env.DOTNET_ROOT}}/myapp
+        
+      - name: Run integrity script
+        uses: Amadevus/pwsh-script@v2
+        id: script
+        with:
+          script: |
+            cd ${{env.DOTNET_ROOT}}/myapp
+            ls
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v2
