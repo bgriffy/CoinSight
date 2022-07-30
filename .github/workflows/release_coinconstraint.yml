@@ -50,6 +50,7 @@ jobs:
       # This is necessary after changing the appsettings.json file in the step above
       - name: Fix service-worker-assets.js hashes
         working-directory: ${{env.DOTNET_ROOT}}/myapp/wwwroot
+        shell: bash
         run: |
           jsFile=$(<service-worker-assets.js)
           # remove JavaScript from contents so it can be interpreted as JSON
