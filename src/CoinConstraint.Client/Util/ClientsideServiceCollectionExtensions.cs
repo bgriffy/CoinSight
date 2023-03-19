@@ -1,6 +1,7 @@
 ﻿using Blazor.ModalDialog;
 using Blazored.LocalStorage;
 using CoinConstraint.Application.Identity;
+using CoinConstraint.Application.Transactions;
 using CoinConstraint.Client.Infrastructure.Authentication;
 using CoinConstraint.Domain.AggregateModels.BudgetingAggregate.Repository_Interfaces.Clientside;
 using Microsoft.AspNetCore.Components.Authorization;
@@ -26,6 +27,7 @@ public static class ClientsideServiceCollectionExtensions
     public static void AddApplicationServices(this IServiceCollection serviceCollection)
     {
         serviceCollection.AddScoped<IBudgetingService, BudgetingService>();
+        serviceCollection.AddScoped<ITransactionService, TransactionService>();
     }
 
     public static void AddThirdPartyServices(this IServiceCollection serviceCollection)

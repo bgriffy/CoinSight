@@ -1,0 +1,194 @@
+﻿@page "/transactions"
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize]
+@implements IDisposable;
+
+@if (_isLoaded)
+{
+    <div class="transactions-page">
+        <div class='transactions-content-container'>
+            <div>
+                <p class="page-title">All Transactions</p>
+            </div>
+            <div>
+                <div class="col-md-12 margin-top col-lg-12">
+                    <div class="transactions-search-padding" style="background-color: @color;">
+                        <div class="search-wrapper search-section" style="display: @visibility;">
+                            <div id="search">
+                                <SfTextBox Type="InputType.Search" 
+                                    ShowClearButton="true" 
+                                    Placeholder="Search" 
+                                    CssClass="search txt" 
+                                    @bind-Value="SearchValue" 
+                                    ValueChange="@(async () => await _transactGridRef.Search(SearchValue))" 
+                                    Created="OnCreate">
+                                </SfTextBox>
+                                <span id="searchbtn" class="e-search-icon transactions-search-icon e-icons" @onclick="@(() => _transactGridRef.Search(SearchValue))"></span>
+                            </div>
+                            <div class="button-section search-section">
+                                <button id="addexpense" class="e-btn small e-info">Add Transaction</button>
+                                <button id="filterTransactions" class="e-btn small e-info">Filter</button>
+                                <div id="add-btn" class='e-btn'>
+                                    <span class='e-icons add-icon add-head-item'></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <TransactionsGrid @ref="_transactGridRef" FilterArgs="_filterArgs"/>
+                </div>
+            </div>
+        </div>
+        <FilterMenu @ref="FilterRef" FilterArgs=_filterArgs FilterArgsChanged="@(async(args) => await HandleFiltersChange(args))"/>
+    </div>
+}
+else
+{
+    <div class="search-skeleton">
+        <SfSkeleton Shape="Syncfusion.Blazor.Notifications.SkeletonType.Rectangle" Height="30px" Width="100%"/>
+    </div>
+    <div class="transaction-grid-skeleton">
+        <SfSkeleton Shape="Syncfusion.Blazor.Notifications.SkeletonType.Rectangle" Height="700px" Width="100%"/>
+    </div>
+    <div class="filter-skeleton">
+        <SfSkeleton Shape="Syncfusion.Blazor.Notifications.SkeletonType.Rectangle" Height="815px" Width="100%"/>
+    </div>
+}
+
+<style>
+    #main-page {
+        overflow-x: hidden;
+        background: linear-gradient(-141deg, #EEF5F7 14%, #EEF2FB 100%);
+    }
+
+    .content.container-fluid {
+        height: 100vh;
+        overflow-y: auto;
+        overflow-x: hidden;
+    }
+
+    @@media (min-width: 1100px) {
+        .rightpane {
+            margin-right: 270px;
+        }
+    }
+
+    @@media (max-width: 1100px) {
+        .rightpane {
+            margin-right: 0px;
+        }
+    }
+
+    @@media (min-width: 768px) {
+        .content .content-wrapper {
+            padding: 0;
+        }
+    }
+
+    @@media (max-width: 768px) {
+        .content .content-wrapper {
+            padding: 0 8px 8px 8px;
+            margin-top: 7rem;
+        }
+    }
+
+    .content.container-fluid {
+        height: 100vh;
+        overflow-y: auto;
+        overflow-x: hidden;
+    }
+
+    /*skeleton*/
+    .e-skeleton.e-skeleton-text, .e-skeleton.e-skeleton-square, .e-skeleton.e-skeleton-rectangle, .e-skeleton.e-skeleton-circle {
+        background-color: #83808014;
+    }
+
+    .search-skeleton {
+        height: 30px;
+        width: 100%;
+        margin: 40px 15px 15px 15px;
+    }
+
+    .transaction-grid-skeleton {
+        height: 80%;
+        width: 100%;
+        margin: 0px 10px 10px 15px;
+    }
+
+    .filter-skeleton {
+        position: absolute;
+        top: 0px;
+        right: 0px;
+        width: 251px;
+        height: 100%;
+    }
+
+    @@media (max-width:1101px) {
+        .filter-skeleton {
+            display: none;
+        }
+    }
+
+    @@media (max-width:768px) {
+        .search-skeleton {
+            margin: 106px 0px 10px 0px;
+        }
+
+        .transaction-grid-skeleton {
+            margin: 10px 0px 10px;
+        }
+    }
+
+</style>
+
+@code {
+    public FilterMenu FilterRef;
+    private TransactionsGrid _transactGridRef;
+    public string SearchValue { get; set; }
+    private string visibility = "none";
+    private string color = "#FFFFFF";
+    private bool _isLoaded;
+    private TransactionFilterArgs _filterArgs = new();
+
+    private async Task HandleFiltersChange(TransactionFilterArgs args)
+    {
+        _filterArgs = args;
+        await _transactGridRef.RefreshGrid();
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (_isLoaded)
+        {
+            await base.OnAfterRenderAsync(firstRender);
+        }
+    }
+
+    private void OnCreate()
+    {
+        this.visibility = ""; this.color = "";
+    }
+
+    public void Dispose()
+    {
+        _transactGridRef = null;
+        FilterRef = null;
+        _isLoaded = false;
+    }
+
+    private async void LoadData()
+    {
+        await Task.Delay(500);
+        _filterArgs.StartDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+        _filterArgs.EndDate = _filterArgs.StartDate.AddMonths(1).AddDays(-1);
+        _isLoaded = true;
+        StateHasChanged();
+    }
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if (firstRender)
+        {
+            LoadData();
+        }
+    }
+}

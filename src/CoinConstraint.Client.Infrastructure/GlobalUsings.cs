@@ -17,3 +17,4 @@ global using Microsoft.AspNetCore.Components.Authorization;
 global using System.Net.Http.Headers;
 global using System.Security.Claims;
 global using CoinConstraint.Shared.Extensions;
+global using CoinConstraint.Shared.Utils;

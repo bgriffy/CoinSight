@@ -1,0 +1,66 @@
+﻿@using CoinConstraint.Application.Budgeting
+@using CoinConstraint.Domain.AggregateModels.BudgetingAggregate.Entities
+<div class="row">
+    <div class="col-xs-6 col-xl-3 col-lg-3 col-md-3 col-sm-6 card-container">
+        <div class="e-card card">
+            <div class="e-card-content">
+                <h3 class="card-value" id="tolincome">@_totalIncome</h3>
+                <span class="card-text">Income</span>
+            </div>
+        </div>
+    </div>
+    <div class="col-xs-6 col-xl-3 col-lg-3 col-md-3 col-sm-6 card-container">
+        <div class="e-card card">
+            <div class="e-card-content">
+                <h3 class="card-value" id="tolexpense">@_totalExpense</h3>
+                <span class="card-text">Expenses</span>
+            </div>
+        </div>
+    </div>
+    <div class="col-xs-6 col-xl-3 col-lg-3 col-md-3 col-sm-6 card-container">
+        <div class="e-card card">
+            <div class="e-card-content">
+                <h3 class="card-value" id="tolbalance">@_totalBalance</h3>
+                <span class="card-text">Balance</span>
+            </div>
+        </div>
+    </div>
+    <div class="col-xs-6 col-xl-3 col-lg-3 col-md-3 col-sm-6 card-container">
+        <div class="e-card card">
+            <div class="e-card-content">
+                <h3 class="card-value" id="toltransaction">@_totalTransactions</h3>
+                <span class="card-text">Transactions</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code{
+    private Budget _selectedBudget = new();
+    private string _totalIncome = "$0";
+    private string _totalExpense = "$0";
+    private string _totalBalance = "$0";
+    private string _totalTransactions = "0";
+
+    public IBudgetingService BudgetingService { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        UpdateCards();
+    }
+
+    public void RefreshCards(Budget budget)
+    {
+        _selectedBudget = budget;
+        UpdateCards();
+    }
+
+    private void UpdateCards()
+    {
+        _totalIncome = _selectedBudget.TotalIncome.ToString("c2");
+        _totalExpense = _selectedBudget.TotalExpense.ToString("c2");
+        _totalBalance = _selectedBudget.TotalBalance.ToString("c2");
+        _totalTransactions = _selectedBudget.TotalTransactions.ToString("c2");
+    }
+}

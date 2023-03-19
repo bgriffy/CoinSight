@@ -1,0 +1,67 @@
+﻿@using CoinConstraint.Application.Identity
+@using CoinConstraint.Application.Transactions
+@using CoinConstraint.Domain.AggregateModels.TransactionsAggregate.Entities
+
+@if (_isLoaded)
+{
+    <div id="recent-transactions-grid">
+        <SfGrid TValue="Transaction" DataSource="@_transactions" AllowSorting AllowPaging EnableHover="false">
+            <GridPageSettings PageSize="4"/>
+            <GridTemplates>
+                <ToolbarTemplate>
+                    <SfToolbar>
+                        <ToolbarItems>
+                            <ToolbarItem Text="Recent Transactions"></ToolbarItem>
+                        </ToolbarItems>
+                    </SfToolbar>
+                </ToolbarTemplate>
+            </GridTemplates>
+            <GridColumns>
+                <GridColumn Field="@nameof(Transaction.TransactionDate)" HeaderText="Date" Width="120" Format="d" />
+                <GridColumn Field="@nameof(Transaction.Description)" HeaderText="Description" Width="180" />
+                <GridColumn Field="@nameof(Transaction.ExpenseDescription)" HeaderText="Expense" Width="180" />
+                <GridColumn Field="@nameof(Transaction.PaymentMode)" HeaderText="Payment Mode" Width="160"></GridColumn>
+                <GridColumn Field="@nameof(Transaction.Payee)" HeaderText="Payee"></GridColumn>
+                <GridColumn Field="@nameof(Transaction.InflowAmount)" HeaderText="Inflow" Width="120" TextAlign="@TextAlign.Right" />
+                <GridColumn Field="@nameof(Transaction.OutflowAmount)" HeaderText="Outflow" Width="120" TextAlign="@TextAlign.Right" />
+            </GridColumns>
+        </SfGrid>
+    </div>
+
+}
+
+@code
+{
+    private List<Transaction> _transactions = new();
+    private Guid _currentUserId;
+    private bool _isLoaded;
+
+    [Inject]
+    public ITransactionService TransactionService { get; set; }
+
+    [Inject]
+    public ICurrentUserService UserService { get; set; }
+
+    [Parameter]
+    public DateTime StartDate { get; set; }
+
+    [Parameter]
+    public DateTime EndDate { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        _currentUserId = await UserService.GetCurrentUserID();
+        await SetTransactions();
+        _isLoaded = true;
+    }
+
+    public async Task RefreshGrid()
+    {
+        await SetTransactions();
+    }
+
+    private async Task SetTransactions()
+    {
+        _transactions = await TransactionService.GetRecentTransactions(_currentUserId, this.StartDate, this.EndDate);
+    }
+}

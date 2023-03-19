@@ -18,7 +18,7 @@ public class Program
 
         builder.Services.AddTransient<CCAuthenticationHeaderHandler>();
 
-        builder.Services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>().CreateClient("CoinConstraint.API"));
+        //builder.Services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>().CreateClient("CoinConstraint.API"));
 
         builder.Services.AddSyncfusionBlazor(options => { options.IgnoreScriptIsolation = true; });
 

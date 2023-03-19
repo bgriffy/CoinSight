@@ -1,0 +1,8 @@
+﻿<div class="container mt-5 @(!LoadSpinnerIsVisible ? "d-none" : "")">
+    <div class="row">
+        <div class="col-md-6 offset-md-3 text-center">
+            <SfSpinner @bind-Visible="@LoadSpinnerIsVisible"/>
+            <h5 class="mt-5">@LoadMessage</h5>
+        </div>
+    </div>
+</div>

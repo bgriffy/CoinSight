@@ -1,0 +1,107 @@
+﻿@page "/about"
+
+<style>
+    #main-page {
+        background: #fff;
+    }
+    .content.container-fluid {
+        height: 100vh;
+        overflow-y: auto;
+        overflow-x: hidden;
+    }
+
+    /*skeleton*/
+    .about-descrip-skeleton {
+        line-height: 20px;
+        margin-top: 26px;
+    }
+
+    .about-heading-skeleton{
+            margin-top: 1%;
+            padding: 0;
+    }
+
+    .about-component-skeleton{
+        width: 92%;
+        margin-left: 15px;
+    }
+</style>
+
+@if (_isLoaded)
+{
+<div>
+    <div class='about-heading'>About This App</div>
+    <div class='about-description'>
+        <p>
+            CoinSight allows you to take control of your finances using monthly budgets and automated ledgers.
+        </p>
+        <p>
+            The application is built with Blazor Web-Assembly, ASP.NET Core, and SQL Server. I'm also planning on utilizing the Plaid API for gathering banking transactions.        
+        </p>
+    </div>
+        <div class='about-heading'>About Me</div>
+        <div class='about-description'>
+            <p>
+                My name is Brent Griffin and I'm a professional software developer who works primarly in the .NET ecosystem. I'm extremely passionate about programming 
+                and am particularly interested in developing web applications.
+            </p>
+            <p>
+                Follow me:
+                <ul>
+                    <li><a class='social-link' href="https://github.com/bgriffy">Github</a></li>
+                    <li><a class='social-link' href="https://www.linkedin.com/in/bgriffin94/">Linkedin</a></li>
+                </ul>
+            </p>
+        </div>
+</div>
+}
+else
+{
+    <div class="about-heading-skeleton">
+        <SfSkeleton Shape="Syncfusion.Blazor.Notifications.SkeletonType.Rectangle" Height="15px" Width="20%"></SfSkeleton>
+        <br />
+    </div>
+    <div class="about-descrip-skeleton">
+        <SfSkeleton Shape="Syncfusion.Blazor.Notifications.SkeletonType.Rectangle" Height="15px" Width="97%"></SfSkeleton>
+        <br />
+        <SfSkeleton Shape="Syncfusion.Blazor.Notifications.SkeletonType.Rectangle" Height="15px" Width="74%"></SfSkeleton>
+    </div>
+    <br />
+    <SfSkeleton Shape="Syncfusion.Blazor.Notifications.SkeletonType.Rectangle" Height="15px" Width="60%"></SfSkeleton>
+    <br />
+    <br />
+    <div class="about-component-skeleton">
+        @for (int i = 0; i < 14; i++)
+        {
+            <div class="control-item">
+                <span>
+                    <SfSkeleton Shape="Syncfusion.Blazor.Notifications.SkeletonType.Rectangle" Height="15px" Width="75%"></SfSkeleton>
+                </span>
+            </div>
+        }
+    </div>
+}
+
+@code{
+    private bool _isLoaded;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+    }
+
+    private async void LoadData()
+    {
+        await Task.Delay(500);
+        _isLoaded = true;
+        StateHasChanged();
+    }
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if (firstRender)
+        {
+            LoadData();
+        }
+    }
+}

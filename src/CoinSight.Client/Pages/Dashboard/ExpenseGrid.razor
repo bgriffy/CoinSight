@@ -1,0 +1,138 @@
+﻿@using CoinConstraint.Application.Budgeting
+@using CoinConstraint.Domain.AggregateModels.BudgetingAggregate.Entities
+@implements IDisposable;
+
+<ExpenseDetail Expense="_selectedExpense" @ref=_expenseDetailDialogRef ExpenseUpdated="() => RefreshExpenseGrid(_selectedBudget.ID)" />
+
+<div class="search-wrapper search-section">
+    <div id="search">
+        <SfTextBox Type="InputType.Search" ShowClearButton="true" Placeholder="Search" CssClass="search txt" @bind-Value="_searchText" ValueChange="@(async() => await Search(_searchText))"></SfTextBox>
+        <span id="searchbtn" class="e-search-icon transactions-search-icon e-icons" @onclick="@(async() => await Search(_searchText))"></span>
+    </div>
+    <div class="button-section search-section">
+        <button id="addexpense" class="e-btn small e-info" @onclick="@(async() => await AddExpense())">Add Expense</button>
+    </div>
+</div>
+
+@if (_isLoaded)
+{
+    <SfGrid class="expenseGrid"
+        @ref=_gridRef
+        TValue="CoinConstraint.Domain.AggregateModels.BudgetingAggregate.Entities.Expense"
+        DataSource="@_selectedBudget.Expenses"
+        Width="100%"
+        AllowSelection="true"
+        GridLines="GridLine.Default"
+        EnableHover="true">
+        <GridEvents OnRecordClick="@(async(RecordClickEventArgs<CoinConstraint.Domain.AggregateModels.BudgetingAggregate.Entities.Expense> row) => await HandleRowClick(row))" />
+        <GridEditSettings AllowEditing="true" AllowEditOnDblClick="false"></GridEditSettings>
+        <GridColumns>
+            <GridColumn HeaderText="Payee" Field="@nameof(CoinConstraint.Domain.AggregateModels.BudgetingAggregate.Entities.Expense.Title)" TextAlign="@TextAlign.Center"></GridColumn>
+            <GridColumn Field="@nameof(CoinConstraint.Domain.AggregateModels.BudgetingAggregate.Entities.Expense.Amount)" Format="C2"></GridColumn>
+            <GridColumn Field="@nameof(CoinConstraint.Domain.AggregateModels.BudgetingAggregate.Entities.Expense.Description)"></GridColumn>
+            <GridColumn TextAlign="TextAlign.Center" Field="@nameof(CoinConstraint.Domain.AggregateModels.BudgetingAggregate.Entities.Expense.Paid)">
+                <Template>
+                    <SfCheckBox Checked="@((context as CoinConstraint.Domain.AggregateModels.BudgetingAggregate.Entities.Expense).Paid)" TChecked="bool"></SfCheckBox>
+                </Template>
+            </GridColumn>
+            <GridColumn TextAlign="TextAlign.Center" HeaderText="Auto-Pay" Field="@nameof(CoinConstraint.Domain.AggregateModels.BudgetingAggregate.Entities.Expense.Automatic)">
+                <Template>
+                    <SfCheckBox Checked="@((context as CoinConstraint.Domain.AggregateModels.BudgetingAggregate.Entities.Expense).Automatic)" TChecked="bool"></SfCheckBox>
+                </Template>
+            </GridColumn>
+            <GridColumn HeaderText="Due Date" Field="@nameof(CoinConstraint.Domain.AggregateModels.BudgetingAggregate.Entities.Expense.DueDate)">
+                <Template>
+                    @((context as CoinConstraint.Domain.AggregateModels.BudgetingAggregate.Entities.Expense).DueDate.ToString("MM/dd/yyyy"))
+                </Template>
+            </GridColumn>
+        </GridColumns>
+    </SfGrid>
+}
+
+@code {
+    private CoinConstraint.Domain.AggregateModels.BudgetingAggregate.Entities.Expense _selectedExpense;
+    private DateTime _startDate;
+    private DateTime _endDate;
+    private List<Budget> _budgets;
+    private Budget _selectedBudget = new Budget();
+    private ExpenseDetail _expenseDetailDialogRef;
+    private string _searchText = "";
+    private SfGrid<CoinConstraint.Domain.AggregateModels.BudgetingAggregate.Entities.Expense> _gridRef;
+    private bool _isLoaded;
+
+    [Inject]
+    public IBudgetingService BudgetingService { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadData();
+        await base.OnInitializedAsync();
+        _isLoaded = true;
+    }
+
+    private async Task LoadData()
+    {
+        await Task.Yield();
+        _budgets = BudgetingService.GetAllBudgets();
+        _selectedBudget = _budgets.First();
+    }
+
+    public async Task HandleRowClick(RecordClickEventArgs<CoinConstraint.Domain.AggregateModels.BudgetingAggregate.Entities.Expense> args)
+    {
+        await EditExpense(args.RowData);
+    }
+
+    private async Task EditExpense(CoinConstraint.Domain.AggregateModels.BudgetingAggregate.Entities.Expense expense)
+    {
+        _selectedExpense = expense;
+        await _expenseDetailDialogRef.ShowEditDialog();
+    }
+
+    private async Task AddExpense()
+    {
+        var expense = new CoinConstraint.Domain.AggregateModels.BudgetingAggregate.Entities.Expense()
+            {
+                BudgetID = _selectedBudget.ID
+            };
+        _selectedExpense = expense;
+        await _expenseDetailDialogRef.ShowAddDialog();
+    }
+
+    private async Task Search(string text)
+    {
+        await _gridRef.SearchAsync(text);
+    }
+
+    public void RefreshExpenseGrid(int? budgetId)
+    {
+        LoadData();
+        _selectedBudget = _budgets.FirstOrDefault(b => b.ID == budgetId);
+        StateHasChanged();
+    }
+
+    public void Dispose()
+    {
+    }
+}
+
+<style>
+    .e-grid tr.e-row {
+        height: 30px;
+    }
+
+    .expenseGrid {
+        cursor: pointer;
+        border: none !important;
+        box-shadow: none !important;
+        margin-bottom: 3rem;
+        height: 40vh;
+    }
+
+    .search-wrapper {
+        margin-bottom: 1rem;
+    }
+
+    #addexpense {
+        margin-bottom: 0.30rem;
+    }
+</style>

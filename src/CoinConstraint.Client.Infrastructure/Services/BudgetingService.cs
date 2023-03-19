@@ -119,7 +119,7 @@ public class BudgetingService : IBudgetingService
         }
     }
 
-    private async Task SaveBudget(Budget budget)
+    public async Task SaveBudget(Budget budget)
     {
         await _unitOfWork.Budgets.UpdateAsync(budget);
 
@@ -139,7 +139,7 @@ public class BudgetingService : IBudgetingService
         }
     }
 
-    private async Task SaveNewBudget(Budget budget)
+    public async Task SaveNewBudget(Budget budget)
     {
         var newID = await _unitOfWork.Budgets.AddBudget(budget);
         budget.ID = newID ?? 0;
@@ -154,6 +154,16 @@ public class BudgetingService : IBudgetingService
             expense.IsUpdated = false;
             expense.IsNew = false;
         }
+    }
+
+    public async Task AddExpense(Expense expense)
+    {
+        await _unitOfWork.Expenses.AddExpense(expense);
+    }
+
+    public async Task UpdateExpense(Expense expense)
+    {
+        await _unitOfWork.Expenses.UpdateExpense(expense);
     }
 
     public async Task RemoveDeletedBudgets()

@@ -32,10 +32,28 @@ public class Budget
     public List<Note> Notes { get; set; } = new List<Note>();
 
     [NotMapped]
+    public string DateRange 
+    { 
+        get => $"{this.StartDate.ToString("MM/dd/yyyy")} - {this.EndDate.ToString("MM/dd/yyyy")}";
+    }
+
+    [NotMapped]
     public bool IsNew { get; set; }
 
     [NotMapped]
     public bool IsUpdated { get; set; }
+
+    [NotMapped]
+    public decimal TotalIncome { get; set; }
+
+    [NotMapped]
+    public decimal TotalExpense { get; set; }
+
+    [NotMapped]
+    public decimal TotalBalance { get; set; }
+
+    [NotMapped]
+    public decimal TotalTransactions { get; set; }
 
     public Budget Clone()
     {

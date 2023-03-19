@@ -1,0 +1,179 @@
+﻿@implements IDisposable;
+@using CoinConstraint.Application.Budgeting
+@using Syncfusion.Blazor.Popups;
+@inject SfDialogService DialogService;
+
+<div id='dlg-content'>
+    @if (this.Expense != null)
+    {
+        <div id="dialogTarget">
+            <SfMessage Severity="MessageSeverity.Success" Visible=@ShowDeleteMsg>The transaction(s) has been deleted successfully.</SfMessage>
+            <SfMessage Severity="MessageSeverity.Success" Visible=@ShowAddedMsg>The transaction has been added successfully.</SfMessage>
+            <SfMessage Severity="MessageSeverity.Success" Visible=@ShowSavedMsg>The transaction has been saved successfully.</SfMessage>
+            <SfDialog @ref="_expenseDetailDialog" Width="100%" CssClass="transact-dialog" ShowCloseIcon="true" CloseOnEscape="false" IsModal="true" Target="#sidebarRightpane">
+                <ChildContent>
+                    <DialogTemplates>
+                        <Header>@DialogHeader</Header>
+                    </DialogTemplates>
+                    <div class='dlg-content'>
+                        <div class="expensedetail-dialog">
+                            <div class="expense-detail-input-group">
+                                <SfTextBox @bind-Value=Expense.Title Placeholder="Payee" FloatLabelType="FloatLabelType.Always" />
+                            </div>
+                            <div class="expense-detail-input-group">
+                                <SfTextBox @bind-Value=Expense.Description Placeholder="Description" FloatLabelType="FloatLabelType.Always" />
+                            </div>
+                            <div class="expense-detail-input-group">
+                                <SfDatePicker @bind-Value=Expense.DueDate Placeholder="Due Date" FloatLabelType="FloatLabelType.Always" />
+                                <SfNumericTextBox @bind-Value=Expense.Amount Placeholder="Amount" FloatLabelType="FloatLabelType.Always" />
+                            </div>
+                            <div class="expense-detail-input-group">
+                                <SfTextBox @bind-Value=Expense.PaymentURL Placeholder="Payment URL" FloatLabelType="FloatLabelType.Always" />
+                            </div>
+                            <div class="expense-detail-input-group">
+                                <SfCheckBox @bind-Checked="Expense.Automatic" Label="Auto-Pay" TChecked="bool" />
+                                <SfCheckBox @bind-Checked="Expense.Paid" Label="Paid" TChecked="bool" />
+                            </div>
+                        </div>
+                    </div>
+                    <DialogButtons>
+                        <DialogButton Content="Save" CssClass="e-info e-add" IsPrimary="true" OnClick="HandleSaveClick" />
+                        <DialogButton Content="Cancel" CssClass="e-outline e-cancel" OnClick="HandleCancelClick" />
+                    </DialogButtons>
+                    <DialogEvents Created="HandleCreatedEvent"></DialogEvents>
+                </ChildContent>
+            </SfDialog>
+        </div>
+    }
+    <Syncfusion.Blazor.Popups.SfDialogProvider />
+</div>
+
+<style>
+    .expense-detail-input-group {
+        margin-bottom: 2rem;
+        display: flex;
+        gap: 3rem;
+    }
+
+    .e-message {
+        position: absolute;
+        top: 0%;
+        right: 0%;
+        width: 86%;
+        letter-spacing: 0.5px;
+        margin: 0;
+        font-size: 16px;
+        font-weight: 600;
+    }
+
+    @@media (max-width: 600px) {
+        .e-message {
+            top: 8%;
+            width: 100%;
+        }
+    }
+</style>
+
+@code {
+    private SfDialog _expenseDetailDialog = new();
+    public TransactionsGrid ContentRef;
+    public string DialogHeader { get; set; }
+    public bool ShowAddedMsg;
+    public bool ShowDeleteMsg;
+    public bool ShowSavedMsg;
+    private bool _isNew;
+
+    [Parameter]
+    public CoinConstraint.Domain.AggregateModels.BudgetingAggregate.Entities.Expense Expense { get; set; }
+
+    [Parameter]
+    public EventCallback ExpenseUpdated { get; set; }
+
+    [Inject]
+    public IBudgetingService BudgetingService { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        this.DialogHeader = "Expense Details";
+    }
+
+    /// <summary>
+    /// Show Add Dialog
+    /// </summary>
+    public async Task ShowAddDialog()
+    {
+        _isNew = true;
+        await _expenseDetailDialog.ShowAsync();
+    }
+
+    private void UpdateAddDialog()
+    {
+    }
+
+    /// <summary>
+    /// Show edit dialog
+    /// </summary>
+    /// <param name="selectedRecord"></param>
+    public async Task ShowEditDialog()
+    {
+        await _expenseDetailDialog.ShowAsync();
+    }
+
+    private void UpdateEditDialog()
+    {
+
+    }
+
+    public void HandleCreatedEvent()
+    {
+    }
+
+    public async Task ShowAlertDialog(List<ExpenseData> selectedRecords)
+    {
+
+    }
+
+    public async Task DlgOverlayClicked()
+    {
+        //if (CreateNewDialog)
+        //    await this._expenseDetailDialog.Hide();
+    }
+
+    public async Task HandleSaveClick()
+    {
+        if (_isNew)
+        {
+            await BudgetingService.AddExpense(Expense);
+        }
+        else
+        {
+            await BudgetingService.UpdateExpense(Expense);
+        }
+
+        await BudgetingService.Init();
+
+        await ExpenseUpdated.InvokeAsync();
+
+        await _expenseDetailDialog.HideAsync();
+    }
+
+    public async Task OnClickDelete()
+    {
+    }
+
+    public async Task HandleCancelClick()
+    {
+        await _expenseDetailDialog.HideAsync();
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        
+    }
+
+    public void Dispose()
+    {
+        _expenseDetailDialog = null;
+    }
+}

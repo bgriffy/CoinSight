@@ -1,0 +1,17 @@
+﻿@using Microsoft.AspNetCore.Components.Authorization
+<AuthorizeView>
+    <Authorized>
+        <a href="LogOut">Log out</a>
+    </Authorized>
+    <NotAuthorized>
+        <a href="Login">Log in</a>
+    </NotAuthorized>
+</AuthorizeView>
+
+<style>
+    a{
+        margin-right: 3rem;
+        margin-top: 1rem;
+        font-size: 20px;
+    }
+</style>

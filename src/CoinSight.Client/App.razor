@@ -1,0 +1,43 @@
+@using CoinConstraint.Application.Budgeting
+@using CoinSight.Client.Pages
+@using Microsoft.AspNetCore.Components.Authorization
+
+
+<CascadingAuthenticationState>
+    <Router AppAssembly="@typeof(Program).Assembly">
+        <Found Context="routeData">
+            <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)">
+                <NotAuthorized>
+                    @if (context.User.Identity?.IsAuthenticated != true)
+                    {
+                        <LoginPage />
+                    }
+                    else
+                    {
+                        <p role="alert">You are not authorized to access this resource.</p>
+                    }
+                </NotAuthorized>
+            </AuthorizeRouteView>
+            @if (_isLoaded)
+            {
+                @*<RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />*@
+            }
+        </Found>
+        <NotFound>
+            <LayoutView Layout="@typeof(MainLayout)">
+                <p>Sorry, there's nothing at this address.</p>
+            </LayoutView>
+        </NotFound>
+    </Router>
+</CascadingAuthenticationState>
+
+
+@code {
+    private bool _isLoaded;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _isLoaded = true;
+        await base.OnInitializedAsync();
+    }
+}

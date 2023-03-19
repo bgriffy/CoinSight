@@ -57,8 +57,7 @@ public class ExpensesController : ControllerBase
                 return Unauthorized();
             }
 
-            await _expenseRepository.AddAsync(expense);
-            await _expenseRepository.SaveChangesAsync();
+            await _expenseRepository.AddExpense(expense);
 
             return Ok();
         }
@@ -75,13 +74,13 @@ public class ExpensesController : ControllerBase
         try
         {
             var actionIsAuthorized = await _authorizationService.ActionIsAuthorized(User, expense, Operations.Update);
+
             if (!actionIsAuthorized)
             {
                 return Unauthorized();
             }
 
-            _expenseRepository.Update(expense);
-            await _expenseRepository.SaveChangesAsync();
+            await _expenseRepository.UpdateExpense(expense);
 
             return Ok();
         }

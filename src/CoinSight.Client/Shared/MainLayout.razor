@@ -1,0 +1,89 @@
+﻿@using CoinConstraint.Application.Budgeting
+@using CoinConstraint.Shared.Extensions
+@inherits LayoutComponentBase
+
+@if (_showSpinner)
+{
+    <div class="sb-content-overlay">
+        <div class="sb-loading">
+            <svg class="circular" height="40" width="40">
+                <circle class="path" cx="25" cy="25" r="20" fill="none" stroke-width="6" stroke-miterlimit="10" />
+            </svg>
+        </div>
+    </div>
+    <style>
+        #main-page {
+            visibility: hidden;
+            opacity: 0;
+        }
+    </style>
+}
+
+<div class="control-container">
+    <SfAppBar ColorMode="AppBarColor.Dark">
+        <div class="appbar-buttons-container">
+            <LoginDisplay />
+        </div>
+    </SfAppBar>
+</div>
+
+@if (_isLoaded)
+{
+
+    <div id="main-page">
+        <div class="sidebar">
+            <NavMenu OnSidebarCreate="@(() => { _showSpinner = false; StateHasChanged(); })" />
+        </div>
+        <div id="addexpenseDialog" class="expense-dialog"></div>
+
+        <div id="sidebarRightpane" class="sidebar-Rightpane">
+            <div class="content container-fluid rightpane">
+                <div class="content-wrapper">
+                    <div id="content">
+                        @Body
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<style>
+    .appbar-buttons-container {
+        display: flex;
+        justify-content: end;
+    }
+
+    .control-container {
+        height: 5rem;
+        margin: 0 auto;
+        width: 100%;
+    }
+
+        .control-container .e-btn.e-inherit {
+            margin: 0 3px;
+        }
+</style>
+
+@code {
+    private bool _isLoaded;
+    private bool _showSpinner = false;
+
+    [Inject]
+    public IBudgetingService BudgetingService { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var state = await StateProvider.GetAuthenticationStateAsync();
+        var user = state.User;
+        var uuid = user.GetUserId();
+
+        if (uuid != null)
+        {
+            await BudgetingService.Init();
+        };
+
+        _isLoaded = true;
+        await base.OnInitializedAsync();
+    }
+}

@@ -1,0 +1,139 @@
+﻿@using CoinConstraint.Domain.AggregateModels.BudgetingAggregate.Entities
+@implements IDisposable;
+
+<div>
+    <div class="filter-container">
+        <SfSidebar @ref="_sidebarRef" Width="270px" MediaQuery="min-width: 1101px" Position="SidebarPosition.Right" >
+            <ChildContent>
+                <div class="sidebar-wrapper-filter">
+                    <div>
+                        <div class="filter-head">
+                            <span class="e-icon filter-icon filter-head-item"></span>
+                            <span class="filter-txt filter-head-item">Filters</span>
+                        </div>
+                        <div class="transaction-filters-container">
+                            <label class="label-font">Select a range</label>
+                            <div class='filter-date-range filter-item'>
+                                <SfDateRangePicker TValue="DateTime"
+                                                   CssClass="DateTime"
+                                                   ShowClearButton="false"
+                                                   Format="MM/dd/yyyy"
+                                                   AllowEdit="false"
+                                                   EndDate="@FilterArgs.EndDate"
+                                                   StartDate="@FilterArgs.StartDate"
+                                                   Min="@_minDate"
+                                                   Max="@_maxDate">
+                                    <DateRangePickerEvents TValue="DateTime" ValueChange="DateRangeChanged" />
+                                </SfDateRangePicker>
+                            </div>
+                            <label class="label-font bottom-align">Cashflow</label>
+                            <div class="cashflow filter-item">
+                                <SfCheckBox TChecked="bool"
+                                            Label="Income"
+                                            Checked="FilterArgs.ShowIncomeTransactions"
+                                            CheckedChanged="@(async(value) => await ShowIncomeCheckboxChanged(value))"
+                                            CssClass="TransactionType">
+                                </SfCheckBox>
+                                <SfCheckBox TChecked="bool"
+                                            Label="Expense"
+                                            Checked="FilterArgs.ShowExpenseTransactions"
+                                            CheckedChanged="@(async(value) => await ShowExpenseCheckboxChanged(value))"
+                                            CssClass="TransactionType">
+                                </SfCheckBox>
+                            </div>
+                            <label class="label-font bottom-align">Payment Mode</label>
+                            <div class="paymentModes filter-item">
+                                <SfCheckBox TChecked="bool"
+                                            Label="Cash"
+                                            Checked="FilterArgs.ShowCashTransactions"
+                                            CheckedChanged="@(async(value) => await ShowCashCheckboxChanged(value))"
+                                            CssClass="PaymentMode">
+                                </SfCheckBox>
+                                <SfCheckBox TChecked="bool"
+                                            Label="Debit Card"
+                                            Checked="FilterArgs.ShowDebitTransactions"
+                                            CheckedChanged="@(async(value) => await ShowDebitCheckboxChanged(value))"
+                                            CssClass="PaymentMode">
+                                </SfCheckBox>
+                                <br />
+                                <br />
+                                <SfCheckBox TChecked="bool"
+                                            Label="Credit Card"
+                                            Checked="FilterArgs.ShowCreditTransactions"
+                                            CheckedChanged="@(async(value) => await ShowCreditCheckboxChanged(value))"
+                                            CssClass="PaymentMode">
+                                </SfCheckBox>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </ChildContent>
+        </SfSidebar>
+    </div>
+</div>
+
+@code {
+    private List<Budget> _budgets = new();
+    private Budget _selectedBudget = new();
+    private SfSidebar _sidebarRef;
+    private DateTime _minDate = new DateTime(DateTime.Now.Year, 1, 1);
+    private DateTime _maxDate = new DateTime(DateTime.Now.Year, 12, 31);
+
+    [Parameter]
+    public TransactionFilterArgs FilterArgs { get; set; } = new();
+
+    [Parameter]
+    public EventCallback<TransactionFilterArgs> FilterArgsChanged { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+    }
+
+    private async Task DateRangeChanged(RangePickerEventArgs<DateTime> args)
+    {
+        this.FilterArgs.StartDate = args.StartDate;
+        this.FilterArgs.EndDate = args.EndDate;
+        await HandleFiltersUpdate();
+    }
+
+    private async Task HandleFiltersUpdate()
+    {
+        await FilterArgsChanged.InvokeAsync(this.FilterArgs);
+    }
+
+    private async Task ShowCashCheckboxChanged(bool value)
+    {
+        this.FilterArgs.ShowCashTransactions = value;
+        await FilterArgsChanged.InvokeAsync(this.FilterArgs);
+    }
+
+    private async Task ShowDebitCheckboxChanged(bool value)
+    {
+        this.FilterArgs.ShowDebitTransactions = value;
+        await FilterArgsChanged.InvokeAsync(this.FilterArgs);
+    }
+
+    private async Task ShowCreditCheckboxChanged(bool value)
+    {
+        this.FilterArgs.ShowCreditTransactions = value;
+        await FilterArgsChanged.InvokeAsync(this.FilterArgs);
+    }
+
+    private async Task ShowExpenseCheckboxChanged(bool value)
+    {
+        this.FilterArgs.ShowExpenseTransactions = value;
+        await FilterArgsChanged.InvokeAsync(this.FilterArgs);
+    }
+
+    private async Task ShowIncomeCheckboxChanged(bool value)
+    {
+        this.FilterArgs.ShowIncomeTransactions = value;
+        await FilterArgsChanged.InvokeAsync(this.FilterArgs);
+    }
+
+    public void Dispose()
+    {
+        _sidebarRef = null;
+    }
+}
