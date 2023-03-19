@@ -29,8 +29,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\CoinConstraint.Client.Infrastructure\CoinConstraint.Client.Infrastructure.csproj" />
-    <ProjectReference Include="..\CoinConstraint.Server.Infrastructure\CoinConstraint.Server.Infrastructure.csproj" />
+    <ProjectReference Include="..\CoinSight.Client.Infrastructure\CoinSight.Client.Infrastructure.csproj" />
+    <ProjectReference Include="..\CoinSight.Server.Infrastructure\CoinSight.Server.Infrastructure.csproj" />
   </ItemGroup>
 
   <ItemGroup>

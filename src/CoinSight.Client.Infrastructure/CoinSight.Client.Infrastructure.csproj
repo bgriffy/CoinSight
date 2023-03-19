@@ -13,8 +13,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\CoinConstraint.Application\CoinConstraint.Application.csproj" />
-    <ProjectReference Include="..\CoinConstraint.Shared\CoinConstraint.Shared.csproj" />
+    <ProjectReference Include="..\CoinSight.Application\CoinSight.Application.csproj" />
+    <ProjectReference Include="..\CoinSight.Shared\CoinSight.Shared.csproj" />
   </ItemGroup>
 
 </Project>

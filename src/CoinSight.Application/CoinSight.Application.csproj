@@ -15,8 +15,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\CoinConstraint.Domain\CoinConstraint.Domain.csproj" />
-    <ProjectReference Include="..\CoinConstraint.Shared\CoinConstraint.Shared.csproj" />
+    <ProjectReference Include="..\CoinSight.Domain\CoinSight.Domain.csproj" />
+    <ProjectReference Include="..\CoinSight.Shared\CoinSight.Shared.csproj" />
   </ItemGroup>
 
 </Project>

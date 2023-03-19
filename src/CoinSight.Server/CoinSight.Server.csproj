@@ -31,8 +31,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\CoinConstraint.Server.Infrastructure\CoinConstraint.Server.Infrastructure.csproj" />
-		<ProjectReference Include="..\CoinConstraint.Shared\CoinConstraint.Shared.csproj" />
+		<ProjectReference Include="..\CoinSight.Server.Infrastructure\CoinSight.Server.Infrastructure.csproj" />
+		<ProjectReference Include="..\CoinSight.Shared\CoinSight.Shared.csproj" />
 		<ProjectReference Include="..\CoinSight.Client\CoinSight.Client.csproj" />
 	</ItemGroup>
 
