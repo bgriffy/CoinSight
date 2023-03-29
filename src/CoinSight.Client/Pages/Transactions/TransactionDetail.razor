@@ -1,16 +1,18 @@
 ﻿@implements IDisposable;
 @using CoinConstraint.Application.Budgeting
+@using CoinConstraint.Application.Transactions
+@using CoinConstraint.Domain.AggregateModels.TransactionsAggregate.Entities
 @using Syncfusion.Blazor.Popups;
 @inject SfDialogService DialogService;
 
 <div id='dlg-content'>
-    @if (this.Expense != null)
+    @if (this.Transaction != null)
     {
         <div id="dialogTarget">
             <SfMessage Severity="MessageSeverity.Success" Visible=@_showDeleteMsg>The transaction(s) has been deleted successfully.</SfMessage>
             <SfMessage Severity="MessageSeverity.Success" Visible=@_showAddedMsg>The transaction has been added successfully.</SfMessage>
             <SfMessage Severity="MessageSeverity.Success" Visible=@_showSavedMsg>The transaction has been saved successfully.</SfMessage>
-            <SfDialog @ref="_expenseDetailDialog" Width="100%" CssClass="transact-dialog" ShowCloseIcon="true" CloseOnEscape="false" IsModal="true" Target="#sidebarRightpane">
+            <SfDialog @ref="_transcationDetailDialog" Width="100%" CssClass="transact-dialog" ShowCloseIcon="true" CloseOnEscape="false" IsModal="true" Target="#sidebarRightpane">
                 <ChildContent>
                     <DialogTemplates>
                         <Header>@_dialogHeader</Header>
@@ -18,21 +20,18 @@
                     <div class='dlg-content'>
                         <div class="expensedetail-dialog">
                             <div class="expense-detail-input-group">
-                                <SfTextBox @bind-Value=Expense.Title Placeholder="Payee" FloatLabelType="FloatLabelType.Always" />
+                                <SfTextBox @bind-Value=Transaction.Payee Placeholder="Payee" FloatLabelType="FloatLabelType.Always" />
                             </div>
                             <div class="expense-detail-input-group">
-                                <SfTextBox @bind-Value=Expense.Description Placeholder="Description" FloatLabelType="FloatLabelType.Always" />
+                                <SfDatePicker @bind-Value=Transaction.TransactionDate Placeholder="Date" FloatLabelType="FloatLabelType.Always" />
+                                <SfTextBox @bind-Value=Transaction.PaymentMode Placeholder="Payment Mode" FloatLabelType="FloatLabelType.Always" />
                             </div>
                             <div class="expense-detail-input-group">
-                                <SfDatePicker @bind-Value=Expense.DueDate Placeholder="Due Date" FloatLabelType="FloatLabelType.Always" />
-                                <SfNumericTextBox @bind-Value=Expense.Amount Placeholder="Amount" FloatLabelType="FloatLabelType.Always" />
+                                <SfTextBox @bind-Value=Transaction.Description Placeholder="Description" FloatLabelType="FloatLabelType.Always" />
                             </div>
                             <div class="expense-detail-input-group">
-                                <SfTextBox @bind-Value=Expense.PaymentURL Placeholder="Payment URL" FloatLabelType="FloatLabelType.Always" />
-                            </div>
-                            <div class="expense-detail-input-group">
-                                <SfCheckBox @bind-Checked="Expense.Automatic" Label="Auto-Pay" TChecked="bool" />
-                                <SfCheckBox @bind-Checked="Expense.Paid" Label="Paid" TChecked="bool" />
+                                <SfNumericTextBox @bind-Value=Transaction.InflowAmount Placeholder="Inflow" FloatLabelType="FloatLabelType.Always" />
+                                <SfNumericTextBox @bind-Value=Transaction.OutflowAmount Placeholder="Outflow" FloatLabelType="FloatLabelType.Always" />
                             </div>
                         </div>
                     </div>
@@ -74,7 +73,7 @@
 </style>
 
 @code {
-    private SfDialog _expenseDetailDialog = new();
+    private SfDialog _transcationDetailDialog = new();
     public string _dialogHeader { get; set; }
     public bool _showAddedMsg;
     public bool _showDeleteMsg;
@@ -82,13 +81,13 @@
     private bool _isNew;
 
     [Parameter]
-    public CoinConstraint.Domain.AggregateModels.BudgetingAggregate.Entities.Expense Expense { get; set; }
+    public Transaction Transaction { get; set; }
 
     [Parameter]
-    public EventCallback ExpenseUpdated { get; set; }
+    public EventCallback TransactionUpdated { get; set; }
 
     [Inject]
-    public IBudgetingService BudgetingService { get; set; }
+    public ITransactionService TransactionService { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
@@ -99,39 +98,39 @@
     public async Task ShowAddDialog()
     {
         _isNew = true;
-        await _expenseDetailDialog.ShowAsync();
+        await _transcationDetailDialog.ShowAsync();
     }
 
     public async Task ShowEditDialog()
     {
-        await _expenseDetailDialog.ShowAsync();
+        await _transcationDetailDialog.ShowAsync();
     }
 
     public async Task HandleSaveClick()
     {
         if (_isNew)
         {
-            await BudgetingService.AddExpense(Expense);
+            await TransactionService.AddTransaction(Transaction);
         }
         else
         {
-            await BudgetingService.UpdateExpense(Expense);
+            await TransactionService.UpdateTransaction(Transaction);
         }
 
-        await BudgetingService.Init();
-                
-        await ExpenseUpdated.InvokeAsync();
+        //await TransactionService.Init();
 
-        await _expenseDetailDialog.HideAsync();
+        await TransactionUpdated.InvokeAsync();
+
+        await _transcationDetailDialog.HideAsync();
     }
 
     public async Task HandleCancelClick()
     {
-        await _expenseDetailDialog.HideAsync();
+        await _transcationDetailDialog.HideAsync();
     }
 
     public void Dispose()
     {
-        _expenseDetailDialog = null;
+        _transcationDetailDialog = null;
     }
 }

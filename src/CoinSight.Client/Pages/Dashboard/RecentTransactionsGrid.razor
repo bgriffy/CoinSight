@@ -2,11 +2,14 @@
 @using CoinConstraint.Application.Transactions
 @using CoinConstraint.Domain.AggregateModels.TransactionsAggregate.Entities
 
+<TransactionDetail Transaction="_selectedTransaction" @ref=_transactionDetail />
+
 @if (_isLoaded)
 {
     <div id="recent-transactions-grid">
         <SfGrid TValue="Transaction" DataSource="@_transactions" AllowSorting AllowPaging EnableHover="false">
             <GridPageSettings PageSize="4"/>
+            <GridEvents OnRecordClick="@(async(RecordClickEventArgs<Transaction> row) => await HandleRowClick(row))" />
             <GridTemplates>
                 <ToolbarTemplate>
                     <SfToolbar>
@@ -30,11 +33,19 @@
 
 }
 
+<style>
+    #recent-transactions-grid{
+        cursor: pointer;
+    }
+</style>
+
 @code
 {
     private List<Transaction> _transactions = new();
     private Guid _currentUserId;
     private bool _isLoaded;
+    private TransactionDetail _transactionDetail;
+    private Transaction _selectedTransaction;
 
     [Inject]
     public ITransactionService TransactionService { get; set; }
@@ -53,6 +64,17 @@
         _currentUserId = await UserService.GetCurrentUserID();
         await SetTransactions();
         _isLoaded = true;
+    }
+
+    public async Task HandleRowClick(RecordClickEventArgs<Transaction> args)
+    {
+        await EditTransaction(args.RowData);
+    }
+
+    private async Task EditTransaction(Transaction transaction)
+    {
+        _selectedTransaction = transaction;
+        await _transactionDetail.ShowEditDialog();
     }
 
     public async Task RefreshGrid()

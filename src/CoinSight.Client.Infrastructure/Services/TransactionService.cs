@@ -55,4 +55,13 @@ public class TransactionService : ITransactionService
         };
     }
 
+    public async Task AddTransaction(Transaction transaction)
+    {
+        await Task.Yield();
+    }
+
+    public async Task UpdateTransaction(Transaction transaction)
+    {
+        await Task.Yield();
+    }
 }
