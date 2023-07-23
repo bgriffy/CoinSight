@@ -26,7 +26,7 @@
                                 <span id="searchbtn" class="e-search-icon transactions-search-icon e-icons" @onclick="@(() => _transactGridRef.Search(SearchValue))"></span>
                             </div>
                             <div class="button-section search-section">
-                                <button id="addexpense" class="e-btn small e-info">Add Transaction</button>
+                                <button onclick="@(async() => await AddTransaction())" id="addexpense" class="e-btn small e-info">Add Transaction</button>
                                 <button id="filterTransactions" class="e-btn small e-info">Filter</button>
                                 <div id="add-btn" class='e-btn'>
                                     <span class='e-icons add-icon add-head-item'></span>
@@ -190,5 +190,10 @@ else
         {
             LoadData();
         }
+    }
+
+    private async Task AddTransaction()
+    {
+        await _transactGridRef.AddTransaction();
     }
 }

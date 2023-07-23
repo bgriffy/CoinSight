@@ -6,12 +6,15 @@
 
 @implements IDisposable;
 
+<TransactionDetail @ref=_transactionDetailRef Transaction="@_selectedTransaction"/>
+
 <div id="transactions-grid-wrapper">
     @if (_isLoaded)
     {
         <div id="recent-transactions-grid">
             <SfGrid @ref=_gridRef TValue="Transaction" DataSource="@_transactions" AllowSorting AllowPaging EnableHover="false">
                 <GridPageSettings PageSize="10" />
+                <GridEvents OnRecordClick="@(async(RecordClickEventArgs<Transaction> row) => await HandleRowClick(row))" />
                 <GridTemplates>
                     <ToolbarTemplate>
                         <SfToolbar>
@@ -41,6 +44,8 @@
     private Guid _currentUserId;
     private bool _isLoaded;
     private SfGrid<Transaction> _gridRef;
+    private Transaction _selectedTransaction;
+    private TransactionDetail _transactionDetailRef;
 
     [Inject]
     public ITransactionService TransactionService { get; set; }
@@ -77,6 +82,23 @@
     public async Task Search(string value)
     {
         await _gridRef.SearchAsync(value);
+    }
+
+    public async Task HandleRowClick(RecordClickEventArgs<Transaction> args)
+    {
+        await EditTransaction(args.RowData);
+    }
+
+    private async Task EditTransaction(Transaction transaction)
+    {
+        _selectedTransaction = transaction;
+        await _transactionDetailRef.ShowEditDialog();
+    }
+
+    public async Task AddTransaction()
+    {
+        _selectedTransaction = new Transaction();
+        await _transactionDetailRef.ShowAddDialog();
     }
 
     public void Dispose()
