@@ -46,32 +46,6 @@
     <Syncfusion.Blazor.Popups.SfDialogProvider />
 </div>
 
-<style>
-    .expense-detail-input-group {
-        margin-bottom: 2rem;
-        display: flex;
-        gap: 3rem;
-    }
-
-    .e-message {
-        position: absolute;
-        top: 0%;
-        right: 0%;
-        width: 86%;
-        letter-spacing: 0.5px;
-        margin: 0;
-        font-size: 16px;
-        font-weight: 600;
-    }
-
-    @@media (max-width: 600px) {
-        .e-message {
-            top: 8%;
-            width: 100%;
-        }
-    }
-</style>
-
 @code {
     private SfDialog _transcationDetailDialog = new();
     public string _dialogHeader { get; set; }
@@ -117,7 +91,7 @@
             await TransactionService.UpdateTransaction(Transaction);
         }
 
-        //await TransactionService.Init();
+        //await TransactionService.Init();      
 
         await TransactionUpdated.InvokeAsync();
 
