@@ -1,0 +1,16 @@
+﻿::deep .budget-dropdown {
+    width: 15% !important;
+    color: #688496;
+    font-size: 15px;
+}
+
+#budget-filters-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+    margin-bottom: 1em;
+}
+
+.e-ddl.e-input-group.e-control-wrapper .e-input {
+    font-size: 14px;
+}

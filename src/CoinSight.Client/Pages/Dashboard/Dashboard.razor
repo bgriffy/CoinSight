@@ -6,44 +6,52 @@
 
 @implements IDisposable;
 
-@if (!_isLoaded)
-{
-    <div class="sb-content-overlay">
-        <div class="sb-loading">
-            <svg class="circular" height="40" width="40">
-                <circle class="path" cx="25" cy="25" r="20" fill="none" stroke-width="6" stroke-miterlimit="10" />
-            </svg>
+<div id="page-container">
+    @if (!_isLoaded)
+    {
+        <div class="sb-content-overlay">
+            <div class="sb-loading">
+                <svg class="circular" height="40" width="40">
+                    <circle class="path" cx="25" cy="25" r="20" fill="none" stroke-width="6" stroke-miterlimit="10" />
+                </svg>
+            </div>
         </div>
-    </div>
-    <style>
-        #main-page {
-            pointer-events: none;
-            cursor: auto;
-        }
-    </style>
-}
-else
-{
-    <div class="control-section dashboard-page">
-        <div id="budget-filters-section">
-            <p class="page-title">Dashboard</p>
-            <SfDropDownList CssClass="budget-dropdown" TValue="int?"
-                    TItem="Budget"
-                    Placeholder="Select a budget"
-                    DataSource="@_budgets"
-                    Value=_selectedBudget.ID
-                    ValueChanged="HandleSelectedBudgetChanged">
-                <DropDownListFieldSettings Value="@nameof(Budget.ID)" Text="@nameof(Budget.DateRange)" />
-            </SfDropDownList>
+    }
+    else
+    {
+        <div class="control-section dashboard-page">
+            <div id="budget-filters-section">
+                <p class="page-title">Dashboard</p>
+                <SfDropDownList CssClass="budget-dropdown" TValue="int?"
+                            TItem="Budget"
+                            Placeholder="Select a budget"
+                            DataSource="@_budgets"
+                            Value=_selectedBudget.ID
+                            ValueChanged="HandleSelectedBudgetChanged">
+                    <DropDownListFieldSettings Value="@nameof(Budget.ID)" Text="@nameof(Budget.DateRange)" />
+                </SfDropDownList>
+            </div>
+
+            <BudgetTotalCards @ref=_cardsRef />
+
+            <ExpenseGrid @ref="_expenseGridRef" />
+
+            <RecentTransactionsGrid StartDate="_selectedBudget.StartDate" EndDate="_selectedBudget.EndDate" />
         </div>
+    }
+</div>
 
-        <BudgetTotalCards @ref=_cardsRef />
+<style>
+    #main-page {
+        overflow-x: hidden;
+        background: linear-gradient(-141deg, #EEF5F7 14%, #EEF2FB 100%);
+    }
 
-        <ExpenseGrid @ref="_expenseGridRef" />
-
-        <RecentTransactionsGrid StartDate="_selectedBudget.StartDate" EndDate="_selectedBudget.EndDate" />
-    </div>
-}
+    .sidebar-Rightpane {
+        padding-bottom: 18px;
+        margin-right: -2px;
+    }
+</style>
 
 
 
@@ -54,7 +62,7 @@ else
     private bool _showSpinner = true;
     private bool _isLoaded;
     private List<Budget> _budgets = new();
-    private Budget _selectedBudget = new(); 
+    private Budget _selectedBudget = new();
 
     [Inject]
     public IBudgetingService BudgetingService { get; set; }
@@ -103,32 +111,3 @@ else
         _expenseGridRef = null;
     }
 }
-
-<style>
-    #main-page {
-        overflow-x: hidden;
-        background: linear-gradient(-141deg, #EEF5F7 14%, #EEF2FB 100%);
-    }
-
-    .sidebar-Rightpane {
-        padding-bottom: 18px;
-        margin-right: -2px;
-    }
-
-    .budget-dropdown{
-        width: 10% !important;
-        color: #688496;
-        font-size: 15px;
-    }
-
-    #budget-filters-section {
-        display: flex;
-        justify-content: space-between;
-        align-items: end;
-        margin-bottom: 1em;
-    }
-
-    .e-ddl.e-input-group.e-control-wrapper .e-input {
-        font-size: 14px;
-    }
-</style>
