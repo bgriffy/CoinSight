@@ -1,6 +1,5 @@
-﻿using CoinConstraint.Application.Identity;
-using CoinConstraint.Server.Infrastructure.Identity;
-using Microsoft.AspNetCore.Authorization.Infrastructure;
+﻿using CoinSight.Application.Expenses.Queries.GetExpenseByBudgetId;
+using MediatR;
 
 namespace CoinConstraint.Server.Controllers.Budgeting;
 
@@ -9,35 +8,37 @@ namespace CoinConstraint.Server.Controllers.Budgeting;
 [ApiController]
 [Authorize]
 
-public class ExpensesController : ControllerBase
+public class ExpensesController : ApiController
 {
     private readonly IExpenseRepository _expenseRepository;
     private readonly ICCAuthorizationService _authorizationService;
+    private readonly ISender _sender;
 
-    public ExpensesController(IExpenseRepository expenseRepository, ICCAuthorizationService authorizationService)
+    public ExpensesController(IExpenseRepository expenseRepository, ICCAuthorizationService authorizationService, ISender sender)
+        : base(sender)
     {
         _expenseRepository = expenseRepository;
         _authorizationService = authorizationService;
+        _sender = sender;
     }
 
     [HttpGet("{budgetID}")]
-    public async Task<ActionResult<List<Expense>>> GetExpensesByBudget(int budgetID)
+    public async Task<IActionResult> GetExpensesByBudget(int budgetID)
     {
         try
         {
-            var userID = User.GetUserId();
             var expenses = _expenseRepository.GetExpensesByBudget(budgetID);
 
-            foreach (var expense in expenses)
+            var command = new GetExpensesByBudgetId(budgetID);
+
+            var result = await _sender.Send(command);
+
+            if (!(await _authorizationService.AuthorizeExpenseView(User, expenses)))
             {
-                var actionIsAuthorized = await _authorizationService.ActionIsAuthorized(User, expense, Operations.Read);
-                if (!actionIsAuthorized)
-                {
-                    return Unauthorized();
-                }
+                return Unauthorized();
             }
 
-            return Ok(expenses);
+            return result.IsSuccess ? Ok(expenses) : BadRequest(result.Error);
         }
         catch (Exception e)
         {

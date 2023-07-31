@@ -3,3 +3,8 @@ global using CoinConstraint.Domain.AggregateModels.BudgetAggregate.Repositories.
 global using CoinConstraint.Domain.AggregateModels.BudgetingAggregate.RepositoryInterfaces.Serverside;
 global using System.Collections.Generic;
 global using System.Threading.Tasks;
+global using CoinSight.Domain.Shared;
+global using MediatR;
+global using CoinSight.Application.Abstractions.Messaging;
+global using System.Threading;
+global using CoinConstraint.Domain.AggregateModels.BudgetingAggregate.Entities;
